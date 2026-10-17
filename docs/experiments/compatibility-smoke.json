@@ -1,0 +1,142 @@
+{
+  "batch_id": "compatibility-smoke",
+  "plan_sha256": "3392fe79d3877477b2d8acc2cfebbd58a46c6486b0b77279c632af967e8357f1",
+  "started_at": "2026-10-17T21:24:19.867665+08:00",
+  "status": "COMPLETED",
+  "max_http_requests": 8,
+  "token_cap": 20000,
+  "account_confirmation_source": "Explicit user confirmation; provider control plane not independently queried",
+  "conversation_id": "conv_3c7d45ad5fe04eb0843d6a45db586159",
+  "requests": [
+    {
+      "scenario": "plain-text",
+      "call_id": "call_9d63f4d539a542afac8f4873fd145e29",
+      "reserved_tokens": 1299,
+      "status": "PASSED",
+      "input_tokens": 16,
+      "output_tokens": 1,
+      "request_id": "d0ff6c76-3798-9a74-9496-7d1b1adaee7c",
+      "http_status": 200,
+      "returned_model": "qwen3.5-plus-2026-02-15",
+      "finish_reason": "stop",
+      "elapsed_seconds": 1.628
+    },
+    {
+      "scenario": "tool-call",
+      "call_id": "call_1f3d2cbe258f4bd5bf873e2b7b4e0f51",
+      "reserved_tokens": 1565,
+      "status": "PASSED",
+      "input_tokens": 291,
+      "output_tokens": 30,
+      "request_id": "1216ab07-8f94-964d-84de-fbfabe549f2f",
+      "http_status": 200,
+      "returned_model": "qwen3.5-plus-2026-02-15",
+      "finish_reason": "tool_calls",
+      "elapsed_seconds": 3.383
+    },
+    {
+      "scenario": "tool-result",
+      "call_id": "call_9e9ff6d4d71d4fbeae21e1b897d0a319",
+      "reserved_tokens": 1821,
+      "status": "PASSED",
+      "input_tokens": 354,
+      "output_tokens": 10,
+      "request_id": "e5c3638e-1098-9e47-a10f-1d71ae1a95ff",
+      "http_status": 200,
+      "returned_model": "qwen3.5-plus-2026-02-15",
+      "finish_reason": "stop",
+      "elapsed_seconds": 2.099
+    },
+    {
+      "scenario": "stream-usage",
+      "call_id": "call_1c8954de317f46fd84cbe70970f11483",
+      "reserved_tokens": 1345,
+      "status": "PASSED",
+      "input_tokens": 18,
+      "output_tokens": 1,
+      "request_id": "4614a2a8-22e6-9d4a-908c-ea04d5af2b4d",
+      "http_status": 200,
+      "returned_model": "qwen3.5-plus-2026-02-15",
+      "finish_reason": "stop",
+      "elapsed_seconds": 1.554
+    },
+    {
+      "scenario": "validated-json",
+      "call_id": "call_6802dfa74d8244ef8271fa5236d1b505",
+      "reserved_tokens": 1342,
+      "status": "PASSED",
+      "input_tokens": 29,
+      "output_tokens": 29,
+      "request_id": "7ab2e508-982e-9122-9c92-62401290bc87",
+      "http_status": 200,
+      "returned_model": "qwen3.5-plus-2026-02-15",
+      "finish_reason": "stop",
+      "elapsed_seconds": 2.447
+    },
+    {
+      "scenario": "tool-schema-check",
+      "call_id": "call_bfcfcc4c08824e31bb1ca98965114500",
+      "reserved_tokens": 1586,
+      "status": "PASSED",
+      "input_tokens": 293,
+      "output_tokens": 30,
+      "request_id": "aa1d3d10-e469-9c6e-b0af-307099a2903e",
+      "http_status": 200,
+      "returned_model": "qwen3.5-plus-2026-02-15",
+      "finish_reason": "tool_calls",
+      "elapsed_seconds": 2.754
+    }
+  ],
+  "stop_reason": null,
+  "elapsed_seconds": 13.933,
+  "actual_http_dispatch_attempts": 6,
+  "input_tokens": 1001,
+  "output_tokens": 101,
+  "unknown_reserved_tokens": 0,
+  "not_run": [],
+  "known_input_tokens": 1001,
+  "known_output_tokens": 101,
+  "usage_complete": true,
+  "http_responses_received": 6,
+  "extra_paid_budget_cny": 0,
+  "billing_note": "Provider-reported usage; billing not queried. Free-tier protection and balance confirmed by user.",
+  "ledger_reconciliation": {
+    "provider": "bailian-beijing-compatible",
+    "exact_models": [
+      "qwen3.5-plus-2026-02-15"
+    ],
+    "batch_id": "compatibility-smoke",
+    "call_rows": 6,
+    "settled_calls": 6,
+    "provider_total_tokens": 1102,
+    "unknown_calls": 0,
+    "remaining_reserved": 0,
+    "batch_cap": 20000,
+    "batch_settled": 1102,
+    "paused": false,
+    "request_ids": [
+      "d0ff6c76-3798-9a74-9496-7d1b1adaee7c",
+      "1216ab07-8f94-964d-84de-fbfabe549f2f",
+      "e5c3638e-1098-9e47-a10f-1d71ae1a95ff",
+      "4614a2a8-22e6-9d4a-908c-ea04d5af2b4d",
+      "7ab2e508-982e-9122-9c92-62401290bc87",
+      "aa1d3d10-e469-9c6e-b0af-307099a2903e"
+    ]
+  },
+  "scope_limitations": [
+    "Six provider protocol fixtures, not full business task success or Agent quality",
+    "tool-result uses the frozen synthetic ToolMessage fixture, not the output ID of the prior HTTP call",
+    "Validated JSON output observed; response_format strict JSON mode not tested",
+    "Valid tool arguments observed twice; not proof of decoder-level strict schema enforcement",
+    "Streaming text plus final usage tested; streaming tool calls not tested",
+    "No billing or quota-control API queried; account balance/protection were user-confirmed",
+    "Only this compatibility batch authorized; development-pilot remains unapproved",
+    "Product Web/worker remains offline scripted mode; general real Agent adapter still disabled"
+  ],
+  "official_references": [
+    "https://help.aliyun.com/zh/model-studio/regions",
+    "https://help.aliyun.com/zh/model-studio/deep-thinking",
+    "https://help.aliyun.com/en/model-studio/stream",
+    "https://help.aliyun.com/zh/model-studio/new-free-quota"
+  ]
+}

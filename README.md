@@ -37,3 +37,11 @@ docker compose up -d db
 
 [评测说明](evaluation/README.md) · [开发结果](docs/experiments/development-final.md) ·
 [阶段 5 交接](docs/handoffs/phase-05.md) · [真实试跑待批计划](evaluation/manifests/compatibility-smoke.json)
+
+
+阶段 6A compatibility-smoke 已完成：精确模型 qwen3.5-plus-2026-02-15，6/6 协议检查通过，
+6 次真实请求、0 重试，输入 1,001 / 输出 101 Token，未知预留 0，耗时 13.933 秒。
+这不等于真实售后 Agent 评测；当前工作台仍为脚本模拟。
+[实际兼容报告](docs/experiments/compatibility-smoke.md) ·
+[6A 交接](docs/handoffs/phase-06A-compatibility-smoke.md) ·
+[下一批待批计划](evaluation/manifests/development-pilot.json)。

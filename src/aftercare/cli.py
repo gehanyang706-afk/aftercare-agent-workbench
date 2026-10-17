@@ -73,6 +73,13 @@ def parser() -> argparse.ArgumentParser:
     plan = ec.add_parser("plan")
     plan.add_argument("--batch", choices=["compatibility-smoke"], required=True)
     plan.add_argument("--dry-run", action="store_true", required=True)
+    model = commands.add_parser("model")
+    mc = model.add_subparsers(dest="model_action", required=True)
+    smoke = mc.add_parser("smoke")
+    smoke.add_argument("--batch", choices=["compatibility-smoke"], required=True)
+    smoke.add_argument("--approval", required=True)
+    smoke.add_argument("--account-confirmation", required=True)
+    smoke.add_argument("--execute", action="store_true", required=True)
     worker = commands.add_parser("worker")
     worker.add_argument("--provider", choices=["scripted"], default="scripted")
     worker.add_argument("--once", action="store_true")
@@ -81,6 +88,23 @@ def parser() -> argparse.ArgumentParser:
 
 def main(argv: list[str] | None = None) -> int:
     args = parser().parse_args(argv)
+    if args.command == "model":
+        from aftercare.llm.smoke import run_smoke
+
+        try:
+            output = run_smoke(Settings(), args.approval, args.account_confirmation)
+            print(json.dumps(output, ensure_ascii=False, indent=2))
+            return 0 if output["status"] == "COMPLETED" else 1
+        except Exception as error:
+            print(
+                json.dumps(
+                    {
+                        "status": "STOPPED",
+                        "error_code": getattr(error, "code", type(error).__name__),
+                    }
+                )
+            )
+            return 1
     install_offline_guard()
     try:
         settings = Settings(offline=True, dev_faults=getattr(args, "demo_faults", False))

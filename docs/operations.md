@@ -80,5 +80,7 @@ Python 离线 hook 不是 OS 沙箱；本项目不暴露 shell/任意文件工�
 dev 运行会重置专用 aftercare_test，逐题导出再重置，不触碰 aftercare_demo；不要与 pytest 并行。
 运行输出 runtime/phase-05/dev-*/report.{json,csv,md}。阶段 5 正式保存的开发报告在 docs/experiments/development-final.*。
 详细隔离、分母和局限见 evaluation/README.md。独立答案不进 Git，请自行备份整个项目 runtime/independent-evaluator 目录。
-真实调用仍被代码阻止；需先批准 compatibility-smoke.json 的精确范围，然后在阶段 6 实现并验证授权执行入口。
+通用真实 Agent 调用仍被阻止；专用 compatibility-smoke 入口已完成一次获批执行，不能重复启动同批次。
+仅该入口支持临时 ALLOW_REAL_MODEL_CALLS=true，并同时校验具体计划 hash、审批、账户确认与预算。
+实际报告见 docs/experiments/compatibility-smoke.md；development-pilot 需独立批准，不能继承本批剩余额度。
 不要在聊天里发送 Key。真实联调前应在账户侧启用仅免费额度保护；任何额外付费需单独批准。

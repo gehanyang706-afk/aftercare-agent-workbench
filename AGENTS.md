@@ -28,8 +28,11 @@ AFTERCARE_TEST_DATABASE_URL=postgresql+psycopg://aftercare:aftercare_local_only@
 .venv/bin/ruff format --check .
 ```
 
-当前完成阶段 0—5。真实发送的 `model smoke`、正式 `eval run --manifest` 等阶段 6 命令尚未实现；
-不得当作可运行功能。每阶段完成后同步更新本文件中的状态与命令。
+当前完成阶段 0—5 及阶段 6A 的 compatibility-smoke（6 次请求、1,102 Token）。
+`model smoke --batch compatibility-smoke --approval <本机审批记录> --account-confirmation <账户确认> --execute`
+已实现，仅接受绑定获批 hash 的这一批；必须临时显式启用真实开关，已执行批次禁止直接重跑。
+通用真实 Agent、development-pilot 和正式 `eval run --manifest` 尚未实现/获批，不能当作可运行功能。
+每阶段完成后同步更新本文件中的状态与命令。
 
 ## 实现、验收与交接
 

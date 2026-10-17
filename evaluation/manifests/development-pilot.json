@@ -1,0 +1,76 @@
+{
+  "batch_id": "development-pilot",
+  "status": "DRAFT_NOT_AUTHORIZED",
+  "exact_model": "qwen3.5-plus-2026-02-15",
+  "provider": "bailian-beijing-compatible",
+  "enable_thinking": false,
+  "profile": "full",
+  "user_simulator": "adaptive-scripted-v1 (no model-user calls)",
+  "split": "dev",
+  "development_file_sha256": "d407bcbaf4cfbf2a2a26354afcab79b0fdf2f3532aa185b95737b8aa08e85382",
+  "tasks": [
+    {
+      "scenario_id": "d-001",
+      "family_id": "d-paid-cancellation",
+      "category": "basic",
+      "task_sha256": "ca37529ff7ad9a4e99091e7d13247e43c080f358b93e28dd27340ef2238ef2d5"
+    },
+    {
+      "scenario_id": "d-003",
+      "family_id": "d-relative-size",
+      "category": "basic",
+      "task_sha256": "389ec4c525c1b7a716636c30617940b2de37fc9700ea3141570b5a92338c1a4c"
+    },
+    {
+      "scenario_id": "d-016",
+      "family_id": "d-exchange-to-return",
+      "category": "revision",
+      "task_sha256": "65a24b6bc78934ca95400d292156bd9bf31386e1eda1f6ba510e8c67cb44db5b"
+    },
+    {
+      "scenario_id": "d-048",
+      "family_id": "d-exchange-response-lost",
+      "category": "recovery",
+      "task_sha256": "f120e06c308ce4169a4dd0d72b2fa7cd7b6fc72ac7f34891113471e340c596a4"
+    }
+  ],
+  "unique_tasks": 4,
+  "repetitions": 1,
+  "max_conversations": 4,
+  "max_requests_per_conversation_including_retries": 16,
+  "max_http_requests_including_retries": 64,
+  "max_token_per_conversation_including_input_output": 24000,
+  "total_token_hard_cap": 96000,
+  "max_output_tokens_per_request": 512,
+  "concurrency": 1,
+  "per_conversation_wall_seconds": 180,
+  "batch_wall_seconds": 1200,
+  "sdk_retries": 0,
+  "additional_paid_cost_cap_cny": 0,
+  "stop_conditions": [
+    "Authentication, region, exact-model, quota or free-tier protection error",
+    "Any unknown usage or transport disconnect; retain reservation and pause",
+    "Provider protocol incompatibility or security-sensitive unauthorized tool attempt",
+    "Any per-request/conversation/batch token, request or wall-clock cap",
+    "Human cancellation"
+  ],
+  "preconditions": [
+    "Separate explicit human approval bound to this plan hash",
+    "Reconfirm exact-model Beijing free quota >= 96000 and FreeTierOnly enabled",
+    "Implement general real Agent adapter with complete 9-tool schemas and offline contract tests before any call",
+    "Prove business-fixture reset cannot delete or reset real budget/call audit rows; use separate durable ledger sessions with business conversation mapping",
+    "Preserve all task failures, timeouts and budget stops; no success-only retries"
+  ],
+  "fixture_storage": "aftercare_test for isolated business fixtures; durable real ledger remains in aftercare_demo with explicit conversation mapping and no reset. Never mutate user-facing demo orders. Do not run pytest concurrently.",
+  "no_holdout_access": true,
+  "no_formal_comparison": true,
+  "automatic_model_switch": false,
+  "estimation_note": "96k is a strict pilot ceiling (4 x 24k), not inferred from the tiny smoke prompts. Full 9-tool contexts have not yet been measured.",
+  "calibration_source": {
+    "compatibility_requests": 6,
+    "input_tokens": 1001,
+    "output_tokens": 101,
+    "unknown_reserved_tokens": 0
+  },
+  "plan_sha256": "9eb8329777e719103f86c188bea0d99d84ec4a9250f2a31575e2a76fd810d894"
+}
