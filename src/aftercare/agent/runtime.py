@@ -92,6 +92,7 @@ def run_turn(
     resume=False,
     run_id=None,
     profile="full",
+    decision="approve",
 ):
     config = {"configurable": {"thread_id": conversation}, "recursion_limit": 96}
     with agent_runtime(
@@ -99,6 +100,19 @@ def run_turn(
     ) as (graph, model):
         state = graph.get_state(config)
         if state.next and not resume:
+            last_human = next(
+                (
+                    m
+                    for m in reversed(state.values.get("messages", []))
+                    if isinstance(m, HumanMessage)
+                ),
+                None,
+            )
+            if last_human is not None and last_human.id == message_id:
+                interrupts = [i for task in state.tasks for i in task.interrupts]
+                if interrupts:
+                    return {**state.values, "__interrupt__": interrupts}
+                return graph.invoke(None, config)
             # Reject the old interrupt only after the new message invalidates its business preview.
             graph.invoke(
                 Command(
@@ -111,7 +125,7 @@ def run_turn(
         if resume:
             if not state.next:
                 return state.values
-            result = graph.invoke(Command(resume={"decisions": [{"type": "approve"}]}), config)
+            result = graph.invoke(Command(resume={"decisions": [{"type": decision}]}), config)
         else:
             with service.sessions() as s:
                 msg = s.get(Message, message_id)

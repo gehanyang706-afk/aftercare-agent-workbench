@@ -28,7 +28,10 @@ class BusinessBoundary(AgentMiddleware):
         if self.profile in ["full", "retrieval"] and len(starts) > 4:
             messages = messages[starts[-4] :]
         text = "仅处理当前用户售后。不得自批，不得声称退款到账。有效状态：" + json.dumps(
-            {"case": snapshot.get("case", {}), "intent_revision": snapshot["revision"]},
+            {
+                "case": {"facts": snapshot.get("case", {}).get("facts", {})},
+                "intent_revision": snapshot["revision"],
+            },
             ensure_ascii=False,
         )
         return handler(

@@ -40,6 +40,10 @@ def offline_plan(messages):
             except (ValueError, TypeError):
                 results[msg.name] = {"ok": False, "error_code": "USER_REJECTED"}
     # A rejected HITL call is protocol feedback, never a successful business receipt.
+    if "get_operation" in results and results["get_operation"].get("ok"):
+        return response(
+            "查询原回执：" + json.dumps(results["get_operation"]["data"], ensure_ascii=False)
+        )
     if "commit_action" in results:
         item = results["commit_action"]
         if item.get("ok"):
@@ -55,10 +59,6 @@ def offline_plan(messages):
                 ]
             )
         return response("旧方案未执行。请继续说明当前诉求，必要时重新生成预览。")
-    if "get_operation" in results and results["get_operation"].get("ok"):
-        return response(
-            "查询原回执：" + json.dumps(results["get_operation"]["data"], ensure_ascii=False)
-        )
     if "request_handoff" in results:
         return response("已创建人工接管工单；状态 HANDOFF_PENDING，尚未判定责任。")
     for name, item in results.items():

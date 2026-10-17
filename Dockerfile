@@ -5,6 +5,7 @@ COPY requirements.lock pyproject.toml ./
 RUN python -m pip install --require-hashes -r requirements.lock
 COPY src ./src
 COPY configs ./configs
+COPY data ./data
 COPY migrations ./migrations
 COPY alembic.ini ./
 RUN python -m pip install --no-deps --no-build-isolation -e . \

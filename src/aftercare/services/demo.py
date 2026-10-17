@@ -224,6 +224,13 @@ def reset_demo(sessions, confirmation):
     assert_dedicated(sessions)
     require(confirmation == "demo-only", "EXPLICIT_RESET_REQUIRED")
     require(sessions.kw["bind"].url.database == "aftercare_demo", "DEMO_DATABASE_REQUIRED")
+    from aftercare.repositories.models import Job
+
+    with sessions() as s:
+        require(
+            s.scalar(select(Job.id).where(Job.status.in_(["RUNNING", "PENDING"]))) is None,
+            "STOP_OR_FINISH_ACTIVE_JOBS_BEFORE_RESET",
+        )
     names = ", ".join('"' + table.name + '"' for table in Base.metadata.sorted_tables)
     with sessions.begin() as s:
         s.execute(text(f"TRUNCATE {names} RESTART IDENTITY CASCADE"))

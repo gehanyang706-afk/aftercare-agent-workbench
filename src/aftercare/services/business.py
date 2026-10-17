@@ -69,6 +69,8 @@ class BusinessService:
             .with_for_update()
         )
         require(row is not None, "NOT_FOUND")
+        if getattr(self, "run_guard", None):
+            self.run_guard(s, row)
         return row
 
     def create_conversation(self, principal):
@@ -82,7 +84,9 @@ class BusinessService:
             self.event(s, row.id, "conversation_created", {})
             return row.id
 
-    def append_message(self, principal, conversation_id, text_value, client_message_id):
+    def append_message(
+        self, principal, conversation_id, text_value, client_message_id, enqueue=None
+    ):
         require(0 < len(text_value) <= 6000, "INVALID_MESSAGE")
         with self.sessions.begin() as s:
             conv = self._conversation(s, principal, conversation_id)
@@ -94,6 +98,8 @@ class BusinessService:
             )
             if existing:
                 require(existing.text == text_value, "MESSAGE_ID_CONFLICT")
+                if enqueue:
+                    enqueue(s, existing)
                 return columns(existing)
             conv.revision += 1
             for preview in s.scalars(
@@ -114,6 +120,8 @@ class BusinessService:
             )
             s.add(row)
             s.flush()
+            if enqueue:
+                enqueue(s, row)
             self.event(
                 s, conv.id, "user_message", {"message_id": row.id, "revision": conv.revision}
             )
@@ -293,7 +301,7 @@ class BusinessService:
         require(row.expires_at >= self.clock(), "PREVIEW_EXPIRED")
         require(row.revision == conv.revision, "INTENT_CHANGED")
 
-    def confirm(self, principal, preview_id, accept: bool):
+    def confirm(self, principal, preview_id, accept: bool, enqueue=None):
         with self.sessions.begin() as s:
             conv, row = self._preview(s, principal, preview_id)
             if row.status == "COMMITTED":
@@ -324,9 +332,12 @@ class BusinessService:
                 "preview_confirmed" if accept else "preview_rejected",
                 {"preview_id": row.id, "revision": conv.revision},
             )
+            if enqueue:
+                enqueue(s, conv, row)
             return {"preview_id": row.id, "status": row.status}
 
     def commit(self, principal, preview_id, idempotency_key=None, fault=None):
+        fault = fault or getattr(self, "commit_fault", None)
         key = idempotency_key or preview_id
         request_hash = digest({"preview_id": preview_id})
         with self.sessions.begin() as s:
@@ -498,7 +509,7 @@ class BusinessService:
                     for m in s.scalars(
                         select(Message)
                         .where(Message.conversation_id == conv.id)
-                        .order_by(Message.created_at)
+                        .order_by(Message.revision, Message.created_at, Message.id)
                     )
                 ],
                 "previews": [

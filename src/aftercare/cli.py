@@ -18,6 +18,7 @@ def parser() -> argparse.ArgumentParser:
         command.add_argument("--offline", action="store_true", help="禁止非本机网络（默认启用）")
         if name == "serve":
             command.add_argument("--port", type=int, default=8000)
+            command.add_argument("--demo-faults", action="store_true")
             command.add_argument(
                 "--container-network",
                 action="store_true",
@@ -55,6 +56,9 @@ def parser() -> argparse.ArgumentParser:
     evaluate = rc.add_parser("evaluate")
     evaluate.add_argument("--split", choices=["dev"], default="dev")
     evaluate.add_argument("--profiles", default="bm25,dense,hybrid,hybrid-rerank")
+    worker = commands.add_parser("worker")
+    worker.add_argument("--provider", choices=["scripted"], default="scripted")
+    worker.add_argument("--once", action="store_true")
     return result
 
 
@@ -62,7 +66,7 @@ def main(argv: list[str] | None = None) -> int:
     args = parser().parse_args(argv)
     install_offline_guard()
     try:
-        settings = Settings(offline=True)
+        settings = Settings(offline=True, dev_faults=getattr(args, "demo_faults", False))
     except ValidationError:
         print(json.dumps({"status": "invalid_config", "code": "CONFIG_INVALID"}))
         return 2
@@ -127,6 +131,11 @@ def main(argv: list[str] | None = None) -> int:
         except Exception:
             print("DATABASE_COMMAND_FAILED: check local database availability and permissions")
             return 1
+        return 0
+    if args.command == "worker":
+        from aftercare.workers.worker import work
+
+        work(settings, once=args.once)
         return 0
     if args.command == "retrieval":
         from aftercare.repositories.database import session_factory

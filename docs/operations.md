@@ -1,96 +1,69 @@
-# 环境、运行与排障
+# 操作说明
 
-本机已安装 /opt/homebrew/bin/python3.13（3.13.14）；所有项目命令使用 .venv。
-不需要 Node，不需要全局安装软件。阶段 0 不依赖模型 Key 或权重。
+项目根目录 `/Users/gehanyang/编程/aftercare-agent-workbench`。使用现有 Python 3.13.14 和项目 .venv。
 
-## 从锁文件重建
-
-下面用于新副本/新环境，不能覆盖正在使用的其他项目环境：
-
-```bash
-cd /Users/gehanyang/编程/aftercare-agent-workbench
-/opt/homebrew/bin/python3.13 -m venv .venv
-.venv/bin/python -m pip install --cache-dir runtime/pip-cache --require-hashes -r requirements.lock
-.venv/bin/python -m pip install --no-deps --no-build-isolation -e .
-.venv/bin/python -m pip check
-```
-
-重新解析锁文件仅在有依赖变更时运行；更新后重新验证并记录版本：
-
-```bash
-.venv/bin/pip-compile --extra dev --all-build-deps --allow-unsafe --generate-hashes --strip-extras --output-file requirements.lock --cache-dir runtime/pip-cache pyproject.toml
-```
-
-.env 可由 .env.example 复制，只作用于本项目。无需配置真实 Key；不要把 Key 发到聊天。
-doctor 只显示 Key/Base URL 是否设置，不显示值；错误输出不回显 DSN 或配置原文。
-
-## 当前可运行命令
-
-```bash
-.venv/bin/python -m aftercare doctor --offline
-.venv/bin/python -m aftercare serve --offline
-.venv/bin/python -m aftercare db current
-.venv/bin/python -m aftercare db migrate
-```
-
-serve 默认 127.0.0.1:8000；--port 可调整冲突端口。--container-network 仅用于容器内部监听，
-Compose 的宿主映射固定 127.0.0.1。禁止直接将工作台公开到公网。
-doctor：0 基础设施 ready；1 依赖未就绪；2 配置无效。db：未知库拒绝退出 2；连接/迁移失败退出 1。
-
-ready 在 2 秒连接超时和 2 秒 SQL 超时内检查数据库、vector 和当前 Alembic revision。
-它不调用模型、不写表、不自动修复。可能返回 DATABASE_UNAVAILABLE、PGVECTOR_MISSING、
-MIGRATIONS_REQUIRED、SCHEMA_REVISION_MISMATCH、OFFLINE_DATABASE_HOST_DENIED。
-live 只证明服务进程响应；ready scope=phase-0-infrastructure 也不证明售后链路已完成。
-
-## 专用数据库（授权镜像下载后再运行）
-
-阶段 0 仅验证 Compose 定义，尚未执行以下拉取/启动操作。资源见 resources.md；
-用户按阶段 1 指令明确允许已列明基础镜像后，不必逐条重问。
+## 本机启动
 
 ```bash
 docker compose up -d db
 .venv/bin/python -m aftercare db migrate
-.venv/bin/python -m aftercare db current
+.venv/bin/python -m aftercare demo seed --database demo
 .venv/bin/python -m aftercare doctor --offline
+.venv/bin/python -m aftercare serve --offline
+# 第二终端
+.venv/bin/python -m aftercare worker --provider scripted
 ```
 
-独立项目名 aftercare-agent-workbench，库 aftercare_demo，角色 aftercare，密码为公开的本机模拟密码，
-端口 127.0.0.1:55432。卷仅属于此 Compose 项目，不复用其他项目。不要连接真实数据库。
-db migrate 只允许本机 aftercare_demo 或 aftercare_test；没有清库/重置命令。
+打开 http://127.0.0.1:8000，选择客户进入工作台。无须配置 Key。
+若端口占用用 `serve --offline --port 8127`。Ctrl+C 停止对应进程，数据库另由 Compose 管理。
 
-阶段 1 增加专用测试库和事务验收。当前如已自行准备 aftercare_test 并迁移，可显式启用真实探针测试：
-
-```bash
-DATABASE_URL=postgresql+psycopg://aftercare:aftercare_local_only@127.0.0.1:55432/aftercare_test .venv/bin/python -m aftercare db migrate
-AFTERCARE_TEST_DATABASE_URL=postgresql+psycopg://aftercare:aftercare_local_only@127.0.0.1:55432/aftercare_test .venv/bin/python -m pytest tests/integration
-```
-
-## 容器应用（同样需要镜像/构建下载授权）
+## 容器启动
 
 ```bash
 docker compose --profile app build app
 docker compose up -d db
 docker compose --profile app run --rm app python -m aftercare db migrate
-docker compose --profile app up -d app
+docker compose --profile app run --rm app python -m aftercare demo seed --database demo
+AFTERCARE_PORT=8128 docker compose --profile app up -d app worker
 ```
 
-容器通过共享专用 PostgreSQL Unix socket 连接数据库，以保持严格非本机网络阻断；宿主开发使用 TCP。
-没有为 Docker 网络域名添加外部网络例外。socket 卷 app 只读挂载，不包含数据库数据文件。
-不把 .env/模型 Key/评测答案/原始运行日志打进镜像。
-worker 尚未实现，因此不创建假 worker 服务；阶段 4 将加入可实际领取任务的入口。
+打开 http://127.0.0.1:8128。本轮实际容器运行在此端口。app 和 worker 用专用 Unix socket 连接 PostgreSQL。
+镜像不含 Key、权重、评测答案或原始日志；默认只运行脚本模型+BM25。宿主机可另跑已验证的 ONNX 检索对照。
+暂停：`docker compose --profile app stop app worker`；保留数据关闭：`docker compose --profile app down`。
+不要使用 down -v，它会删除专用数据卷。勿同时启动多个无必要的本机/容器 worker。
 
-暂停使用 `docker compose --profile app stop`；保留数据停止用 `docker compose --profile app down`。
-不使用 down -v，它会删除项目数据卷。阶段 0 未启动容器，因此没有需要清理的运行服务。
+## 重置、故障与排障
 
-## 验证与证据
+`demo seed` 不覆盖已有数据，若交付时间太久导致演示订单超时，先停止/完成活动 job，然后显式运行：
 
 ```bash
-.venv/bin/python -m pytest -m "not live_model and not model_weights"
-.venv/bin/python -m ruff check .
-.venv/bin/python -m ruff format --check .
-docker compose config --quiet
+.venv/bin/python -m aftercare demo reset --confirm demo-only
 ```
 
-runtime/phase-00 保存本机详细日志（被 Git 忽略）；可跟踪验收摘要在 docs/validation-phase-00.json。
-离线保护覆盖 Python socket/DNS/UDP，不是 OS 沙箱；当前不暴露 subprocess 推理路径。
-依赖下载不等于模型推理；没有安装 torch、sentence-transformers 或模型权重。
+仅清除本项目 aftercare_demo 的已知业务表并重建模拟初态；拒绝未知库/角色/schema 或存在活动任务。
+不会自动清理其他数据库，不提供生产数据重置。aftercare_test 专用于测试，测试会重置其中 fixture，勿保存业务数据。
+
+`serve --offline --demo-faults` 开启本机演示注入：下次提交后丢响应、下次任务阻塞、下次提交前回滚。
+普通运行默认关闭该接口。阻塞任务可点停止；未知用量保留预算，演示可在没有活动 job 后显式重置。
+确认前说新诉求会使旧方案失效；不要把聊天“好的”当授权。提交后改口不会撤回已有申请。
+
+live 200 仅表示进程响应；ready 检查数据库、vector 与当前 Alembic head，失败 503；doctor 对应退出 1。
+配置错误退出 2。Key/Base URL 只报告是否存在；异常不回显 DSN。全局 ALLOW_REAL_MODEL_CALLS 仍不能开启真实调用。
+
+## 依赖与验证
+
+```bash
+/opt/homebrew/bin/python3.13 -m venv .venv
+.venv/bin/python -m pip install --cache-dir runtime/pip-cache --require-hashes -r requirements.lock
+.venv/bin/python -m pip install --no-deps --no-build-isolation -e .
+.venv/bin/python -m pip check
+.venv/bin/python -m ruff check .
+.venv/bin/python -m ruff format --check .
+AFTERCARE_TEST_DATABASE_URL=postgresql+psycopg://aftercare:aftercare_local_only@127.0.0.1:55432/aftercare_test .venv/bin/python -m pytest -m 'not live_model'
+```
+
+缺少测试库时先在本项目 PostgreSQL 创建 aftercare_test，再用 DATABASE_URL 指定该库运行 db migrate。
+真实事务不用 SQLite；普通 pytest 禁止外部网络。模型权重已在 runtime/models，固定 revision/hash 见 configs/local-models.lock.json。
+重新取得权重运行 scripts/download_models.py；embedding 导出运行 scripts/export_embedding.py。均不得改全局缓存。
+锁更新：`pip-compile --extra dev --all-build-deps --allow-unsafe --generate-hashes --strip-extras --output-file requirements.lock --cache-dir runtime/pip-cache pyproject.toml`，仅依赖变化时使用。
+Python 离线 hook 不是 OS 沙箱；本项目不暴露 shell/任意文件工具，LLM 工厂和 provider 执行仍拒绝真实请求。

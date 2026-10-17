@@ -253,3 +253,28 @@ class ModelCall(Base):
     request_id: Mapped[str | None] = mapped_column(String)
     details: Mapped[dict] = mapped_column(JSON, default=dict)
     created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True))
+
+
+class DemoSession(Base):
+    __tablename__ = "demo_sessions"
+    token_hash: Mapped[str] = mapped_column(String, primary_key=True)
+    customer_id: Mapped[str] = mapped_column(ForeignKey("customers.id"))
+    csrf_token: Mapped[str] = mapped_column(String)
+    expires_at: Mapped[datetime] = mapped_column(DateTime(timezone=True))
+
+
+class Job(Base):
+    __tablename__ = "jobs"
+    id: Mapped[str] = mapped_column(String, primary_key=True)
+    conversation_id: Mapped[str] = mapped_column(ForeignKey("conversations.id"), index=True)
+    message_id: Mapped[str | None] = mapped_column(ForeignKey("messages.id"))
+    dedup_key: Mapped[str] = mapped_column(String, unique=True)
+    kind: Mapped[str] = mapped_column(String)
+    revision: Mapped[int] = mapped_column(Integer)
+    status: Mapped[str] = mapped_column(String, default="PENDING")
+    lease_owner: Mapped[str | None] = mapped_column(String)
+    lease_expires_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True))
+    attempt: Mapped[int] = mapped_column(Integer, default=0)
+    cancel_requested: Mapped[bool] = mapped_column(Boolean, default=False)
+    result: Mapped[dict] = mapped_column(JSON, default=dict)
+    created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True))

@@ -1,0 +1,17 @@
+{
+  "base_url": "http://127.0.0.1:8128",
+  "ready_status": 200,
+  "conversation_id": "conv_da87e597d67a43d5b42f7b4c26b3aa25",
+  "receipt": {
+    "operation_id": "op_7adf4737419b47e295e0b929626188a8",
+    "preview_id": "prev_af3a2c3b503245d5ad8ba891f4ff27d5",
+    "status": "COMMITTED",
+    "result": "CANCELLED",
+    "order_id": "S1001",
+    "application_id": null,
+    "notice": "仅记录模拟退款请求，不代表退款到账"
+  },
+  "duplicate_confirm_operations": 1,
+  "remote_model_calls": 0,
+  "worker": "Compose container (host worker stopped)"
+}

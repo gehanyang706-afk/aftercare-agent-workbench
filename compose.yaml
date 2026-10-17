@@ -20,6 +20,7 @@ services:
   app:
     profiles: [app]
     build: .
+    image: aftercare-agent-workbench:local
     environment:
       APP_ENV: local
       ALLOW_REAL_MODEL_CALLS: "false"
@@ -31,13 +32,28 @@ services:
       db:
         condition: service_healthy
     ports:
-      - "127.0.0.1:8000:8000"
+      - "127.0.0.1:${AFTERCARE_PORT:-8000}:8000"
     command: ["python", "-m", "aftercare", "serve", "--offline", "--container-network"]
     healthcheck:
       test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://127.0.0.1:8000/health/ready', timeout=5)"]
       interval: 10s
       timeout: 6s
       retries: 5
+    restart: "no"
+  worker:
+    profiles: [app]
+    image: aftercare-agent-workbench:local
+    build: .
+    environment:
+      APP_ENV: local
+      ALLOW_REAL_MODEL_CALLS: "false"
+      DATABASE_URL: "postgresql+psycopg://aftercare:aftercare_local_only@/aftercare_demo?host=/var/run/postgresql"
+    volumes:
+      - pgsocket:/var/run/postgresql:ro
+    depends_on:
+      db:
+        condition: service_healthy
+    command: ["python", "-m", "aftercare", "worker", "--provider", "scripted"]
     restart: "no"
 volumes:
   pgdata:

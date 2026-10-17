@@ -23,6 +23,7 @@ class Settings(BaseSettings):
         "postgresql+psycopg://aftercare:aftercare_local_only@127.0.0.1:55432/aftercare_demo"
     )
     offline: bool = True
+    dev_faults: bool = False
 
     @field_validator("database_url")
     @classmethod
@@ -44,7 +45,7 @@ class Settings(BaseSettings):
             "api_key_configured": bool(self.dashscope_api_key.get_secret_value()),
             "base_url_configured": bool(self.dashscope_base_url.get_secret_value()),
             "database_configured": bool(self.database_url.get_secret_value()),
-            "phase": 3,
+            "phase": 4,
         }
 
 
