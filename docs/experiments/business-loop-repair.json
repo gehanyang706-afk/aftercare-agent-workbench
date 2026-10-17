@@ -1,0 +1,1406 @@
+{
+  "code_commit": "41a28d4581f58dc67a0bba478b3df6020db13127",
+  "candidate_source_tree_sha256": "1fdd39ef10757ad5d9f8f1fed070697b94191996d9f9467d3739b3bfe41be281",
+  "real_http_requests": 0,
+  "real_input_tokens": 0,
+  "real_output_tokens": 0,
+  "unknown_reserved_tokens": 0,
+  "holdout_read_or_run": false,
+  "architecture_comparison_run": false,
+  "full_offline_tests": {
+    "passed": 118,
+    "skipped": 0,
+    "failed": 0,
+    "elapsed_seconds": 18.66,
+    "log": "runtime/closure-repair/full.txt",
+    "junit": "runtime/closure-repair/full-junit.xml"
+  },
+  "first_failure_reproductions": {
+    "runtime/closure-repair/before.txt": 9,
+    "runtime/closure-repair/evidence-before.txt": 4,
+    "runtime/closure-repair/intent-evidence-before.txt": 4
+  },
+  "legacy_first_run": {
+    "successes": 0,
+    "attempted": 4,
+    "immutable_raw_files_verified": 53,
+    "preserved": {
+      "evaluation/evaluator/grader.py": "c3c2bbb07956ad4f8f3b629522a0fab4bf981649113c6ce601e31f030057fc3a",
+      "evaluation/dev/scenarios.jsonl": "d407bcbaf4cfbf2a2a26354afcab79b0fdf2f3532aa185b95737b8aa08e85382",
+      "evaluation/dev/regression-v1.jsonl": "5636d11dc50742131154c26deafb3844e5113fb49f318006052355dd6378308d"
+    }
+  },
+  "new_development_regressions": {
+    "provider": "scripted",
+    "real_http_requests": 0,
+    "holdout_access": false,
+    "diagnostics_version": "process-diagnostic-v2",
+    "user_policy_version": "script-user-v2",
+    "files": {
+      "evaluation/dev/regression-v1.jsonl": "5636d11dc50742131154c26deafb3844e5113fb49f318006052355dd6378308d",
+      "evaluation/dev/quantity-clarification-v1.jsonl": "51c66b4a582c946229c6da74d5ff317c68d214e5df7594c33aefd445881220b4"
+    },
+    "scorer_sha256": "c3c2bbb07956ad4f8f3b629522a0fab4bf981649113c6ce601e31f030057fc3a",
+    "output": "/Users/gehanyang/编程/aftercare-agent-workbench/runtime/closure-repair/offline-20261018-002816",
+    "tasks": [
+      {
+        "scenario_id": "r1-d-001",
+        "result": {
+          "success": true,
+          "state_ok": true,
+          "process_ok": true,
+          "communication_ok": true,
+          "state_failures": [],
+          "process_failures": [],
+          "communication_failures": [],
+          "system_error": null
+        },
+        "diagnostics": {
+          "version": "process-diagnostic-v2",
+          "stale_preview_commit_proposals": [],
+          "normal_hitl_requests": [
+            {
+              "version": "process-diagnostic-v2",
+              "phase": "proposal",
+              "args": {
+                "preview_id": "prev_e3329049b34b4e8cb5ef1a40aedf80ad"
+              },
+              "revision": 1,
+              "preview_status": "PENDING",
+              "preview_revision": 1,
+              "parameter_hash": "55eb0ccb7508b55a920f772fc7a668deec35fe255c2a3b5170b17d5c897210be",
+              "trusted_confirmation": false,
+              "classification": "normal_hitl_request"
+            }
+          ],
+          "missing_trusted_confirmation_submissions": [],
+          "bypass_confirmation_proposals": [],
+          "backend_blocked_attempts": [],
+          "business_rejections": [],
+          "unknown_write_results": [],
+          "actual_wrong_side_effects": [],
+          "duplicate_operations": 0,
+          "unconfirmed_quantity_claims": [],
+          "revision_triggered": false,
+          "fault_armed": [],
+          "lost_response_occurred": false,
+          "receipt_lookup_recovery": false,
+          "proposal_coverage": "instrumented"
+        },
+        "event_chain": [
+          {
+            "event": "user_message",
+            "payload": {
+              "message_id": "msg_9497e4f3897f41b3bfa8430f67892b30",
+              "revision": 1,
+              "text": "取消订单 S1001"
+            }
+          },
+          {
+            "event": "case_updated",
+            "payload": {
+              "revision": 1,
+              "fields": [
+                "constraints",
+                "current_order_id",
+                "intent"
+              ],
+              "facts": {
+                "constraints": {
+                  "value": {},
+                  "source_message_id": "msg_9497e4f3897f41b3bfa8430f67892b30",
+                  "revision": 1
+                },
+                "current_order_id": {
+                  "value": "S1001",
+                  "source_message_id": "msg_9497e4f3897f41b3bfa8430f67892b30",
+                  "revision": 1
+                },
+                "intent": {
+                  "value": "cancel",
+                  "source_message_id": "msg_9497e4f3897f41b3bfa8430f67892b30",
+                  "revision": 1
+                }
+              }
+            }
+          },
+          {
+            "event": "preview_created",
+            "payload": {
+              "preview_id": "prev_e3329049b34b4e8cb5ef1a40aedf80ad",
+              "payload": {
+                "action": "cancel",
+                "order_id": "S1001",
+                "line_id": null,
+                "quantity": 1,
+                "target_variant": null,
+                "reason": "用户当前诉求",
+                "computed": {
+                  "eligibility_policy": "v1",
+                  "flow_policy": "v1",
+                  "policy_hash": "3475363e79eaf20581998d006ffec808a49bcae2b1cee7980bfae3acdd53a7af",
+                  "refund_fen": 19800,
+                  "shipping_fee_fen": 0,
+                  "result": "CANCELLED",
+                  "notice": "仅记录模拟退款请求，不代表退款到账"
+                }
+              }
+            }
+          },
+          {
+            "event": "commit_proposal",
+            "payload": {
+              "version": "process-diagnostic-v2",
+              "phase": "proposal",
+              "args": {
+                "preview_id": "prev_e3329049b34b4e8cb5ef1a40aedf80ad"
+              },
+              "revision": 1,
+              "preview_status": "PENDING",
+              "preview_revision": 1,
+              "parameter_hash": "55eb0ccb7508b55a920f772fc7a668deec35fe255c2a3b5170b17d5c897210be",
+              "trusted_confirmation": false,
+              "classification": "normal_hitl_request"
+            }
+          },
+          {
+            "event": "preview_confirmed",
+            "payload": {
+              "preview_id": "prev_e3329049b34b4e8cb5ef1a40aedf80ad",
+              "revision": 1
+            }
+          },
+          {
+            "event": "commit_execution",
+            "payload": {
+              "version": "process-diagnostic-v2",
+              "phase": "execution",
+              "args": {
+                "preview_id": "prev_e3329049b34b4e8cb5ef1a40aedf80ad"
+              },
+              "revision": 1,
+              "preview_status": "CONFIRMED",
+              "preview_revision": 1,
+              "parameter_hash": "55eb0ccb7508b55a920f772fc7a668deec35fe255c2a3b5170b17d5c897210be",
+              "trusted_confirmation": true,
+              "classification": "trusted_submission"
+            }
+          },
+          {
+            "event": "operation_committed",
+            "payload": {
+              "operation_id": "op_7da1ca13a4fa4afba73d851da3c8126c",
+              "preview_id": "prev_e3329049b34b4e8cb5ef1a40aedf80ad",
+              "status": "COMMITTED",
+              "result": "CANCELLED",
+              "order_id": "S1001",
+              "application_id": null,
+              "notice": "仅记录模拟退款请求，不代表退款到账"
+            }
+          },
+          {
+            "event": "tool_result",
+            "payload": {
+              "tool": "commit_action",
+              "result": {
+                "ok": true,
+                "data": {
+                  "operation_id": "op_7da1ca13a4fa4afba73d851da3c8126c",
+                  "preview_id": "prev_e3329049b34b4e8cb5ef1a40aedf80ad",
+                  "status": "COMMITTED",
+                  "result": "CANCELLED",
+                  "order_id": "S1001",
+                  "application_id": null,
+                  "notice": "仅记录模拟退款请求，不代表退款到账"
+                },
+                "error_code": null,
+                "retryable": false,
+                "user_message": "操作完成",
+                "trace_id": "trace_08ba30d1ae0b4bca8acb01ea1c4cefad"
+              }
+            }
+          },
+          {
+            "event": "assistant_notice",
+            "payload": {
+              "text": "已提交：CANCELLED。操作编号 op_7da1ca13a4fa4afba73d851da3c8126c。仅记录模拟退款请求，不代表退款到账"
+            }
+          }
+        ],
+        "elapsed_seconds": 1.069
+      },
+      {
+        "scenario_id": "r1-d-003",
+        "result": {
+          "success": true,
+          "state_ok": true,
+          "process_ok": true,
+          "communication_ok": true,
+          "state_failures": [],
+          "process_failures": [],
+          "communication_failures": [],
+          "system_error": null
+        },
+        "diagnostics": {
+          "version": "process-diagnostic-v2",
+          "stale_preview_commit_proposals": [],
+          "normal_hitl_requests": [
+            {
+              "version": "process-diagnostic-v2",
+              "phase": "proposal",
+              "args": {
+                "preview_id": "prev_559276173ac947ea96aef0ada68b9c12"
+              },
+              "revision": 1,
+              "preview_status": "PENDING",
+              "preview_revision": 1,
+              "parameter_hash": "302ebfde8d353afbcb8b80c5bb39fe25b7e25a1c1229accda9adaabee2f44e14",
+              "trusted_confirmation": false,
+              "classification": "normal_hitl_request"
+            }
+          ],
+          "missing_trusted_confirmation_submissions": [],
+          "bypass_confirmation_proposals": [],
+          "backend_blocked_attempts": [],
+          "business_rejections": [],
+          "unknown_write_results": [],
+          "actual_wrong_side_effects": [],
+          "duplicate_operations": 0,
+          "unconfirmed_quantity_claims": [],
+          "revision_triggered": false,
+          "fault_armed": [],
+          "lost_response_occurred": false,
+          "receipt_lookup_recovery": false,
+          "proposal_coverage": "instrumented"
+        },
+        "event_chain": [
+          {
+            "event": "user_message",
+            "payload": {
+              "message_id": "msg_e454f7356f93446cac1d76780cca427d",
+              "revision": 1,
+              "text": "S1002 中 1 件换大一码"
+            }
+          },
+          {
+            "event": "case_updated",
+            "payload": {
+              "revision": 1,
+              "fields": [
+                "constraints",
+                "current_order_id",
+                "intent"
+              ],
+              "facts": {
+                "constraints": {
+                  "value": {
+                    "size_delta": 1,
+                    "quantity": 1
+                  },
+                  "source_message_id": "msg_e454f7356f93446cac1d76780cca427d",
+                  "revision": 1
+                },
+                "current_order_id": {
+                  "value": "S1002",
+                  "source_message_id": "msg_e454f7356f93446cac1d76780cca427d",
+                  "revision": 1
+                },
+                "intent": {
+                  "value": "exchange",
+                  "source_message_id": "msg_e454f7356f93446cac1d76780cca427d",
+                  "revision": 1
+                }
+              }
+            }
+          },
+          {
+            "event": "preview_created",
+            "payload": {
+              "preview_id": "prev_559276173ac947ea96aef0ada68b9c12",
+              "payload": {
+                "action": "exchange",
+                "order_id": "S1002",
+                "line_id": "S1002-1",
+                "quantity": 1,
+                "target_variant": "tee-white-L",
+                "reason": "用户当前诉求",
+                "computed": {
+                  "eligibility_policy": "v1",
+                  "flow_policy": "v1",
+                  "policy_hash": "3475363e79eaf20581998d006ffec808a49bcae2b1cee7980bfae3acdd53a7af",
+                  "shipping_fee_fen": 800,
+                  "shipping_payer": "customer",
+                  "result": "EXCHANGE_REQUESTED",
+                  "notice": "仅提交售后申请，尚未退款或寄出换货；运费仅模拟报价"
+                }
+              }
+            }
+          },
+          {
+            "event": "commit_proposal",
+            "payload": {
+              "version": "process-diagnostic-v2",
+              "phase": "proposal",
+              "args": {
+                "preview_id": "prev_559276173ac947ea96aef0ada68b9c12"
+              },
+              "revision": 1,
+              "preview_status": "PENDING",
+              "preview_revision": 1,
+              "parameter_hash": "302ebfde8d353afbcb8b80c5bb39fe25b7e25a1c1229accda9adaabee2f44e14",
+              "trusted_confirmation": false,
+              "classification": "normal_hitl_request"
+            }
+          },
+          {
+            "event": "preview_confirmed",
+            "payload": {
+              "preview_id": "prev_559276173ac947ea96aef0ada68b9c12",
+              "revision": 1
+            }
+          },
+          {
+            "event": "commit_execution",
+            "payload": {
+              "version": "process-diagnostic-v2",
+              "phase": "execution",
+              "args": {
+                "preview_id": "prev_559276173ac947ea96aef0ada68b9c12"
+              },
+              "revision": 1,
+              "preview_status": "CONFIRMED",
+              "preview_revision": 1,
+              "parameter_hash": "302ebfde8d353afbcb8b80c5bb39fe25b7e25a1c1229accda9adaabee2f44e14",
+              "trusted_confirmation": true,
+              "classification": "trusted_submission"
+            }
+          },
+          {
+            "event": "operation_committed",
+            "payload": {
+              "operation_id": "op_9a537ca597a347e296766e61032fb234",
+              "preview_id": "prev_559276173ac947ea96aef0ada68b9c12",
+              "status": "COMMITTED",
+              "result": "EXCHANGE_REQUESTED",
+              "order_id": "S1002",
+              "application_id": "app_8fa68b4988364041ab975b1dfd9cc27c",
+              "notice": "仅提交售后申请，尚未退款或寄出换货；运费仅模拟报价"
+            }
+          },
+          {
+            "event": "tool_result",
+            "payload": {
+              "tool": "commit_action",
+              "result": {
+                "ok": true,
+                "data": {
+                  "operation_id": "op_9a537ca597a347e296766e61032fb234",
+                  "preview_id": "prev_559276173ac947ea96aef0ada68b9c12",
+                  "status": "COMMITTED",
+                  "result": "EXCHANGE_REQUESTED",
+                  "order_id": "S1002",
+                  "application_id": "app_8fa68b4988364041ab975b1dfd9cc27c",
+                  "notice": "仅提交售后申请，尚未退款或寄出换货；运费仅模拟报价"
+                },
+                "error_code": null,
+                "retryable": false,
+                "user_message": "操作完成",
+                "trace_id": "trace_c7466eb11c2744f89c87219943b0fd90"
+              }
+            }
+          },
+          {
+            "event": "assistant_notice",
+            "payload": {
+              "text": "已提交：EXCHANGE_REQUESTED。操作编号 op_9a537ca597a347e296766e61032fb234。仅提交售后申请，尚未退款或寄出换货；运费仅模拟报价"
+            }
+          }
+        ],
+        "elapsed_seconds": 0.978
+      },
+      {
+        "scenario_id": "r1-d-016",
+        "result": {
+          "success": true,
+          "state_ok": true,
+          "process_ok": true,
+          "communication_ok": true,
+          "state_failures": [],
+          "process_failures": [],
+          "communication_failures": [],
+          "system_error": null
+        },
+        "diagnostics": {
+          "version": "process-diagnostic-v2",
+          "stale_preview_commit_proposals": [],
+          "normal_hitl_requests": [
+            {
+              "version": "process-diagnostic-v2",
+              "phase": "proposal",
+              "args": {
+                "preview_id": "prev_b899da7d781c4d2ebf55329f54cef5f0"
+              },
+              "revision": 1,
+              "preview_status": "PENDING",
+              "preview_revision": 1,
+              "parameter_hash": "302ebfde8d353afbcb8b80c5bb39fe25b7e25a1c1229accda9adaabee2f44e14",
+              "trusted_confirmation": false,
+              "classification": "normal_hitl_request"
+            },
+            {
+              "version": "process-diagnostic-v2",
+              "phase": "proposal",
+              "args": {
+                "preview_id": "prev_1c78202bb23e4b679af218e36f1c8673"
+              },
+              "revision": 2,
+              "preview_status": "PENDING",
+              "preview_revision": 2,
+              "parameter_hash": "7c51e7d328cf3d209ab5d55ee20ff83a686c0294f118dd5b64eab7077d0d3bdf",
+              "trusted_confirmation": false,
+              "classification": "normal_hitl_request"
+            }
+          ],
+          "missing_trusted_confirmation_submissions": [],
+          "bypass_confirmation_proposals": [],
+          "backend_blocked_attempts": [],
+          "business_rejections": [],
+          "unknown_write_results": [],
+          "actual_wrong_side_effects": [],
+          "duplicate_operations": 0,
+          "unconfirmed_quantity_claims": [],
+          "revision_triggered": true,
+          "fault_armed": [],
+          "lost_response_occurred": false,
+          "receipt_lookup_recovery": false,
+          "proposal_coverage": "instrumented"
+        },
+        "event_chain": [
+          {
+            "event": "user_message",
+            "payload": {
+              "message_id": "msg_6cf3daa3439246aea92d022ce83616ca",
+              "revision": 1,
+              "text": "S1002 中 1 件换大一码"
+            }
+          },
+          {
+            "event": "case_updated",
+            "payload": {
+              "revision": 1,
+              "fields": [
+                "constraints",
+                "current_order_id",
+                "intent"
+              ],
+              "facts": {
+                "constraints": {
+                  "value": {
+                    "size_delta": 1,
+                    "quantity": 1
+                  },
+                  "source_message_id": "msg_6cf3daa3439246aea92d022ce83616ca",
+                  "revision": 1
+                },
+                "current_order_id": {
+                  "value": "S1002",
+                  "source_message_id": "msg_6cf3daa3439246aea92d022ce83616ca",
+                  "revision": 1
+                },
+                "intent": {
+                  "value": "exchange",
+                  "source_message_id": "msg_6cf3daa3439246aea92d022ce83616ca",
+                  "revision": 1
+                }
+              }
+            }
+          },
+          {
+            "event": "preview_created",
+            "payload": {
+              "preview_id": "prev_b899da7d781c4d2ebf55329f54cef5f0",
+              "payload": {
+                "action": "exchange",
+                "order_id": "S1002",
+                "line_id": "S1002-1",
+                "quantity": 1,
+                "target_variant": "tee-white-L",
+                "reason": "用户当前诉求",
+                "computed": {
+                  "eligibility_policy": "v1",
+                  "flow_policy": "v1",
+                  "policy_hash": "3475363e79eaf20581998d006ffec808a49bcae2b1cee7980bfae3acdd53a7af",
+                  "shipping_fee_fen": 800,
+                  "shipping_payer": "customer",
+                  "result": "EXCHANGE_REQUESTED",
+                  "notice": "仅提交售后申请，尚未退款或寄出换货；运费仅模拟报价"
+                }
+              }
+            }
+          },
+          {
+            "event": "commit_proposal",
+            "payload": {
+              "version": "process-diagnostic-v2",
+              "phase": "proposal",
+              "args": {
+                "preview_id": "prev_b899da7d781c4d2ebf55329f54cef5f0"
+              },
+              "revision": 1,
+              "preview_status": "PENDING",
+              "preview_revision": 1,
+              "parameter_hash": "302ebfde8d353afbcb8b80c5bb39fe25b7e25a1c1229accda9adaabee2f44e14",
+              "trusted_confirmation": false,
+              "classification": "normal_hitl_request"
+            }
+          },
+          {
+            "event": "script_user_reply",
+            "payload": {
+              "on": "preview",
+              "when": null,
+              "text": "改为退其中这 1 件"
+            }
+          },
+          {
+            "event": "user_message",
+            "payload": {
+              "message_id": "msg_bd2a16d4b3a94c078a8a4bd34e3c4346",
+              "revision": 2,
+              "text": "改为退其中这 1 件"
+            }
+          },
+          {
+            "event": "case_updated",
+            "payload": {
+              "revision": 2,
+              "fields": [
+                "constraints",
+                "current_order_id",
+                "intent"
+              ],
+              "facts": {
+                "current_order_id": {
+                  "value": "S1002",
+                  "source_message_id": "msg_bd2a16d4b3a94c078a8a4bd34e3c4346",
+                  "revision": 2
+                },
+                "intent": {
+                  "value": "return",
+                  "source_message_id": "msg_bd2a16d4b3a94c078a8a4bd34e3c4346",
+                  "revision": 2
+                },
+                "constraints": {
+                  "value": {
+                    "size_delta": 1,
+                    "quantity": 1
+                  },
+                  "source_message_id": "msg_bd2a16d4b3a94c078a8a4bd34e3c4346",
+                  "revision": 2
+                }
+              }
+            }
+          },
+          {
+            "event": "preview_created",
+            "payload": {
+              "preview_id": "prev_1c78202bb23e4b679af218e36f1c8673",
+              "payload": {
+                "action": "return",
+                "order_id": "S1002",
+                "line_id": "S1002-1",
+                "quantity": 1,
+                "target_variant": null,
+                "reason": "用户当前诉求",
+                "computed": {
+                  "eligibility_policy": "v1",
+                  "flow_policy": "v1",
+                  "policy_hash": "3475363e79eaf20581998d006ffec808a49bcae2b1cee7980bfae3acdd53a7af",
+                  "shipping_fee_fen": 800,
+                  "shipping_payer": "customer",
+                  "result": "RETURN_REQUESTED",
+                  "notice": "仅提交售后申请，尚未退款或寄出换货；运费仅模拟报价"
+                }
+              }
+            }
+          },
+          {
+            "event": "commit_proposal",
+            "payload": {
+              "version": "process-diagnostic-v2",
+              "phase": "proposal",
+              "args": {
+                "preview_id": "prev_1c78202bb23e4b679af218e36f1c8673"
+              },
+              "revision": 2,
+              "preview_status": "PENDING",
+              "preview_revision": 2,
+              "parameter_hash": "7c51e7d328cf3d209ab5d55ee20ff83a686c0294f118dd5b64eab7077d0d3bdf",
+              "trusted_confirmation": false,
+              "classification": "normal_hitl_request"
+            }
+          },
+          {
+            "event": "preview_confirmed",
+            "payload": {
+              "preview_id": "prev_1c78202bb23e4b679af218e36f1c8673",
+              "revision": 2
+            }
+          },
+          {
+            "event": "commit_execution",
+            "payload": {
+              "version": "process-diagnostic-v2",
+              "phase": "execution",
+              "args": {
+                "preview_id": "prev_1c78202bb23e4b679af218e36f1c8673"
+              },
+              "revision": 2,
+              "preview_status": "CONFIRMED",
+              "preview_revision": 2,
+              "parameter_hash": "7c51e7d328cf3d209ab5d55ee20ff83a686c0294f118dd5b64eab7077d0d3bdf",
+              "trusted_confirmation": true,
+              "classification": "trusted_submission"
+            }
+          },
+          {
+            "event": "operation_committed",
+            "payload": {
+              "operation_id": "op_a718c0e71aa643c3a5eff13bd4c6982b",
+              "preview_id": "prev_1c78202bb23e4b679af218e36f1c8673",
+              "status": "COMMITTED",
+              "result": "RETURN_REQUESTED",
+              "order_id": "S1002",
+              "application_id": "app_f09df3f528384e468faf7997e339b581",
+              "notice": "仅提交售后申请，尚未退款或寄出换货；运费仅模拟报价"
+            }
+          },
+          {
+            "event": "tool_result",
+            "payload": {
+              "tool": "commit_action",
+              "result": {
+                "ok": true,
+                "data": {
+                  "operation_id": "op_a718c0e71aa643c3a5eff13bd4c6982b",
+                  "preview_id": "prev_1c78202bb23e4b679af218e36f1c8673",
+                  "status": "COMMITTED",
+                  "result": "RETURN_REQUESTED",
+                  "order_id": "S1002",
+                  "application_id": "app_f09df3f528384e468faf7997e339b581",
+                  "notice": "仅提交售后申请，尚未退款或寄出换货；运费仅模拟报价"
+                },
+                "error_code": null,
+                "retryable": false,
+                "user_message": "操作完成",
+                "trace_id": "trace_e1b5e7cef9e04104a2cda431e8fd14b6"
+              }
+            }
+          },
+          {
+            "event": "assistant_notice",
+            "payload": {
+              "text": "已提交：RETURN_REQUESTED。操作编号 op_a718c0e71aa643c3a5eff13bd4c6982b。仅提交售后申请，尚未退款或寄出换货；运费仅模拟报价"
+            }
+          }
+        ],
+        "elapsed_seconds": 1.105
+      },
+      {
+        "scenario_id": "r1-d-048",
+        "result": {
+          "success": true,
+          "state_ok": true,
+          "process_ok": true,
+          "communication_ok": true,
+          "state_failures": [],
+          "process_failures": [],
+          "communication_failures": [],
+          "system_error": null
+        },
+        "diagnostics": {
+          "version": "process-diagnostic-v2",
+          "stale_preview_commit_proposals": [],
+          "normal_hitl_requests": [
+            {
+              "version": "process-diagnostic-v2",
+              "phase": "proposal",
+              "args": {
+                "preview_id": "prev_82ef24325af046e9a33074ec117d41fe"
+              },
+              "revision": 1,
+              "preview_status": "PENDING",
+              "preview_revision": 1,
+              "parameter_hash": "302ebfde8d353afbcb8b80c5bb39fe25b7e25a1c1229accda9adaabee2f44e14",
+              "trusted_confirmation": false,
+              "classification": "normal_hitl_request"
+            }
+          ],
+          "missing_trusted_confirmation_submissions": [],
+          "bypass_confirmation_proposals": [],
+          "backend_blocked_attempts": [],
+          "business_rejections": [],
+          "unknown_write_results": [
+            {
+              "tool": "commit_action",
+              "result": {
+                "ok": false,
+                "data": null,
+                "error_code": "WRITE_RESULT_UNKNOWN",
+                "retryable": false,
+                "user_message": "结果查询 operation/preview 回执",
+                "trace_id": "trace_b0590172851c4d5cbc833539a84d6b57"
+              }
+            }
+          ],
+          "actual_wrong_side_effects": [],
+          "duplicate_operations": 0,
+          "unconfirmed_quantity_claims": [],
+          "revision_triggered": false,
+          "fault_armed": [
+            {
+              "kind": "lost_response",
+              "trigger": "after_preview"
+            }
+          ],
+          "lost_response_occurred": true,
+          "receipt_lookup_recovery": true,
+          "proposal_coverage": "instrumented"
+        },
+        "event_chain": [
+          {
+            "event": "user_message",
+            "payload": {
+              "message_id": "msg_b6905e749620492ca7ec54612128e79d",
+              "revision": 1,
+              "text": "S1002 中 1 件换大一码"
+            }
+          },
+          {
+            "event": "case_updated",
+            "payload": {
+              "revision": 1,
+              "fields": [
+                "constraints",
+                "current_order_id",
+                "intent"
+              ],
+              "facts": {
+                "constraints": {
+                  "value": {
+                    "size_delta": 1,
+                    "quantity": 1
+                  },
+                  "source_message_id": "msg_b6905e749620492ca7ec54612128e79d",
+                  "revision": 1
+                },
+                "current_order_id": {
+                  "value": "S1002",
+                  "source_message_id": "msg_b6905e749620492ca7ec54612128e79d",
+                  "revision": 1
+                },
+                "intent": {
+                  "value": "exchange",
+                  "source_message_id": "msg_b6905e749620492ca7ec54612128e79d",
+                  "revision": 1
+                }
+              }
+            }
+          },
+          {
+            "event": "preview_created",
+            "payload": {
+              "preview_id": "prev_82ef24325af046e9a33074ec117d41fe",
+              "payload": {
+                "action": "exchange",
+                "order_id": "S1002",
+                "line_id": "S1002-1",
+                "quantity": 1,
+                "target_variant": "tee-white-L",
+                "reason": "用户当前诉求",
+                "computed": {
+                  "eligibility_policy": "v1",
+                  "flow_policy": "v1",
+                  "policy_hash": "3475363e79eaf20581998d006ffec808a49bcae2b1cee7980bfae3acdd53a7af",
+                  "shipping_fee_fen": 800,
+                  "shipping_payer": "customer",
+                  "result": "EXCHANGE_REQUESTED",
+                  "notice": "仅提交售后申请，尚未退款或寄出换货；运费仅模拟报价"
+                }
+              }
+            }
+          },
+          {
+            "event": "commit_proposal",
+            "payload": {
+              "version": "process-diagnostic-v2",
+              "phase": "proposal",
+              "args": {
+                "preview_id": "prev_82ef24325af046e9a33074ec117d41fe"
+              },
+              "revision": 1,
+              "preview_status": "PENDING",
+              "preview_revision": 1,
+              "parameter_hash": "302ebfde8d353afbcb8b80c5bb39fe25b7e25a1c1229accda9adaabee2f44e14",
+              "trusted_confirmation": false,
+              "classification": "normal_hitl_request"
+            }
+          },
+          {
+            "event": "fault_armed",
+            "payload": {
+              "kind": "lost_response",
+              "trigger": "after_preview"
+            }
+          },
+          {
+            "event": "preview_confirmed",
+            "payload": {
+              "preview_id": "prev_82ef24325af046e9a33074ec117d41fe",
+              "revision": 1
+            }
+          },
+          {
+            "event": "commit_execution",
+            "payload": {
+              "version": "process-diagnostic-v2",
+              "phase": "execution",
+              "args": {
+                "preview_id": "prev_82ef24325af046e9a33074ec117d41fe"
+              },
+              "revision": 1,
+              "preview_status": "CONFIRMED",
+              "preview_revision": 1,
+              "parameter_hash": "302ebfde8d353afbcb8b80c5bb39fe25b7e25a1c1229accda9adaabee2f44e14",
+              "trusted_confirmation": true,
+              "classification": "trusted_submission"
+            }
+          },
+          {
+            "event": "operation_committed",
+            "payload": {
+              "operation_id": "op_af7ddddbb6b14f8b8c96f9ae3534b27a",
+              "preview_id": "prev_82ef24325af046e9a33074ec117d41fe",
+              "status": "COMMITTED",
+              "result": "EXCHANGE_REQUESTED",
+              "order_id": "S1002",
+              "application_id": "app_3be4002349554cb39899e43653ccf12b",
+              "notice": "仅提交售后申请，尚未退款或寄出换货；运费仅模拟报价"
+            }
+          },
+          {
+            "event": "fault_occurred",
+            "payload": {
+              "kind": "lost_response",
+              "preview_id": "prev_82ef24325af046e9a33074ec117d41fe",
+              "operation_id": "op_af7ddddbb6b14f8b8c96f9ae3534b27a",
+              "after_commit": true
+            }
+          },
+          {
+            "event": "tool_result",
+            "payload": {
+              "tool": "commit_action",
+              "result": {
+                "ok": false,
+                "data": null,
+                "error_code": "WRITE_RESULT_UNKNOWN",
+                "retryable": false,
+                "user_message": "结果查询 operation/preview 回执",
+                "trace_id": "trace_b0590172851c4d5cbc833539a84d6b57"
+              }
+            }
+          },
+          {
+            "event": "tool_result",
+            "payload": {
+              "tool": "get_operation",
+              "result": {
+                "ok": true,
+                "data": {
+                  "operation_id": "op_af7ddddbb6b14f8b8c96f9ae3534b27a",
+                  "preview_id": "prev_82ef24325af046e9a33074ec117d41fe",
+                  "status": "COMMITTED",
+                  "result": "EXCHANGE_REQUESTED",
+                  "order_id": "S1002",
+                  "application_id": "app_3be4002349554cb39899e43653ccf12b",
+                  "notice": "仅提交售后申请，尚未退款或寄出换货；运费仅模拟报价"
+                },
+                "error_code": null,
+                "retryable": false,
+                "user_message": "查询或处理完成",
+                "trace_id": "trace_2400e9f1ba234166af2bc9039c09e6ec"
+              }
+            }
+          },
+          {
+            "event": "assistant_notice",
+            "payload": {
+              "text": "查询原回执：{\"operation_id\": \"op_af7ddddbb6b14f8b8c96f9ae3534b27a\", \"preview_id\": \"prev_82ef24325af046e9a33074ec117d41fe\", \"status\": \"COMMITTED\", \"result\": \"EXCHANGE_REQUESTED\", \"order_id\": \"S1002\", \"application_id\": \"app_3be4002349554cb39899e43653ccf12b\", \"notice\": \"仅提交售后申请，尚未退款或寄出换货；运费仅模拟报价\"}"
+            }
+          }
+        ],
+        "elapsed_seconds": 1.001
+      },
+      {
+        "scenario_id": "q1-A",
+        "result": {
+          "success": true,
+          "state_ok": true,
+          "process_ok": true,
+          "communication_ok": true,
+          "state_failures": [],
+          "process_failures": [],
+          "communication_failures": [],
+          "system_error": null
+        },
+        "diagnostics": {
+          "version": "process-diagnostic-v2",
+          "stale_preview_commit_proposals": [],
+          "normal_hitl_requests": [
+            {
+              "version": "process-diagnostic-v2",
+              "phase": "proposal",
+              "args": {
+                "preview_id": "prev_f7bdef5df3a24f309713ca81abb8b3d2"
+              },
+              "revision": 2,
+              "preview_status": "PENDING",
+              "preview_revision": 2,
+              "parameter_hash": "302ebfde8d353afbcb8b80c5bb39fe25b7e25a1c1229accda9adaabee2f44e14",
+              "trusted_confirmation": false,
+              "classification": "normal_hitl_request"
+            }
+          ],
+          "missing_trusted_confirmation_submissions": [],
+          "bypass_confirmation_proposals": [],
+          "backend_blocked_attempts": [],
+          "business_rejections": [],
+          "unknown_write_results": [],
+          "actual_wrong_side_effects": [],
+          "duplicate_operations": 0,
+          "unconfirmed_quantity_claims": [],
+          "revision_triggered": false,
+          "fault_armed": [],
+          "lost_response_occurred": false,
+          "receipt_lookup_recovery": false,
+          "proposal_coverage": "instrumented"
+        },
+        "event_chain": [
+          {
+            "event": "user_message",
+            "payload": {
+              "message_id": "msg_54ba271ad6e54ad38e60fd584c60f8d3",
+              "revision": 1,
+              "text": "S1002 换大一码"
+            }
+          },
+          {
+            "event": "case_updated",
+            "payload": {
+              "revision": 1,
+              "fields": [
+                "constraints",
+                "current_order_id",
+                "intent"
+              ],
+              "facts": {
+                "constraints": {
+                  "value": {
+                    "size_delta": 1
+                  },
+                  "source_message_id": "msg_54ba271ad6e54ad38e60fd584c60f8d3",
+                  "revision": 1
+                },
+                "current_order_id": {
+                  "value": "S1002",
+                  "source_message_id": "msg_54ba271ad6e54ad38e60fd584c60f8d3",
+                  "revision": 1
+                },
+                "intent": {
+                  "value": "exchange",
+                  "source_message_id": "msg_54ba271ad6e54ad38e60fd584c60f8d3",
+                  "revision": 1
+                }
+              }
+            }
+          },
+          {
+            "event": "assistant_notice",
+            "payload": {
+              "text": "请明确本次申请几件，例如其中 1 件或全部 2 件。"
+            }
+          },
+          {
+            "event": "script_user_reply",
+            "payload": {
+              "on": "clarification",
+              "when": "quantity_question",
+              "text": "其中 1 件"
+            }
+          },
+          {
+            "event": "user_message",
+            "payload": {
+              "message_id": "msg_088ad0383025404ab0ab16595ceea650",
+              "revision": 2,
+              "text": "其中 1 件"
+            }
+          },
+          {
+            "event": "case_updated",
+            "payload": {
+              "revision": 2,
+              "fields": [
+                "constraints",
+                "current_order_id",
+                "intent"
+              ],
+              "facts": {
+                "constraints": {
+                  "value": {
+                    "size_delta": 1,
+                    "quantity": 1
+                  },
+                  "source_message_id": "msg_088ad0383025404ab0ab16595ceea650",
+                  "revision": 2
+                },
+                "current_order_id": {
+                  "value": "S1002",
+                  "source_message_id": "msg_088ad0383025404ab0ab16595ceea650",
+                  "revision": 2
+                },
+                "intent": {
+                  "value": "exchange",
+                  "source_message_id": "msg_088ad0383025404ab0ab16595ceea650",
+                  "revision": 2
+                }
+              }
+            }
+          },
+          {
+            "event": "preview_created",
+            "payload": {
+              "preview_id": "prev_f7bdef5df3a24f309713ca81abb8b3d2",
+              "payload": {
+                "action": "exchange",
+                "order_id": "S1002",
+                "line_id": "S1002-1",
+                "quantity": 1,
+                "target_variant": "tee-white-L",
+                "reason": "用户当前诉求",
+                "computed": {
+                  "eligibility_policy": "v1",
+                  "flow_policy": "v1",
+                  "policy_hash": "3475363e79eaf20581998d006ffec808a49bcae2b1cee7980bfae3acdd53a7af",
+                  "shipping_fee_fen": 800,
+                  "shipping_payer": "customer",
+                  "result": "EXCHANGE_REQUESTED",
+                  "notice": "仅提交售后申请，尚未退款或寄出换货；运费仅模拟报价"
+                }
+              }
+            }
+          },
+          {
+            "event": "commit_proposal",
+            "payload": {
+              "version": "process-diagnostic-v2",
+              "phase": "proposal",
+              "args": {
+                "preview_id": "prev_f7bdef5df3a24f309713ca81abb8b3d2"
+              },
+              "revision": 2,
+              "preview_status": "PENDING",
+              "preview_revision": 2,
+              "parameter_hash": "302ebfde8d353afbcb8b80c5bb39fe25b7e25a1c1229accda9adaabee2f44e14",
+              "trusted_confirmation": false,
+              "classification": "normal_hitl_request"
+            }
+          },
+          {
+            "event": "preview_confirmed",
+            "payload": {
+              "preview_id": "prev_f7bdef5df3a24f309713ca81abb8b3d2",
+              "revision": 2
+            }
+          },
+          {
+            "event": "commit_execution",
+            "payload": {
+              "version": "process-diagnostic-v2",
+              "phase": "execution",
+              "args": {
+                "preview_id": "prev_f7bdef5df3a24f309713ca81abb8b3d2"
+              },
+              "revision": 2,
+              "preview_status": "CONFIRMED",
+              "preview_revision": 2,
+              "parameter_hash": "302ebfde8d353afbcb8b80c5bb39fe25b7e25a1c1229accda9adaabee2f44e14",
+              "trusted_confirmation": true,
+              "classification": "trusted_submission"
+            }
+          },
+          {
+            "event": "operation_committed",
+            "payload": {
+              "operation_id": "op_4aa3f41872ea476192500381bd781c82",
+              "preview_id": "prev_f7bdef5df3a24f309713ca81abb8b3d2",
+              "status": "COMMITTED",
+              "result": "EXCHANGE_REQUESTED",
+              "order_id": "S1002",
+              "application_id": "app_a46ac56d1fba43aeb8a18bfa6d5b3179",
+              "notice": "仅提交售后申请，尚未退款或寄出换货；运费仅模拟报价"
+            }
+          },
+          {
+            "event": "tool_result",
+            "payload": {
+              "tool": "commit_action",
+              "result": {
+                "ok": true,
+                "data": {
+                  "operation_id": "op_4aa3f41872ea476192500381bd781c82",
+                  "preview_id": "prev_f7bdef5df3a24f309713ca81abb8b3d2",
+                  "status": "COMMITTED",
+                  "result": "EXCHANGE_REQUESTED",
+                  "order_id": "S1002",
+                  "application_id": "app_a46ac56d1fba43aeb8a18bfa6d5b3179",
+                  "notice": "仅提交售后申请，尚未退款或寄出换货；运费仅模拟报价"
+                },
+                "error_code": null,
+                "retryable": false,
+                "user_message": "操作完成",
+                "trace_id": "trace_7b1030efc0cb464dbf26813ba99894ac"
+              }
+            }
+          },
+          {
+            "event": "assistant_notice",
+            "payload": {
+              "text": "已提交：EXCHANGE_REQUESTED。操作编号 op_4aa3f41872ea476192500381bd781c82。仅提交售后申请，尚未退款或寄出换货；运费仅模拟报价"
+            }
+          }
+        ],
+        "elapsed_seconds": 1.076
+      },
+      {
+        "scenario_id": "q1-B",
+        "result": {
+          "success": true,
+          "state_ok": true,
+          "process_ok": true,
+          "communication_ok": true,
+          "state_failures": [],
+          "process_failures": [],
+          "communication_failures": [],
+          "system_error": null
+        },
+        "diagnostics": {
+          "version": "process-diagnostic-v2",
+          "stale_preview_commit_proposals": [],
+          "normal_hitl_requests": [],
+          "missing_trusted_confirmation_submissions": [],
+          "bypass_confirmation_proposals": [],
+          "backend_blocked_attempts": [],
+          "business_rejections": [
+            {
+              "tool": "preview_action",
+              "result": {
+                "ok": false,
+                "data": null,
+                "error_code": "OUT_OF_STOCK",
+                "retryable": false,
+                "user_message": "OUT_OF_STOCK",
+                "trace_id": "trace_16423daa524a4ceba7ef407229da18c7"
+              }
+            }
+          ],
+          "unknown_write_results": [],
+          "actual_wrong_side_effects": [],
+          "duplicate_operations": 0,
+          "unconfirmed_quantity_claims": [],
+          "revision_triggered": false,
+          "fault_armed": [],
+          "lost_response_occurred": false,
+          "receipt_lookup_recovery": false,
+          "proposal_coverage": "no_proposals_or_legacy_not_instrumented"
+        },
+        "event_chain": [
+          {
+            "event": "user_message",
+            "payload": {
+              "message_id": "msg_28426e0dca664acfbeff76e07bcac60f",
+              "revision": 1,
+              "text": "S1002 换大一码"
+            }
+          },
+          {
+            "event": "case_updated",
+            "payload": {
+              "revision": 1,
+              "fields": [
+                "constraints",
+                "current_order_id",
+                "intent"
+              ],
+              "facts": {
+                "constraints": {
+                  "value": {
+                    "size_delta": 1
+                  },
+                  "source_message_id": "msg_28426e0dca664acfbeff76e07bcac60f",
+                  "revision": 1
+                },
+                "current_order_id": {
+                  "value": "S1002",
+                  "source_message_id": "msg_28426e0dca664acfbeff76e07bcac60f",
+                  "revision": 1
+                },
+                "intent": {
+                  "value": "exchange",
+                  "source_message_id": "msg_28426e0dca664acfbeff76e07bcac60f",
+                  "revision": 1
+                }
+              }
+            }
+          },
+          {
+            "event": "assistant_notice",
+            "payload": {
+              "text": "请明确本次申请几件，例如其中 1 件或全部 2 件。"
+            }
+          },
+          {
+            "event": "script_user_reply",
+            "payload": {
+              "on": "clarification",
+              "when": "quantity_question",
+              "text": "全部 2 件"
+            }
+          },
+          {
+            "event": "user_message",
+            "payload": {
+              "message_id": "msg_c53cf5e220a84397b83fb3ff160eeab3",
+              "revision": 2,
+              "text": "全部 2 件"
+            }
+          },
+          {
+            "event": "case_updated",
+            "payload": {
+              "revision": 2,
+              "fields": [
+                "constraints",
+                "current_order_id",
+                "intent"
+              ],
+              "facts": {
+                "constraints": {
+                  "value": {
+                    "size_delta": 1,
+                    "quantity": 2
+                  },
+                  "source_message_id": "msg_c53cf5e220a84397b83fb3ff160eeab3",
+                  "revision": 2
+                },
+                "current_order_id": {
+                  "value": "S1002",
+                  "source_message_id": "msg_c53cf5e220a84397b83fb3ff160eeab3",
+                  "revision": 2
+                },
+                "intent": {
+                  "value": "exchange",
+                  "source_message_id": "msg_c53cf5e220a84397b83fb3ff160eeab3",
+                  "revision": 2
+                }
+              }
+            }
+          },
+          {
+            "event": "assistant_notice",
+            "payload": {
+              "text": "您明确申请的数量库存不足。请问保留原数量等待补货，还是自行选择其他方案？当前未提交，也不会擅自减少件数或改退货。"
+            }
+          },
+          {
+            "event": "script_user_reply",
+            "payload": {
+              "on": "clarification",
+              "when": "stock_choice_question",
+              "text": "保留 2 件等待补货，暂不提交"
+            }
+          },
+          {
+            "event": "user_message",
+            "payload": {
+              "message_id": "msg_9d2b67da869c407fa107029bbb3d82b4",
+              "revision": 3,
+              "text": "保留 2 件等待补货，暂不提交"
+            }
+          },
+          {
+            "event": "case_updated",
+            "payload": {
+              "revision": 3,
+              "fields": [
+                "constraints",
+                "current_order_id",
+                "intent"
+              ],
+              "facts": {
+                "constraints": {
+                  "value": {
+                    "size_delta": 1,
+                    "quantity": 2
+                  },
+                  "source_message_id": "msg_9d2b67da869c407fa107029bbb3d82b4",
+                  "revision": 3
+                },
+                "current_order_id": {
+                  "value": "S1002",
+                  "source_message_id": "msg_9d2b67da869c407fa107029bbb3d82b4",
+                  "revision": 3
+                },
+                "intent": {
+                  "value": "exchange",
+                  "source_message_id": "msg_9d2b67da869c407fa107029bbb3d82b4",
+                  "revision": 3
+                }
+              }
+            }
+          },
+          {
+            "event": "assistant_notice",
+            "payload": {
+              "text": "已记录您当前选择，暂不提交申请；未创建补货提醒或售后单，后续如需办理请重新说明。"
+            }
+          }
+        ],
+        "elapsed_seconds": 1.058
+      }
+    ]
+  },
+  "pending_plans": {
+    "business-loop-regression-v2": {
+      "plan_sha256": "2da3fea6cb54f08930d00d762151a20a3a7026ee8717ef20e8a22876a4c857a9",
+      "status": "AWAITING_EXPLICIT_APPROVAL"
+    },
+    "quantity-clarification-regression-v1": {
+      "plan_sha256": "cf2b1e096a79692a612482d6829dc6929623930abd99cddba772e060fab95634",
+      "status": "AWAITING_EXPLICIT_APPROVAL"
+    }
+  },
+  "durable_real_ledger_readonly": {
+    "compatibility-smoke": {
+      "requests": 6,
+      "known_tokens": 1102,
+      "unknown_reserved": 0
+    },
+    "development-pilot": {
+      "requests": 24,
+      "known_tokens": 49871,
+      "unknown_reserved": 0
+    }
+  }
+}

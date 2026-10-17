@@ -22,6 +22,7 @@ docker compose up -d db
 .venv/bin/python -m aftercare worker --provider scripted
 # 专用测试库须先初始化；测试与开发评测不能同时运行
 AFTERCARE_TEST_DATABASE_URL=postgresql+psycopg://aftercare:aftercare_local_only@127.0.0.1:55432/aftercare_test .venv/bin/python -m pytest -m 'not live_model'
+.venv/bin/python -m evaluation.evaluator.regression_offline
 .venv/bin/python -m aftercare eval validate --split dev
 .venv/bin/python -m aftercare eval run --split dev --provider scripted
 .venv/bin/ruff check .
@@ -33,6 +34,10 @@ AFTERCARE_TEST_DATABASE_URL=postgresql+psycopg://aftercare:aftercare_local_only@
 专用入口为 `model smoke --batch compatibility-smoke` 或 `model smoke --batch development-pilot`，
 均需 `--approval`、`--account-confirmation` 与 `--execute`。
 已实现，仅接受各自绑定的获批 hash；必须临时显式启用真实开关，已执行批次禁止直接重跑。
+闭环修复版已通过 118 项离线测试及四题闭环/两题数量澄清。
+新增 business-loop-regression-v2、quantity-clarification-regression-v1 专用待批入口，
+均未授权/未执行；需独立新审批、固定指纹及当前免费余量/保护确认，不能沿用旧授权。
+详细证据与限制见 docs/experiments/business-loop-repair.md。
 真实模型适配已接入九工具主图，仅专用评测入口注入；普通工作台仍默认离线。
 修复后真实回归和正式 `eval run --manifest` 未授权，不能自动运行。
 每阶段完成后同步更新本文件中的状态与命令。

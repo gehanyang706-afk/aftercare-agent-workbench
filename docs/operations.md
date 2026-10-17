@@ -92,3 +92,19 @@ dev 运行会重置专用 aftercare_test，逐题导出再重置，不触碰 aft
 业务 fixture 与真实 ledger 分库；真实批次运行期间仍不得并行 pytest 或离线 dev 清库。
 原始状态/事件/请求/响应保存在 runtime/development-pilot-first，批次后离线测试不覆盖这些证据。
 新候选数据与回归计划是独立版本，尚未授权；旧批剩余额度不能当作新批许可。
+
+## 闭环修复与数量澄清的离线回归
+
+项目根目录运行：
+
+    .venv/bin/python -m evaluation.evaluator.regression_offline
+
+仅加载 regression-v1 四题和 quantity-clarification-v1 两题，scripted/full、产品子进程强制离线，
+只重置 aftercare_test；不能与 pytest 并行。输出在 runtime/closure-repair/offline-时间戳。
+118 项离线测试和最终六题记录见 docs/experiments/business-loop-repair.md。
+现有常驻旧容器本次未重建；用源码启动或依照上文重新构建才能体验新代码。
+
+专用 model smoke 增加 business-loop-regression-v2 与 quantity-clarification-regression-v1 两个命名范围；
+只接受新计划 hash、固定源码、独立人工审批、当前免费余量/北京地域/FreeTierOnly 确认，
+并临时启用真实进程开关。计划本身不构成批准，本次没有新真实调用。
+完整上限/重试/停止条件在各 evaluation/manifests 同名计划；不得沿用旧 pilot 审批。
