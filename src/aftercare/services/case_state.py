@@ -43,6 +43,10 @@ def update_case(service, principal, conversation_id, request: CaseUpdate):
         case = deepcopy(conv.case or {})
         facts = case.setdefault("facts", {})
         superseded = case.setdefault("superseded", [])
+        changed = any(facts.get(k, {}).get("value") != v for k, v in request.changes.items())
+        if not changed and case.get("intent_revision") == conv.revision:
+            service.event(s, conv.id, "case_update_noop", {"revision": conv.revision})
+            return deepcopy(case)
         object_changed = any(
             k in request.changes and facts.get(k, {}).get("value") != request.changes[k]
             for k in ["current_order_id", "current_line_id", "intent"]
@@ -65,14 +69,21 @@ def update_case(service, principal, conversation_id, request: CaseUpdate):
             facts[key] = {"value": value, "source_message_id": source.id, "revision": conv.revision}
         case["intent_revision"] = conv.revision
         conv.case = case
+        invalidated = False
         for row in s.scalars(
             select(Preview).where(
                 Preview.conversation_id == conv.id, Preview.status.in_(["PENDING", "CONFIRMED"])
             )
         ):
             row.status = "INVALIDATED"
+            invalidated = True
+        if invalidated:
+            conv.status = "RUNNING"
         service.event(
-            s, conv.id, "case_updated", {"revision": conv.revision, "fields": list(request.changes)}
+            s,
+            conv.id,
+            "case_updated",
+            {"revision": conv.revision, "fields": list(request.changes), "facts": deepcopy(facts)},
         )
         return deepcopy(case)
 

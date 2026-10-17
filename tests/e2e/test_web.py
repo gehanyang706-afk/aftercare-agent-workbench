@@ -26,7 +26,7 @@ def web(service, dev=False):
     return client, settings
 
 
-def submit(client, conv, text="S1002 换大一码", mid="first"):
+def submit(client, conv, text="S1002 中 1 件换大一码", mid="first"):
     response = client.post(
         f"/api/conversations/{conv}/messages", json={"text": text, "client_message_id": mid}
     )

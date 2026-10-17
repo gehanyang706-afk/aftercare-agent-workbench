@@ -1,0 +1,105 @@
+{
+  "batch_id": "business-loop-regression-v2",
+  "status": "AWAITING_EXPLICIT_APPROVAL",
+  "exact_model": "qwen3.5-plus-2026-02-15",
+  "provider": "bailian-beijing-compatible",
+  "enable_thinking": false,
+  "profile": "full",
+  "user_simulator": "script-user-v2 (no model user)",
+  "user_policy_version": "script-user-v2",
+  "diagnostics_version": "process-diagnostic-v2",
+  "split": "dev",
+  "development_file": "evaluation/dev/regression-v1.jsonl",
+  "development_file_sha256": "5636d11dc50742131154c26deafb3844e5113fb49f318006052355dd6378308d",
+  "unique_tasks": 4,
+  "repetitions": 1,
+  "max_conversations": 4,
+  "tasks": [
+    {
+      "scenario_id": "r1-d-001",
+      "task_sha256": "1afb42858f0356e9806c4003cda466ac7950723bcf6f297d2fa1074897c25052"
+    },
+    {
+      "scenario_id": "r1-d-003",
+      "task_sha256": "744dc336a1aa2ea7442f2fa8f11e27843f3a1f235b3c9fb2d56a6d4fe99bfb18"
+    },
+    {
+      "scenario_id": "r1-d-016",
+      "task_sha256": "1e3bb0868b99d46fadc3ca1475cafef687e0f18300edcb097a26324dbef82ede"
+    },
+    {
+      "scenario_id": "r1-d-048",
+      "task_sha256": "0fde7b78397d1dec9f84d15207355ffd22a429ce274b9e51852173ffe6d97fe4"
+    }
+  ],
+  "candidate_source_tree_sha256": "869c901cd4da27778871433c67f5d71863f8ab80994dd587558c7ba8745a721e",
+  "frozen_scorer": "evaluation/evaluator/grader.py",
+  "frozen_scorer_sha256": "c3c2bbb07956ad4f8f3b629522a0fab4bf981649113c6ce601e31f030057fc3a",
+  "max_requests_per_conversation_including_retries": 16,
+  "max_http_requests_including_retries": 64,
+  "max_requests_per_user_turn_including_auxiliary_reasoning": 8,
+  "max_token_per_conversation_including_input_output": 40000,
+  "total_token_hard_cap": 160000,
+  "max_output_tokens_per_request": 512,
+  "concurrency": 1,
+  "per_conversation_wall_seconds": 300,
+  "batch_wall_seconds": 1200,
+  "sdk_retries": 0,
+  "http_retries": 0,
+  "whole_task_reruns": 0,
+  "additional_paid_cost_cap_cny": 0,
+  "automatic_model_switch": false,
+  "model_user_calls": 0,
+  "no_holdout_access": true,
+  "no_formal_comparison": true,
+  "old_budget_carryover": 0,
+  "estimation": {
+    "reference_first_run": {
+      "requests": 24,
+      "input_tokens": 48040,
+      "output_tokens": 1831,
+      "elapsed_seconds": 131.291
+    },
+    "reference_per_task_tokens": [
+      6551,
+      11751,
+      15766,
+      15803
+    ],
+    "estimated_total_tokens_range": [
+      70000,
+      110000
+    ],
+    "estimated_total_requests_range": [
+      32,
+      48
+    ],
+    "estimated_wall_seconds_range": [
+      180,
+      450
+    ],
+    "uncertainty": "Planning estimate only: first run had no completed business loop. Extra turns/context vary. Hard caps are not predicted consumption; caps or conservative reservations may stop before completion."
+  },
+  "retry_rules": [
+    "No SDK/HTTP automatic retries; no whole-task rerun.",
+    "Recoverable tool-order/schema/business feedback may lead to new budgeted model requests within the same task; each counts against all caps.",
+    "Read tools may retry locally at most twice; writes never retry blindly. WRITE_RESULT_UNKNOWN queries original receipt, not a new write."
+  ],
+  "stop_conditions": [
+    "Before dispatch: hash/code/scenario/diagnostic/approval mismatch, missing key, wrong model/Beijing endpoint, unconfirmed current free quota/protection.",
+    "Any authentication/quota/paid protection/provider protocol/security anomaly; usage unknown or inconsistent: stop batch and keep unknown reservations.",
+    "Any request/token/turn/conversation/batch deadline or human cancellation: stop, preserve first trajectory; do not append tasks or change model.",
+    "Ordinary task failure: save first result, continue only remaining fixed tasks if no batch-stop category; no live code changes."
+  ],
+  "preconditions": [
+    "Separate human approval quoting this batch and plan hash; this plan is not authorization.",
+    "Confirm current free quota for this exact Beijing model is at least 160000 tokens and FreeTierOnly is active; no paid fallback.",
+    "Frozen code fingerprint must match before parent preflight and each product gateway construction.",
+    "Business fixtures only aftercare_test; durable ledger aftercare_demo. Do not run pytest concurrently.",
+    "Unique batch-state file and durable batch ledger must both show never started; spent or unused old budget is not transferable."
+  ],
+  "entry": "python -m aftercare model smoke --batch business-loop-regression-v2 --approval <new-approval.json> --account-confirmation <fresh-account.json> --execute",
+  "ledger": "Existing PilotGateway -> BailianAdapter/send_once -> BudgetLedger; no new provider or workbench real-mode opening.",
+  "diagnostic_requirement": "Keep frozen score plus proposal/state-aware v2 diagnostics, per-task event chain, exact matching lost-response receipt and one-side-effect checks.",
+  "plan_sha256": "abc6348fa3b4cb65e48b91b34d4facfa1727c2e0ab5cb8c9cdab2abaf9aa0213"
+}

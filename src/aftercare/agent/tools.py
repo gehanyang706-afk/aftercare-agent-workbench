@@ -100,7 +100,9 @@ def toolset(service, principal, conversation, search, retrieval_profile="bm25"):
         ),
         "preview_action": (
             ActionInput,
-            lambda **kw: service.preview(principal, conversation, ActionInput(**kw)),
+            lambda **kw: service.preview(
+                principal, conversation, ActionInput(**kw), require_case=True
+            ),
             "校验资格并生成只读预览，不能代表授权",
         ),
         "commit_action": (
@@ -126,6 +128,10 @@ def toolset(service, principal, conversation, search, retrieval_profile="bm25"):
             trace = new_id("trace")
             try:
                 parsed = _schema.model_validate(kwargs)
+                if _name == "commit_action":
+                    from aftercare.services.process_audit import audit_commit
+
+                    audit_commit(service, principal, conversation, parsed.model_dump(), "execution")
                 data = _handler(**parsed.model_dump())
                 result = {
                     "ok": True,

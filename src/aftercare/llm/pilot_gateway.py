@@ -30,10 +30,18 @@ class PilotGateway:
         trace_directory,
         permit,
     ):
-        require(
-            permit.get("plan_sha256") == PLAN_HASH and permit.get("batch_id") == BATCH,
-            "PILOT_APPROVAL_REQUIRED",
-        )
+        if permit.get("batch_id") == BATCH:
+            require(permit.get("plan_sha256") == PLAN_HASH, "PILOT_APPROVAL_REQUIRED")
+            self.batch, self.plan_hash = BATCH, PLAN_HASH
+            self.batch_cap, self.task_cap, self.request_cap = 96000, 24000, 64
+        else:
+            from aftercare.llm.regression_scope import read_scope
+
+            scope = read_scope(permit)
+            self.batch, self.plan_hash = scope["batch_id"], scope["plan_sha256"]
+            self.batch_cap = scope["total_token_hard_cap"]
+            self.task_cap = scope["max_token_per_conversation_including_input_output"]
+            self.request_cap = scope["max_http_requests_including_retries"]
         require(settings.allow_real_model_calls, "EXPLICIT_REAL_CALL_FLAG_REQUIRED")
         self.settings = settings
         self.ledger = BudgetLedger(ledger_sessions)
@@ -47,6 +55,10 @@ class PilotGateway:
         )
 
     def security_attempt(self, tool, args):
+        if tool == "commit_action":
+            from aftercare.services.process_audit import audit_commit
+
+            audit_commit(self.service, self.principal, self.conversation, args, "proposal")
         with self.service.sessions.begin() as session:
             self.service._conversation(session, self.principal, self.conversation)
             self.service.event(
@@ -65,19 +77,19 @@ class PilotGateway:
         call_id = self.ledger.reserve(
             "bailian-beijing-compatible",
             MODEL,
-            BATCH,
+            self.batch,
             self.ledger_conversation,
             self.run_id,
             len(request.content) + 1024,
             512,
-            96000,
-            conversation_cap=24000,
-            batch_request_cap=64,
+            self.batch_cap,
+            conversation_cap=self.task_cap,
+            batch_request_cap=self.request_cap,
         )
         write_json(
             self.trace_directory / f"{call_id}.request.json",
             {
-                "plan_sha256": PLAN_HASH,
+                "plan_sha256": self.plan_hash,
                 "call_id": call_id,
                 "request": payload,
                 "business_conversation": self.conversation,
@@ -111,7 +123,7 @@ class PilotGateway:
                     "elapsed_seconds": round(time.monotonic() - started, 3),
                     "wire_sha256": hashlib.sha256(request.content).hexdigest(),
                     "business_conversation": self.conversation,
-                    "plan_sha256": PLAN_HASH,
+                    "plan_sha256": self.plan_hash,
                 }
             require(result.get("data", {}).get("model") == MODEL, "PROVIDER_PROTOCOL_MODEL")
             require(usage[1] <= 512, "PROVIDER_PROTOCOL_OUTPUT_CAP")

@@ -17,7 +17,7 @@ from sqlalchemy.engine import make_url
 from aftercare.config import PROJECT_ROOT, Settings
 from aftercare.domain.rules import require
 from aftercare.llm.budget import BudgetLedger
-from aftercare.llm.pilot_gateway import BATCH, PLAN_HASH
+from aftercare.llm.pilot_gateway import PLAN_HASH
 from aftercare.llm.smoke import MODEL, now, write_json
 from aftercare.repositories.database import is_local_database, session_factory
 from aftercare.repositories.models import ModelCall
@@ -52,6 +52,36 @@ def preflight(settings, approval, account, plan):
         all(plan.get(k) == v and approval.get(k) == v for k, v in bounds.items()),
         "PILOT_SCOPE_MISMATCH",
     )
+    verify_account_connection(settings, account, digest)
+    path = PROJECT_ROOT / "evaluation/dev/scenarios.jsonl"
+    require(
+        hashlib.sha256(path.read_bytes()).hexdigest() == plan["development_file_sha256"],
+        "DEV_VERSION_MISMATCH",
+    )
+    all_cases = {c.scenario_id: c for c in load_dev()}
+    cases = []
+    for item in plan["tasks"]:
+        case = all_cases[item["scenario_id"]]
+        # Raw task JSON has equivalent date formatting frozen by its author.
+        raw = next(
+            json.loads(line)
+            for line in path.read_text().splitlines()
+            if json.loads(line)["scenario_id"] == case.scenario_id
+        )
+        require(
+            hashlib.sha256(json.dumps(raw, ensure_ascii=False, sort_keys=True).encode()).hexdigest()
+            == item["task_sha256"],
+            "TASK_VERSION_MISMATCH",
+        )
+        cases.append(case)
+    require(
+        [c.scenario_id for c in cases] == ["d-001", "d-003", "d-016", "d-048"],
+        "FIXED_TASK_SET_REQUIRED",
+    )
+    return cases
+
+
+def verify_account_connection(settings, account, digest):
     require(
         account.get("plan_sha256") == digest
         and all(
@@ -90,32 +120,6 @@ def preflight(settings, approval, account, plan):
     require(
         is_local_database(db) and db.database == "aftercare_demo", "DURABLE_DEMO_LEDGER_REQUIRED"
     )
-    path = PROJECT_ROOT / "evaluation/dev/scenarios.jsonl"
-    require(
-        hashlib.sha256(path.read_bytes()).hexdigest() == plan["development_file_sha256"],
-        "DEV_VERSION_MISMATCH",
-    )
-    all_cases = {c.scenario_id: c for c in load_dev()}
-    cases = []
-    for item in plan["tasks"]:
-        case = all_cases[item["scenario_id"]]
-        # Raw task JSON has equivalent date formatting frozen by its author.
-        raw = next(
-            json.loads(line)
-            for line in path.read_text().splitlines()
-            if json.loads(line)["scenario_id"] == case.scenario_id
-        )
-        require(
-            hashlib.sha256(json.dumps(raw, ensure_ascii=False, sort_keys=True).encode()).hexdigest()
-            == item["task_sha256"],
-            "TASK_VERSION_MISMATCH",
-        )
-        cases.append(case)
-    require(
-        [c.scenario_id for c in cases] == ["d-001", "d-003", "d-016", "d-048"],
-        "FIXED_TASK_SET_REQUIRED",
-    )
-    return cases
 
 
 class PilotActor:
@@ -189,13 +193,19 @@ def run(settings, approval_path, account_path):
     approval = json.loads(Path(approval_path).read_text())
     account = json.loads(Path(account_path).read_text())
     cases = preflight(settings, approval, account, plan)
+    return run_batch(
+        settings, approval, account, plan, cases, PROJECT_ROOT / "runtime/development-pilot-first"
+    )
+
+
+def run_batch(settings, approval, account, plan, cases, directory):
+    batch_id, plan_hash = plan["batch_id"], plan["plan_sha256"]
     ledger_sessions = session_factory(settings)
     business_settings = Settings(
         _env_file=None,
         database_url="postgresql+psycopg://aftercare:aftercare_local_only@127.0.0.1:55432/aftercare_test",
     )
     business_sessions = session_factory(business_settings)
-    directory = PROJECT_ROOT / "runtime/development-pilot-first"
     directory.mkdir(parents=True, exist_ok=True)
     state_path = directory / "batch-state.json"
     with ledger_sessions.kw["bind"].connect() as lock:
@@ -204,12 +214,12 @@ def run(settings, approval_path, account_path):
             require(not state_path.exists(), "PILOT_ALREADY_STARTED_NO_WHOLE_TASK_RERUN")
             with ledger_sessions() as s:
                 require(
-                    s.scalar(select(ModelCall.id).where(ModelCall.batch_id == BATCH)) is None,
+                    s.scalar(select(ModelCall.id).where(ModelCall.batch_id == batch_id)) is None,
                     "EXISTING_PILOT_CALLS",
                 )
             state = {
-                "batch_id": BATCH,
-                "plan_sha256": PLAN_HASH,
+                "batch_id": batch_id,
+                "plan_sha256": plan_hash,
                 "status": "RUNNING",
                 "started_at": now(),
                 "code_commit": subprocess.check_output(
@@ -218,11 +228,11 @@ def run(settings, approval_path, account_path):
                 "tasks": [],
                 "stop_reason": None,
                 "profile": "full",
-                "user": "adaptive-scripted-v1",
+                "user": plan["user_simulator"],
             }
             write_json(state_path, state)
             start = time.monotonic()
-            batch_deadline = time.time() + 1200
+            batch_deadline = time.time() + plan["batch_wall_seconds"]
             ledger_service = BusinessService(ledger_sessions)
             for case in cases:
                 if time.time() >= batch_deadline:
@@ -230,7 +240,7 @@ def run(settings, approval_path, account_path):
                     break
                 ledger_conv = ledger_service.create_conversation("alice")
                 task_start = time.monotonic()
-                deadline = min(batch_deadline, time.time() + 180)
+                deadline = min(batch_deadline, time.time() + plan["per_conversation_wall_seconds"])
 
                 def actor_factory(log, ledger_conv=ledger_conv, deadline=deadline):
                     return PilotActor(log, ledger_conv, deadline, directory / "traces", approval)
@@ -251,6 +261,10 @@ def run(settings, approval_path, account_path):
                             select(ModelCall).where(ModelCall.conversation_id == ledger_conv)
                         )
                     ]
+                from evaluation.evaluator.diagnostics_v2 import diagnose, event_chain
+
+                result["diagnostics"] = diagnose(result["observed"])
+                result["event_chain"] = event_chain(result["observed"])
                 result["ledger_conversation"] = ledger_conv
                 result["actual_calls"] = calls
                 result["latency_seconds"] = round(time.monotonic() - task_start, 3)
@@ -276,7 +290,7 @@ def run(settings, approval_path, account_path):
             state["elapsed_seconds"] = round(time.monotonic() - start, 3)
             state["status"] = "STOPPED" if state["stop_reason"] else "COMPLETED"
             state["attempted_tasks"] = len(state["tasks"])
-            state["planned_tasks"] = 4
+            state["planned_tasks"] = len(cases)
             state["passed_tasks"] = sum(t["result"]["success"] for t in state["tasks"])
             state["request_count"] = sum(t["request_count"] for t in state["tasks"])
             state["known_input_tokens"] = sum(t["input_tokens"] for t in state["tasks"])

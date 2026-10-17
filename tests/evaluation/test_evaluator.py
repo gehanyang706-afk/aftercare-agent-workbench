@@ -54,7 +54,7 @@ def test_profiles_keep_confirmation_boundary(service, profile):
     )
     setup_checkpoints(settings)
     conv = service.create_conversation("alice")
-    msg = service.append_message("alice", conv, "S1002 换大一码", "profile-first")
+    msg = service.append_message("alice", conv, "S1002 中 1 件换大一码", "profile-first")
     result = run_turn(settings, service, "alice", conv, msg["id"], profile=profile)
     assert result.get("__interrupt__")
     snapshot = service.snapshot("alice", conv)

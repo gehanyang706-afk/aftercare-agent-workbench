@@ -123,7 +123,10 @@ class BusinessService:
             if enqueue:
                 enqueue(s, row)
             self.event(
-                s, conv.id, "user_message", {"message_id": row.id, "revision": conv.revision}
+                s,
+                conv.id,
+                "user_message",
+                {"message_id": row.id, "revision": conv.revision, "text": text_value},
             )
             return columns(row)
 
@@ -213,7 +216,7 @@ class BusinessService:
         )
         return info
 
-    def preview(self, principal, conversation_id, action: ActionInput):
+    def preview(self, principal, conversation_id, action: ActionInput, *, require_case=False):
         payload = action.model_dump()
         if action.action == "cancel":
             require(action.line_id is None and action.target_variant is None, "INVALID_PARAMETERS")
@@ -225,6 +228,10 @@ class BusinessService:
         parameter_hash = digest(payload)
         with self.sessions.begin() as s:
             conv = self._conversation(s, principal, conversation_id)
+            if require_case:
+                from aftercare.services.intent_guard import validate_case_for_preview
+
+                validate_case_for_preview(s, conv, action)
             existing = s.scalar(
                 select(Preview).where(
                     Preview.conversation_id == conv.id,
@@ -458,6 +465,19 @@ class BusinessService:
             if fault == "before_commit":
                 raise RuntimeError("INJECTED_TRANSACTION_FAILURE")
         if fault == "lost_response":
+            with self.sessions.begin() as s:
+                self._conversation(s, principal, row.conversation_id)
+                self.event(
+                    s,
+                    row.conversation_id,
+                    "fault_occurred",
+                    {
+                        "kind": "lost_response",
+                        "preview_id": preview_id,
+                        "operation_id": op_id,
+                        "after_commit": True,
+                    },
+                )
             raise BusinessError("WRITE_RESULT_UNKNOWN", "结果查询 operation/preview 回执")
         return receipt
 
@@ -513,7 +533,14 @@ class BusinessService:
                     )
                 ],
                 "previews": [
-                    columns(p)
+                    {
+                        **columns(p),
+                        "confirmation_available": (
+                            p.status in {"PENDING", "CONFIRMED"}
+                            and p.revision == conv.revision
+                            and p.expires_at >= self.clock()
+                        ),
+                    }
                     for p in s.scalars(select(Preview).where(Preview.conversation_id == conv.id))
                 ],
             }

@@ -25,7 +25,7 @@ def settings(service):
 
 def test_scripted_real_tool_roundtrip_parallel_and_hitl(service):
     conv = service.create_conversation("alice")
-    msg = service.append_message("alice", conv, "S1002 换大一码", "first")
+    msg = service.append_message("alice", conv, "S1002 中 1 件换大一码", "first")
     graph, model = factory(service, "alice", conv, InMemorySaver())
     config = {"configurable": {"thread_id": conv}, "recursion_limit": 96}
     result = graph.invoke({"messages": [HumanMessage(content=msg["text"], id=msg["id"])]}, config)
@@ -48,7 +48,7 @@ def test_persistent_restart_and_new_message_reject_old_interrupt(service):
     config = settings(service)
     setup_checkpoints(config)
     conv = service.create_conversation("alice")
-    first = service.append_message("alice", conv, "S1002 换大一码", "1")
+    first = service.append_message("alice", conv, "S1002 中 1 件换大一码", "1")
     assert run_turn(config, service, "alice", conv, first["id"]).get("__interrupt__")
     old = service.snapshot("alice", conv)["previews"][0]["id"]
     second = service.append_message("alice", conv, "改成退货", "2")
@@ -66,7 +66,7 @@ def test_persistent_restart_and_new_message_reject_old_interrupt(service):
 
 def test_graph_approval_cannot_forge_business_approval(service):
     conv = service.create_conversation("alice")
-    msg = service.append_message("alice", conv, "S1002 换大一码", "1")
+    msg = service.append_message("alice", conv, "S1002 中 1 件换大一码", "1")
     graph, _ = factory(service, "alice", conv, InMemorySaver())
     config = {"configurable": {"thread_id": conv}}
     graph.invoke({"messages": [HumanMessage(content=msg["text"], id=msg["id"])]}, config)
@@ -160,7 +160,7 @@ def test_commit_survives_checkpoint_not_yet_written(service):
     cfg = settings(service)
     setup_checkpoints(cfg)
     conv = service.create_conversation("alice")
-    msg = service.append_message("alice", conv, "S1002 换大一码", "first")
+    msg = service.append_message("alice", conv, "S1002 中 1 件换大一码", "first")
     run_turn(cfg, service, "alice", conv, msg["id"])
     pid = service.snapshot("alice", conv)["previews"][0]["id"]
     service.confirm("alice", pid, True)

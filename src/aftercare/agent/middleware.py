@@ -51,11 +51,84 @@ class BusinessBoundary(AgentMiddleware):
                 ensure_ascii=False,
             )
         )
-        return handler(
-            request.override(
-                tools=tools, messages=messages, system_message=SystemMessage(content=text)
-            )
+        prepared = request.override(
+            tools=tools, messages=messages, system_message=SystemMessage(content=text)
         )
+        from aftercare.services.process_audit import audit_commit
+
+        history = []
+        for attempt in range(3):
+            result = handler(prepared)
+            replies = result.result if hasattr(result, "result") else [result]
+            invalid = False
+            from aftercare.services.intent_guard import user_evidence
+
+            # Product owns evidence; evaluator diagnostics consume only observations.
+            from aftercare.services.quantity_audit import quantity_claims
+
+            evidence = user_evidence(users)
+            for reply in replies:
+                content = str(getattr(reply, "content", ""))
+                if content:
+                    with self.service.sessions.begin() as session:
+                        self.service._conversation(session, self.principal, self.conversation)
+                        self.service.event(
+                            session, self.conversation, "assistant_notice", {"text": content}
+                        )
+                        for claim in quantity_claims(content, evidence):
+                            self.service.event(
+                                session, self.conversation, "unconfirmed_quantity_claim", claim
+                            )
+                for call in getattr(reply, "tool_calls", []):
+                    if call["name"] == "commit_action":
+                        audit = audit_commit(
+                            self.service,
+                            self.principal,
+                            self.conversation,
+                            call["args"],
+                            "proposal",
+                        )
+                        invalid |= audit["classification"] in {
+                            "stale_or_unknown_preview",
+                            "invalid_arguments",
+                            "missing_trusted_confirmation",
+                        }
+            if not invalid:
+                if hasattr(result, "result"):
+                    result.result = history + replies
+                return result
+            # Never expose a stale proposal as a normal confirmation interrupt. Feed back
+            # paired errors before the next (budgeted) model call; preserve its raw proposal.
+            history.extend(replies)
+            for reply in replies:
+                for call in getattr(reply, "tool_calls", []):
+                    history.append(
+                        ToolMessage(
+                            content=json.dumps(
+                                {
+                                    "ok": False,
+                                    "data": None,
+                                    "error_code": "PREVIEW_REVALIDATION_REQUIRED",
+                                    "retryable": False,
+                                    "user_message": (
+                                        "该批次含失效提交提议，整批未执行。请核对诉求并重新预览。"
+                                    ),
+                                },
+                                ensure_ascii=False,
+                            ),
+                            name=call["name"],
+                            tool_call_id=call["id"],
+                            status="error",
+                        )
+                    )
+            if attempt == 2:
+                from langchain.agents.middleware.types import ModelResponse
+
+                return ModelResponse(
+                    result=history + [AIMessage(content="预览已失效，未提交；请重新说明诉求。")]
+                )
+            prepared = prepared.override(messages=list(messages) + history)
+        raise AssertionError("unreachable")
 
     def wrap_tool_call(self, request, handler):
         name = request.tool_call["name"]
@@ -105,28 +178,6 @@ class BusinessBoundary(AgentMiddleware):
                 tool_call_id=request.tool_call["id"],
                 status="error",
             )
-        if name == "preview_action":
-            snapshot = self.service.snapshot(self.principal, self.conversation)
-            if snapshot.get("case", {}).get("intent_revision") != snapshot["revision"]:
-                payload = {
-                    "ok": False,
-                    "data": None,
-                    "error_code": "CASE_UPDATE_REQUIRED",
-                    "retryable": False,
-                    "user_message": "先完成当前 update_case，再生成预览；两者不能并行",
-                    "trace_id": request.tool_call["id"],
-                }
-                with self.service.sessions.begin() as session:
-                    self.service._conversation(session, self.principal, self.conversation)
-                    self.service.event(
-                        session, self.conversation, "tool_result", {"tool": name, "result": payload}
-                    )
-                return ToolMessage(
-                    content=json.dumps(payload, ensure_ascii=False),
-                    name=name,
-                    tool_call_id=request.tool_call["id"],
-                    status="error",
-                )
         try:
             result = handler(request)
             reads = {

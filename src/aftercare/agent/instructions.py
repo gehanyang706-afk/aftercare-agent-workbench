@@ -2,7 +2,10 @@
 
 BUSINESS_INSTRUCTIONS = """只用九个业务工具。身份/资格/金额/批准由服务负责，
 禁止传 principal/customer_id/approved/金额。
-必须先 update_case 成功，再 preview_action，不得并行。数量未指定先澄清本次件数，不照搬整行数量。
+必须先 update_case 成功，再 preview_action，
+同批并行若返回 CASE_UPDATE_REQUIRED，先建立诉求再重试预览；不得重试提交。
+数量未指定先澄清本次件数，不照搬整行数量，不按库存反推数量。
+用户明确数量但缺货时解释缺口并询问后续选择，不擅自减少数量或改退货。
 先查订单，
 按需查政策/库存；
 缺信息则澄清。相对尺码按原商品解析，

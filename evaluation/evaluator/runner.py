@@ -99,7 +99,11 @@ def observe(sessions, communications, error=None):
     with sessions() as s:
 
         def rows(cls):
-            return [columns(row) for row in s.scalars(select(cls))]
+            return (
+                [columns(row) for row in s.scalars(select(cls).order_by(cls.id))]
+                if cls is Event
+                else [columns(row) for row in s.scalars(select(cls))]
+            )
 
         return {
             "orders": {r["id"]: r for r in rows(Order)},
@@ -171,12 +175,18 @@ def run_case(scenario, settings, sessions, profile, output, actor_factory=Actor)
     pending_message = scenario.initial_user_message
     decision = "reject"
 
+    def record(kind, payload):
+        with sessions.begin() as session:
+            service._conversation(session, principal, conversation)
+            service.event(session, conversation, kind, payload)
+
     def faults(trigger):
         for i, fault in enumerate(scenario.fault_schedule):
             if i in used_faults or fault.get("trigger", "after_preview") != trigger:
                 continue
             used_faults.add(i)
             kind = fault["kind"]
+            record("fault_armed", {"kind": kind, "trigger": trigger})
             if kind == "ship_order":
                 ship_order(sessions, fault.get("order_id", "S1001"))
             elif kind == "inventory_zero":
@@ -208,7 +218,11 @@ def run_case(scenario, settings, sessions, profile, output, actor_factory=Actor)
                 error = result["error"]
                 break
             snapshot = service.snapshot(principal, conversation)
-            previews = [p for p in snapshot["previews"] if p["status"] == "PENDING"]
+            previews = [
+                p
+                for p in snapshot["previews"]
+                if p["status"] == "PENDING" and p["confirmation_available"]
+            ]
             kind = (
                 "preview"
                 if previews
@@ -220,10 +234,19 @@ def run_case(scenario, settings, sessions, profile, output, actor_factory=Actor)
                 preview = previews[-1]
                 visible.append(json.dumps(preview["payload"], ensure_ascii=False))
                 faults("after_preview")
-            index = next((i for i, step in enumerate(steps) if step.get("on") == kind), None)
+            from evaluation.evaluator.user_policy_v2 import matches
+
+            current_text = "\n".join(result.get("communications", []))
+            index = next(
+                (i for i, step in enumerate(steps) if matches(step, kind, current_text)), None
+            )
             step = steps.pop(index) if index is not None else None
             if step and step.get("say"):
                 pending_message = step["say"]
+                record(
+                    "script_user_reply",
+                    {"on": kind, "when": step.get("when"), "text": pending_message},
+                )
                 continue
             if previews:
                 if step and step.get("repeat_message"):

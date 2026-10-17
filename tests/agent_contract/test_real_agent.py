@@ -125,7 +125,7 @@ def test_real_wire_adapter_nine_tools_hitl_and_receipts(service, tmp_path, monke
     monkeypatch.setattr(pilot_gateway, "bounded", offline_wire_response)
     conv = service.create_conversation("alice")
     ledger_conv = service.create_conversation("alice")
-    msg = service.append_message("alice", conv, "S1002 换大一码", "first")
+    msg = service.append_message("alice", conv, "S1002 中 1 件换大一码", "first")
     result = run_turn(
         Settings(_env_file=None),
         service,

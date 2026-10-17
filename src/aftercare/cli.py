@@ -3,6 +3,7 @@ import importlib.metadata
 import json
 import platform
 import sys
+from pathlib import Path
 
 from pydantic import ValidationError
 
@@ -77,7 +78,14 @@ def parser() -> argparse.ArgumentParser:
     mc = model.add_subparsers(dest="model_action", required=True)
     smoke = mc.add_parser("smoke")
     smoke.add_argument(
-        "--batch", choices=["compatibility-smoke", "development-pilot"], required=True
+        "--batch",
+        choices=[
+            "compatibility-smoke",
+            "development-pilot",
+            "business-loop-regression-v2",
+            "quantity-clarification-regression-v1",
+        ],
+        required=True,
     )
     smoke.add_argument("--approval", required=True)
     smoke.add_argument("--account-confirmation", required=True)
@@ -94,7 +102,18 @@ def main(argv: list[str] | None = None) -> int:
         from aftercare.llm.smoke import run_smoke
 
         try:
-            if args.batch == "development-pilot":
+            if args.batch in {
+                "business-loop-regression-v2",
+                "quantity-clarification-regression-v1",
+            }:
+                sys.path.insert(0, str(PROJECT_ROOT))
+                from evaluation.evaluator.regression_live import run
+
+                approval = json.loads(Path(args.approval).read_text())
+                if approval.get("batch_id") != args.batch:
+                    raise ValueError("REGRESSION_BATCH_ARGUMENT_MISMATCH")
+                output = run(Settings(), args.approval, args.account_confirmation)
+            elif args.batch == "development-pilot":
                 sys.path.insert(0, str(PROJECT_ROOT))
                 from evaluation.evaluator.pilot import run
 

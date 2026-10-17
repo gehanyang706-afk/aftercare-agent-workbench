@@ -76,8 +76,33 @@ def offline_plan(messages):
     for name, item in results.items():
         if not item.get("ok"):
             code = item.get("error_code", "INVALID_TOOL_RESULT")
+            if name == "preview_action" and code == "CASE_UPDATE_REQUIRED":
+                return response(
+                    calls=[
+                        call(
+                            "update_case",
+                            {
+                                "expected_revision": context["intent_revision"],
+                                "source_message_id": human.id,
+                                "changes": {
+                                    "current_order_id": value("current_order_id"),
+                                    "intent": value("intent"),
+                                    "constraints": value("constraints", {}),
+                                },
+                            },
+                        )
+                    ]
+                )
+            if name == "preview_action" and code in {
+                "QUANTITY_CLARIFICATION_REQUIRED",
+                "CASE_QUANTITY_MISMATCH",
+            }:
+                return response("请明确本次申请几件，例如其中 1 件或全部 2 件。")
+            if name == "preview_action" and code == "OUT_OF_STOCK":
+                return response(
+                    "您明确申请的数量库存不足。请问保留原数量等待补货，还是自行选择其他方案？当前未提交，也不会擅自减少件数或改退货。"
+                )
             if name == "preview_action" and code in [
-                "OUT_OF_STOCK",
                 "OUTSIDE_POLICY_WINDOW",
                 "ITEM_INELIGIBLE",
             ]:
@@ -151,6 +176,10 @@ def offline_plan(messages):
                 call("list_orders", {}),
             ]
         )
+    if any(w in text for w in ["暂不提交", "不要办理", "暂不办理"]):
+        return response(
+            "已记录您当前选择，暂不提交申请；未创建补货提醒或售后单，后续如需办理请重新说明。"
+        )
     if any(w in text for w in ["质量", "破损", "投诉", "人工", "坏了"]):
         return response(
             calls=[
@@ -187,7 +216,9 @@ def offline_plan(messages):
         return response("请明确要办理的商品行和数量。")
     args = {"action": intent, "order_id": order, "reason": "用户当前诉求"}
     if intent != "cancel":
-        args["quantity"] = constraints.get("quantity", 1)
+        if "quantity" not in constraints:
+            return response("请明确本次申请几件，例如其中 1 件或全部 2 件。")
+        args["quantity"] = constraints["quantity"]
         args["line_id"] = line["id"]
     if intent == "exchange":
         if "get_inventory" not in results:
