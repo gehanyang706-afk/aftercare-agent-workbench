@@ -3,6 +3,8 @@ import json
 from langchain.agents.middleware import AgentMiddleware
 from langchain_core.messages import AIMessage, HumanMessage, SystemMessage, ToolMessage
 
+from aftercare.agent.context import assemble_messages
+from aftercare.agent.instructions import BUSINESS_INSTRUCTIONS
 from aftercare.agent.tools import ALLOWED
 
 
@@ -27,16 +29,26 @@ class BusinessBoundary(AgentMiddleware):
         starts = [i for i, m in enumerate(messages) if isinstance(m, HumanMessage)]
         if self.profile == "full" and len(starts) > 4:
             messages = messages[starts[-4] :]
-        text = "仅处理当前用户售后。不得自批，不得声称退款到账。有效状态：" + json.dumps(
-            {
-                "case": {
-                    "facts": snapshot.get("case", {}).get("facts", {})
-                    if self.profile == "full"
-                    else {}
+        if self.profile == "full":
+            messages = assemble_messages(messages)
+        text = (
+            BUSINESS_INSTRUCTIONS
+            + "有效状态："
+            + json.dumps(
+                {
+                    "case": {
+                        "facts": {
+                            key: {"value": fact.get("value")}
+                            for key, fact in snapshot.get("case", {}).get("facts", {}).items()
+                        }
+                        if self.profile == "full"
+                        else {}
+                    },
+                    "intent_revision": snapshot["revision"],
+                    "current_user_message_id": users[-1]["id"] if users else None,
                 },
-                "intent_revision": snapshot["revision"],
-            },
-            ensure_ascii=False,
+                ensure_ascii=False,
+            )
         )
         return handler(
             request.override(

@@ -33,7 +33,7 @@ def factory(
         run_id=run_id or f"{conversation}:{service.snapshot(principal, conversation)['revision']}",
     )
     register_harness_profile(
-        "aftercare:scripted",
+        getattr(model, "model_name", "aftercare:scripted"),
         HarnessProfile(
             general_purpose_subagent=GeneralPurposeSubagentProfile(enabled=False),
             excluded_tools=EXCLUDED,
@@ -99,6 +99,7 @@ def run_turn(
     run_id=None,
     profile="full",
     decision="approve",
+    model=None,
 ):
     if profile == "fixed-workflow":
         from aftercare.agent.workflow import run_workflow
@@ -108,7 +109,7 @@ def run_turn(
         raise ValueError("UNKNOWN_AGENT_PROFILE")
     config = {"configurable": {"thread_id": conversation}, "recursion_limit": 96}
     with agent_runtime(
-        settings, service, principal, conversation, run_id=run_id, profile=profile
+        settings, service, principal, conversation, run_id=run_id, model=model, profile=profile
     ) as (graph, model):
         state = graph.get_state(config)
         if state.next and not resume:

@@ -153,7 +153,7 @@ class Actor:
         self.log.close()
 
 
-def run_case(scenario, settings, sessions, profile, output):
+def run_case(scenario, settings, sessions, profile, output, actor_factory=Actor):
     reset(sessions, scenario)
     service = BusinessService(sessions, lambda: scenario.clock)
     principal = scenario.user_known_facts.get("principal", "alice")
@@ -165,7 +165,7 @@ def run_case(scenario, settings, sessions, profile, output):
         "conversation": conversation,
         "profile": profile,
     }
-    actor = Actor(output / f"{scenario.scenario_id}.stderr.log")
+    actor = actor_factory(output / f"{scenario.scenario_id}.stderr.log")
     visible, used_faults, steps = [], set(), list(scenario.user_behavior_policy)
     error, turns = None, 0
     pending_message = scenario.initial_user_message

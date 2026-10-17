@@ -1,6 +1,6 @@
 """All attempts reserve first. Unknown usage keeps reservations and pauses that model."""
 
-from sqlalchemy import func, select
+from sqlalchemy import case, func, select
 from sqlalchemy.dialects.postgresql import insert
 
 from aftercare.domain.contracts import utc_now
@@ -14,7 +14,17 @@ class BudgetLedger:
         self.sessions = sessions
 
     def reserve(
-        self, provider, model, batch, conversation, run, input_bound, output_cap, cap=200000
+        self,
+        provider,
+        model,
+        batch,
+        conversation,
+        run,
+        input_bound,
+        output_cap,
+        cap=200000,
+        conversation_cap=100000,
+        batch_request_cap=None,
     ):
         require(input_bound >= 0 and output_cap > 0, "INVALID_RESERVATION")
         key = f"{provider}:{model}:{batch}"
@@ -41,12 +51,31 @@ class BudgetLedger:
                 select(func.count()).select_from(ModelCall).where(ModelCall.run_id == run)
             )
             require(calls < 16 and run_calls < 8, "MODEL_CALL_LIMIT")
-            prior = s.scalar(
-                select(func.coalesce(func.sum(ModelCall.usage + 0), 0)).where(
-                    ModelCall.conversation_id == conversation
+            if batch_request_cap is not None:
+                batch_calls = s.scalar(
+                    select(func.count())
+                    .select_from(ModelCall)
+                    .where(
+                        ModelCall.batch_id == batch,
+                        ModelCall.provider == provider,
+                        ModelCall.exact_model == model,
+                    )
                 )
+                require(batch_calls < batch_request_cap, "BATCH_REQUEST_LIMIT")
+            prior = s.scalar(
+                select(
+                    func.coalesce(
+                        func.sum(
+                            case(
+                                (ModelCall.usage.is_(None), ModelCall.reserved),
+                                else_=ModelCall.usage,
+                            )
+                        ),
+                        0,
+                    )
+                ).where(ModelCall.conversation_id == conversation)
             )
-            require(prior + amount <= 100000, "CONVERSATION_TOKEN_LIMIT")
+            require(prior + amount <= conversation_cap, "CONVERSATION_TOKEN_LIMIT")
             for row in [project, budget]:
                 row.reserved += amount
             call_id = new_id("call")

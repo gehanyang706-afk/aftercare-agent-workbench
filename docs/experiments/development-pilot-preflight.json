@@ -1,0 +1,31 @@
+{
+  "checked_at": "2026-10-17T21:52:19.962510+08:00",
+  "plan_sha256": "9eb8329777e719103f86c188bea0d99d84ec4a9250f2a31575e2a76fd810d894",
+  "scope_matches_authorization": true,
+  "fixed_tasks": [
+    "d-001",
+    "d-003",
+    "d-016",
+    "d-048"
+  ],
+  "profile": "full",
+  "provider": "bailian-beijing-compatible",
+  "exact_model": "qwen3.5-plus-2026-02-15",
+  "offline_tests": {
+    "passed": 74,
+    "skipped": 0,
+    "seconds": 30.13
+  },
+  "nine_tools_wire_hitl_revision_lost_response": "offline validated",
+  "ledger_database": "aftercare_demo",
+  "fixture_database": "aftercare_test",
+  "durable_calls_before_fixture_reset": 32,
+  "durable_calls_after_fixture_reset": 32,
+  "durable_call_snapshot_identical": true,
+  "known_real_model_consumption_before_batch": 1102,
+  "pilot_real_requests_before_start": 0,
+  "account_confirmation": "user-attested within current conversation; not independently read from console",
+  "default_real_flag": false,
+  "test_logs": "runtime/development-pilot-preflight",
+  "general_context_projection": "current facts + raw recent user turns + whole validated preview blocks/committed receipts; originals unchanged"
+}

@@ -76,7 +76,9 @@ def parser() -> argparse.ArgumentParser:
     model = commands.add_parser("model")
     mc = model.add_subparsers(dest="model_action", required=True)
     smoke = mc.add_parser("smoke")
-    smoke.add_argument("--batch", choices=["compatibility-smoke"], required=True)
+    smoke.add_argument(
+        "--batch", choices=["compatibility-smoke", "development-pilot"], required=True
+    )
     smoke.add_argument("--approval", required=True)
     smoke.add_argument("--account-confirmation", required=True)
     smoke.add_argument("--execute", action="store_true", required=True)
@@ -92,7 +94,13 @@ def main(argv: list[str] | None = None) -> int:
         from aftercare.llm.smoke import run_smoke
 
         try:
-            output = run_smoke(Settings(), args.approval, args.account_confirmation)
+            if args.batch == "development-pilot":
+                sys.path.insert(0, str(PROJECT_ROOT))
+                from evaluation.evaluator.pilot import run
+
+                output = run(Settings(), args.approval, args.account_confirmation)
+            else:
+                output = run_smoke(Settings(), args.approval, args.account_confirmation)
             print(json.dumps(output, ensure_ascii=False, indent=2))
             return 0 if output["status"] == "COMPLETED" else 1
         except Exception as error:
