@@ -32,7 +32,7 @@
       "task_sha256": "0fde7b78397d1dec9f84d15207355ffd22a429ce274b9e51852173ffe6d97fe4"
     }
   ],
-  "candidate_source_tree_sha256": "869c901cd4da27778871433c67f5d71863f8ab80994dd587558c7ba8745a721e",
+  "candidate_source_tree_sha256": "1fdd39ef10757ad5d9f8f1fed070697b94191996d9f9467d3739b3bfe41be281",
   "frozen_scorer": "evaluation/evaluator/grader.py",
   "frozen_scorer_sha256": "c3c2bbb07956ad4f8f3b629522a0fab4bf981649113c6ce601e31f030057fc3a",
   "max_requests_per_conversation_including_retries": 16,
@@ -101,5 +101,5 @@
   "entry": "python -m aftercare model smoke --batch business-loop-regression-v2 --approval <new-approval.json> --account-confirmation <fresh-account.json> --execute",
   "ledger": "Existing PilotGateway -> BailianAdapter/send_once -> BudgetLedger; no new provider or workbench real-mode opening.",
   "diagnostic_requirement": "Keep frozen score plus proposal/state-aware v2 diagnostics, per-task event chain, exact matching lost-response receipt and one-side-effect checks.",
-  "plan_sha256": "abc6348fa3b4cb65e48b91b34d4facfa1727c2e0ab5cb8c9cdab2abaf9aa0213"
+  "plan_sha256": "2da3fea6cb54f08930d00d762151a20a3a7026ee8717ef20e8a22876a4c857a9"
 }

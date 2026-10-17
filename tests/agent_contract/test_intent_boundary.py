@@ -330,3 +330,28 @@ def test_state_change_and_preview_in_same_batch_never_leave_valid_stale_card(
         a.result()
         b.result()
     assert not any(p["confirmation_available"] for p in service.snapshot("alice", conv)["previews"])
+
+
+@pytest.mark.parametrize(
+    "latest,action",
+    [
+        ("不是退货，是换货", "return"),
+        ("换货或者退货都可以吗", "return"),
+        ("查询一下订单状态", "exchange"),
+        ("好的", "exchange"),
+    ],
+)
+def test_negation_ambiguous_options_and_ack_are_not_new_action_authority(service, latest, action):
+    conv, msg, change, tools = setup(service)
+    update_case(service, "alice", conv, change)
+    msg2 = service.append_message("alice", conv, latest, "next")
+    change.expected_revision = 2
+    change.source_message_id = msg2["id"]
+    change.changes["intent"] = action
+    update_case(service, "alice", conv, change)
+    args = {**ARGS, "action": action}
+    if action == "return":
+        args["target_variant"] = None
+    assert (
+        invoke(tools, "preview_action", args)["error_code"] == "USER_INTENT_CLARIFICATION_REQUIRED"
+    )

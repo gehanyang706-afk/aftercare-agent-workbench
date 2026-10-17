@@ -32,26 +32,27 @@ def user_evidence(messages):
             order = orders[-1].upper()
             if order != evidence.get("order_id"):
                 evidence = {"order_id": order}
-        action = (
-            "return"
-            if "退" in text
-            else "exchange"
-            if "换" in text and "不换了" not in text
-            else "cancel"
-            if "取消" in text
-            else None
-        )
-        withdrawal = bool(
-            re.search(
-                r"不换了|不要换|不退了|不要退|不要取消|不取消了|不要办理|暂不办理|暂不提交|停止办理",
-                text,
-            )
-        )
-        if withdrawal:
-            evidence.pop("action", None)
-        elif action:
-            evidence["action"] = action
         qty = explicit_quantity(text)
+        positive = re.sub(r"不(?:是|需要|要)?(?:再)?(?:换货?|退货?|取消)(?:了)?", "", text)
+        actions = {
+            value
+            for token, value in (("退", "return"), ("换", "exchange"), ("取消", "cancel"))
+            if token in positive
+        }
+        withdrawal = bool(re.search(r"不要办理|暂不办理|暂不提交|停止办理", text))
+        # Multiple alternatives or a question about options are not an action selection.
+        ambiguous = len(actions) != 1 or bool(re.search(r"或者|还是|都可以|能否|可以吗", positive))
+        if not ambiguous and not withdrawal:
+            evidence["action"] = next(iter(actions))
+        elif actions or withdrawal:
+            evidence.pop("action", None)
+        elif qty is None and not re.search(
+            r"大一码|小一码|原码|白色|黑色|尺码|未使用|没穿过", text
+        ):
+            evidence.pop("action", None)
+        if qty is None and re.search(r"数量\s*\d+|\d+\s*件", text):
+            evidence.pop("quantity", None)
+            evidence.pop("quantity_source", None)
         if qty is not None:
             evidence["quantity"] = qty
             evidence["quantity_source"] = source
