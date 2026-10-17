@@ -45,6 +45,7 @@ class BusinessBoundary(AgentMiddleware):
                         else {}
                     },
                     "intent_revision": snapshot["revision"],
+                    "current_time": self.service.clock().isoformat(),
                     "current_user_message_id": users[-1]["id"] if users else None,
                 },
                 ensure_ascii=False,
@@ -104,6 +105,28 @@ class BusinessBoundary(AgentMiddleware):
                 tool_call_id=request.tool_call["id"],
                 status="error",
             )
+        if name == "preview_action":
+            snapshot = self.service.snapshot(self.principal, self.conversation)
+            if snapshot.get("case", {}).get("intent_revision") != snapshot["revision"]:
+                payload = {
+                    "ok": False,
+                    "data": None,
+                    "error_code": "CASE_UPDATE_REQUIRED",
+                    "retryable": False,
+                    "user_message": "先完成当前 update_case，再生成预览；两者不能并行",
+                    "trace_id": request.tool_call["id"],
+                }
+                with self.service.sessions.begin() as session:
+                    self.service._conversation(session, self.principal, self.conversation)
+                    self.service.event(
+                        session, self.conversation, "tool_result", {"tool": name, "result": payload}
+                    )
+                return ToolMessage(
+                    content=json.dumps(payload, ensure_ascii=False),
+                    name=name,
+                    tool_call_id=request.tool_call["id"],
+                    status="error",
+                )
         try:
             result = handler(request)
             reads = {

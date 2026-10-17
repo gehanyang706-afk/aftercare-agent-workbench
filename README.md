@@ -45,3 +45,11 @@ docker compose up -d db
 [实际兼容报告](docs/experiments/compatibility-smoke.md) ·
 [6A 交接](docs/handoffs/phase-06A-compatibility-smoke.md) ·
 [下一批待批计划](evaluation/manifests/development-pilot.json)。
+
+
+阶段 6A 首轮 development-pilot 已结案，**0/4 任务完成**；24 次真实请求，输入 48,040 / 输出 1,831，
+未知预留 0。没有实际业务操作；一次工具顺序错误，三题涉及数量歧义与脚本用户缺口。
+改口及丢响应恢复未触发，不声称真实闭环通过。首轮证据不重写；修复后没有再次调用真实模型。
+[首轮结果与归因](docs/experiments/development-pilot-first.md) ·
+[交接记录](docs/handoffs/phase-06A-development-pilot.md) ·
+[新回归草案，未批准](evaluation/manifests/development-pilot-regression-01.json)。

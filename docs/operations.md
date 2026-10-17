@@ -84,3 +84,11 @@ dev 运行会重置专用 aftercare_test，逐题导出再重置，不触碰 aft
 仅该入口支持临时 ALLOW_REAL_MODEL_CALLS=true，并同时校验具体计划 hash、审批、账户确认与预算。
 实际报告见 docs/experiments/compatibility-smoke.md；development-pilot 需独立批准，不能继承本批剩余额度。
 不要在聊天里发送 Key。真实联调前应在账户侧启用仅免费额度保护；任何额外付费需单独批准。
+
+
+首轮 development-pilot 已执行并关闭，入口为 `model smoke --batch development-pilot`，绑定其审批/账户确认。
+不要直接再次执行；持久状态与账本会拒绝复跑。详情见 docs/handoffs/phase-06A-development-pilot.md。
+真实业务适配通过受限模型注入，普通 Web/worker 仍为脚本模式，不因 .env 开关自行更换 provider。
+业务 fixture 与真实 ledger 分库；真实批次运行期间仍不得并行 pytest 或离线 dev 清库。
+原始状态/事件/请求/响应保存在 runtime/development-pilot-first，批次后离线测试不覆盖这些证据。
+新候选数据与回归计划是独立版本，尚未授权；旧批剩余额度不能当作新批许可。

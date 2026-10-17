@@ -72,8 +72,9 @@ def offline_wire_response(fn, args, seconds):
             }
             for c in planned.tool_calls
         ]
-    incoming = len(json.dumps(payload, ensure_ascii=False).encode()) // 4
-    outgoing = max(1, len(json.dumps(message, ensure_ascii=False).encode()) // 4)
+    # Protocol doubles use fixed reported usage, not a guessed production tokenizer.
+    # Budget boundaries are tested with explicit reservations in separate tests below.
+    incoming, outgoing = 100, 10
     return {
         "http_status": 200,
         "request_id": "offline-mock",
@@ -347,3 +348,30 @@ def test_malformed_provider_message_is_a_batch_stop():
     with pytest.raises(BusinessError, match="PROVIDER_PROTOCOL_MESSAGE") as error:
         BudgetedBailianModel(gateway=MalformedGateway()).invoke([HumanMessage(content="hello")])
     assert stop_batch(error.value.code)
+
+
+def test_preview_requires_current_case_before_generation(service):
+    from langgraph.checkpoint.memory import InMemorySaver
+
+    from aftercare.agent.runtime import factory
+    from aftercare.llm.scripted import ScriptedModel, call, response
+
+    conv = service.create_conversation("alice")
+    msg = service.append_message("alice", conv, "取消订单 S1001", "ordering")
+    model = ScriptedModel(
+        ledger=BudgetLedger(service.sessions),
+        conversation_id=conv,
+        run_id="bad-order",
+        responses=[
+            response(calls=[call("preview_action", {"action": "cancel", "order_id": "S1001"})]),
+            response("先更新诉求"),
+        ],
+    )
+    graph, _ = factory(service, "alice", conv, InMemorySaver(), model=model)
+    result = graph.invoke(
+        {"messages": [HumanMessage(content=msg["text"], id=msg["id"])]},
+        {"configurable": {"thread_id": conv}},
+    )
+    errors = [json.loads(m.content) for m in result["messages"] if isinstance(m, ToolMessage)]
+    assert errors[0]["error_code"] == "CASE_UPDATE_REQUIRED"
+    assert service.snapshot("alice", conv)["previews"] == []

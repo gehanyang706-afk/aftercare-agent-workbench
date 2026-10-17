@@ -1,0 +1,26 @@
+{
+  "version": "development-regression-v1",
+  "status": "PROPOSED_NOT_RUN_WITH_REAL_MODEL",
+  "original_file_sha256": "d407bcbaf4cfbf2a2a26354afcab79b0fdf2f3532aa185b95737b8aa08e85382",
+  "new_file_sha256": "5636d11dc50742131154c26deafb3844e5113fb49f318006052355dd6378308d",
+  "changes": [
+    {
+      "source": "d-001",
+      "candidate": "r1-d-001",
+      "change": "Input and oracle unchanged; regression of generic tool-order guard."
+    },
+    {
+      "source": "d-003/d-016/d-048",
+      "candidate": "r1-d-003/r1-d-016/r1-d-048",
+      "change": "Make quantity=1 explicit in initial request and hidden goal/oracle; revision user also specifies 1 item. Original scenarios did not state quantity and scripted user could not answer quantity clarification. These are versioned seen regressions, not replacement scores for the original batch."
+    }
+  ],
+  "unchanged": [
+    "Original scenarios.jsonl",
+    "Original grader",
+    "First-run 0/4 results",
+    "First-run raw traces",
+    "Business eligibility and stock rules"
+  ],
+  "future_user_strategy_note": "Additional ambiguous-quantity tasks need an independently specified clarification policy; not included in this proposed four-task batch."
+}

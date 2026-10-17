@@ -1,0 +1,77 @@
+{
+  "batch_id": "development-pilot-regression-01",
+  "status": "DRAFT_NOT_AUTHORIZED",
+  "exact_model": "qwen3.5-plus-2026-02-15",
+  "provider": "bailian-beijing-compatible",
+  "enable_thinking": false,
+  "profile": "full",
+  "user_simulator": "adaptive-scripted-v1 (no model-user calls)",
+  "split": "dev",
+  "development_file_sha256": "5636d11dc50742131154c26deafb3844e5113fb49f318006052355dd6378308d",
+  "unique_tasks": 4,
+  "repetitions": 1,
+  "max_conversations": 4,
+  "max_requests_per_conversation_including_retries": 16,
+  "max_http_requests_including_retries": 64,
+  "max_token_per_conversation_including_input_output": 24000,
+  "total_token_hard_cap": 96000,
+  "max_output_tokens_per_request": 512,
+  "concurrency": 1,
+  "per_conversation_wall_seconds": 180,
+  "batch_wall_seconds": 1200,
+  "sdk_retries": 0,
+  "additional_paid_cost_cap_cny": 0,
+  "stop_conditions": [
+    "Authentication, region, exact-model, quota or free-tier protection error",
+    "Any unknown usage or transport disconnect; retain reservation and pause",
+    "Provider protocol incompatibility or security-sensitive unauthorized tool attempt",
+    "Any per-request/conversation/batch token, request or wall-clock cap",
+    "Human cancellation"
+  ],
+  "no_holdout_access": true,
+  "no_formal_comparison": true,
+  "automatic_model_switch": false,
+  "development_file": "evaluation/dev/regression-v1.jsonl",
+  "tasks": [
+    {
+      "scenario_id": "r1-d-001",
+      "source_scenario_id": "d-001",
+      "task_sha256": "1afb42858f0356e9806c4003cda466ac7950723bcf6f297d2fa1074897c25052"
+    },
+    {
+      "scenario_id": "r1-d-003",
+      "source_scenario_id": "d-003",
+      "task_sha256": "744dc336a1aa2ea7442f2fa8f11e27843f3a1f235b3c9fb2d56a6d4fe99bfb18"
+    },
+    {
+      "scenario_id": "r1-d-016",
+      "source_scenario_id": "d-016",
+      "task_sha256": "1e3bb0868b99d46fadc3ca1475cafef687e0f18300edcb097a26324dbef82ede"
+    },
+    {
+      "scenario_id": "r1-d-048",
+      "source_scenario_id": "d-048",
+      "task_sha256": "0fde7b78397d1dec9f84d15207355ffd22a429ce274b9e51852173ffe6d97fe4"
+    }
+  ],
+  "prior_first_run": {
+    "batch_id": "development-pilot",
+    "tasks_passed": 0,
+    "tasks_attempted": 4,
+    "requests": 24,
+    "tokens": 49871,
+    "first_run_manifest": "evaluation/manifests/development-pilot-first-run.json"
+  },
+  "preconditions": [
+    "Separate explicit authorization bound to this new plan hash",
+    "Reconfirm Beijing free quota >= 96000 and FreeTierOnly protection",
+    "Freeze the offline-fixed code and versioned explicit-quantity scenarios; no changes while live",
+    "Keep persistent ledger separate from business fixture resets",
+    "Implement only this newly approved batch ID; original batch remains permanently closed"
+  ],
+  "estimation_note": "96k is unchanged ceiling (4 x 24k), not a prediction of successful task consumption. First batch stopped before real confirmation/change/recovery coverage.",
+  "fixture_storage": "aftercare_test for isolated business fixtures; durable real ledger remains in aftercare_demo with explicit conversation mapping and no reset. Never mutate user-facing demo orders. Do not run pytest concurrently.",
+  "candidate_source_tree_sha256": "da96ce5bdd10c71f1f11456ebe49acf8918aee193bb89e6ea2a833b06fb34f2a",
+  "offline_fix_evidence": "docs/experiments/development-pilot-offline-fix.json",
+  "plan_sha256": "2392081abeea0c7e01c38c33093033a865618fc380d6076eea1c49cf0429e14a"
+}
