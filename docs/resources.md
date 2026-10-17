@@ -36,3 +36,17 @@ Docker 只读检查最初受沙箱 socket 权限限制；依赖下载最初受�
 
 本机安装后实测目录占用：`.venv` 约 222 MiB；`runtime`（依赖缓存与验收日志）约 64 MiB。
 这是当前 macOS 运行目录，不代表 Linux 构建体积或模型加载峰值。
+
+## 阶段 5 当前资源状态（取代上方阶段 0 的历史“未下载”状态）
+
+用户随后已授权下载所列资源，范围内没有重复索取批准。实际已下载并构建：
+
+- 两个固定 digest 基础镜像；app/worker 镜像实测 952,317,902 字节（约 908 MiB）。
+- BAAI/bge-small-zh-v1.5 与 BAAI/bge-reranker-base，固定 revision/hash 见 configs/local-models.lock.json。
+  本地权重与导出文件合计 1,320,769,921 字节；只存在项目 runtime/models。
+- 本机 .venv 实测约 1.2 GiB，含 macOS 导出所需 torch/transformers；Linux lock marker 不装这些 macOS 工具。
+- 本地 ONNX CPU 探针峰值 RSS 1,995,145,216 字节；两文本 embedding 首次加载+推理约 1.009s，
+  reranker 两对首次加载+推理约 2.547s。小探针不代表生产负载。完整记录 docs/local-model-resource-report.json。
+
+没有全局软件安装、模型 API 消费、公网部署或其他项目变更。
+应用镜像 ID 和源文件 hash 将保存在 evaluation/manifests/release-candidate.json。

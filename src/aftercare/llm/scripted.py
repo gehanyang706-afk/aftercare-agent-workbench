@@ -28,6 +28,16 @@ def offline_plan(messages):
     text = str(human.content)
     context = json.loads(str(messages[0].content).split("有效状态：", 1)[-1])
     facts = context.get("case", {}).get("facts", {})
+    if not facts:
+        # Full-history baselines reconstruct from visible prior update results, not server memory.
+        for prior in messages[1:human_index]:
+            if isinstance(prior, ToolMessage) and prior.name == "update_case":
+                try:
+                    update = json.loads(str(prior.content))
+                    if update.get("ok"):
+                        facts = update["data"].get("facts", {})
+                except (ValueError, TypeError):
+                    pass
 
     def value(k, default=None):
         return facts.get(k, {}).get("value", default)
@@ -58,6 +68,8 @@ def offline_plan(messages):
                     call("get_operation", {"preview_id": results["preview_action"]["data"]["id"]})
                 ]
             )
+        if item.get("error_code") == "WRITE_RESULT_UNKNOWN":
+            return response("尚未查到原提交回执，当前不宣称成功。请稍后查询或转人工处理。")
         return response("旧方案未执行。请继续说明当前诉求，必要时重新生成预览。")
     if "request_handoff" in results:
         return response("已创建人工接管工单；状态 HANDOFF_PENDING，尚未判定责任。")
@@ -117,6 +129,9 @@ def offline_plan(messages):
             constraints["color"] = color
     if any(w in text for w in ["穿过了", "使用过", "已经穿过"]):
         constraints["unused"] = False
+    quantity = re.search(r"数量\s*(\d+)|(?<!\d)(\d+)\s*件", text)
+    if quantity:
+        constraints["quantity"] = int(quantity.group(1) or quantity.group(2))
     if "update_case" not in results:
         changes = {"constraints": constraints}
         if order:
@@ -172,6 +187,7 @@ def offline_plan(messages):
         return response("请明确要办理的商品行和数量。")
     args = {"action": intent, "order_id": order, "reason": "用户当前诉求"}
     if intent != "cancel":
+        args["quantity"] = constraints.get("quantity", 1)
         args["line_id"] = line["id"]
     if intent == "exchange":
         if "get_inventory" not in results:

@@ -1,0 +1,32 @@
+# Offline profiles share schemas, ownership, trusted approval, eligibility and idempotency.
+# Scripted runs compare engineering paths, never real model task quality or cost.
+fixed-workflow:
+  driver: aftercare.agent.workflow.run_workflow
+  intent_model: aftercare:scripted
+  stages: [slots-and-orders, order-and-policy, inventory, preview, trusted-confirm, commit]
+  retrieval: bm25
+  state: explicit-workflow-state
+  recovery: receipt-query-only
+react-full-policy:
+  driver: aftercare.agent.runtime.run_turn
+  intent_model: aftercare:scripted
+  retrieval: full-policy
+  history: complete-until-budget-limit
+  state: visible-history
+  read_retries: 0
+retrieval:
+  driver: aftercare.agent.runtime.run_turn
+  intent_model: aftercare:scripted
+  retrieval: bm25
+  history: complete-until-budget-limit
+  state: visible-history
+  read_retries: 0
+full:
+  driver: aftercare.agent.runtime.run_turn
+  intent_model: aftercare:scripted
+  retrieval: bm25
+  history: last-four-complete-user-blocks
+  state: structured-effective-facts
+  read_retries: 2
+formal_comparison_candidates: [react-full-policy, full]
+selection_reason: Strong full-history/all-applicable-policy baseline vs complete proposal; real utility and token tradeoff require separately approved pilot.

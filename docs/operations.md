@@ -67,3 +67,18 @@ AFTERCARE_TEST_DATABASE_URL=postgresql+psycopg://aftercare:aftercare_local_only@
 重新取得权重运行 scripts/download_models.py；embedding 导出运行 scripts/export_embedding.py。均不得改全局缓存。
 锁更新：`pip-compile --extra dev --all-build-deps --allow-unsafe --generate-hashes --strip-extras --output-file requirements.lock --cache-dir runtime/pip-cache pyproject.toml`，仅依赖变化时使用。
 Python 离线 hook 不是 OS 沙箱；本项目不暴露 shell/任意文件工具，LLM 工厂和 provider 执行仍拒绝真实请求。
+
+## 离线评测与真实试跑边界
+
+```bash
+.venv/bin/python -m aftercare eval validate --split dev
+.venv/bin/python -m aftercare eval run --split dev --provider scripted --profile full
+.venv/bin/python -m aftercare eval verify-grader
+.venv/bin/python -m aftercare eval plan --batch compatibility-smoke --dry-run
+```
+
+dev 运行会重置专用 aftercare_test，逐题导出再重置，不触碰 aftercare_demo；不要与 pytest 并行。
+运行输出 runtime/phase-05/dev-*/report.{json,csv,md}。阶段 5 正式保存的开发报告在 docs/experiments/development-final.*。
+详细隔离、分母和局限见 evaluation/README.md。独立答案不进 Git，请自行备份整个项目 runtime/independent-evaluator 目录。
+真实调用仍被代码阻止；需先批准 compatibility-smoke.json 的精确范围，然后在阶段 6 实现并验证授权执行入口。
+不要在聊天里发送 Key。真实联调前应在账户侧启用仅免费额度保护；任何额外付费需单独批准。

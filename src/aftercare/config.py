@@ -45,7 +45,7 @@ class Settings(BaseSettings):
             "api_key_configured": bool(self.dashscope_api_key.get_secret_value()),
             "base_url_configured": bool(self.dashscope_base_url.get_secret_value()),
             "database_configured": bool(self.database_url.get_secret_value()),
-            "phase": 4,
+            "phase": 5,
         }
 
 

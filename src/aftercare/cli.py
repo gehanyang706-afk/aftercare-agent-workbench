@@ -56,6 +56,23 @@ def parser() -> argparse.ArgumentParser:
     evaluate = rc.add_parser("evaluate")
     evaluate.add_argument("--split", choices=["dev"], default="dev")
     evaluate.add_argument("--profiles", default="bm25,dense,hybrid,hybrid-rerank")
+    evaluation = commands.add_parser("eval")
+    ec = evaluation.add_subparsers(dest="eval_action", required=True)
+    for name in ("validate", "run"):
+        sub = ec.add_parser(name)
+        sub.add_argument("--split", choices=["dev"], default="dev")
+        if name == "run":
+            sub.add_argument("--provider", choices=["scripted"], default="scripted")
+            sub.add_argument(
+                "--profile",
+                choices=["full", "retrieval", "react-full-policy", "fixed-workflow"],
+                default="full",
+            )
+            sub.add_argument("--limit", type=int)
+    ec.add_parser("verify-grader")
+    plan = ec.add_parser("plan")
+    plan.add_argument("--batch", choices=["compatibility-smoke"], required=True)
+    plan.add_argument("--dry-run", action="store_true", required=True)
     worker = commands.add_parser("worker")
     worker.add_argument("--provider", choices=["scripted"], default="scripted")
     worker.add_argument("--once", action="store_true")
@@ -70,6 +87,24 @@ def main(argv: list[str] | None = None) -> int:
     except ValidationError:
         print(json.dumps({"status": "invalid_config", "code": "CONFIG_INVALID"}))
         return 2
+
+    if args.command == "eval":
+        # Evaluator is intentionally outside the installable product package/container.
+        sys.path.insert(0, str(PROJECT_ROOT))
+        from evaluation.evaluator.grader import verify_mutations
+        from evaluation.evaluator.plan import compatibility_plan
+        from evaluation.evaluator.runner import run_development, validate
+
+        if args.eval_action == "validate":
+            output = validate()
+        elif args.eval_action == "verify-grader":
+            output = verify_mutations()
+        elif args.eval_action == "plan":
+            output = compatibility_plan()
+        else:
+            output = run_development(args.profile, args.limit)
+        print(json.dumps(output, ensure_ascii=False, indent=2))
+        return 0 if output.get("valid", output.get("passed", True)) else 1
 
     if args.command == "doctor":
         from aftercare.repositories.database import database_health

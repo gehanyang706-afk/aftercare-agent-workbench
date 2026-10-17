@@ -1,0 +1,229 @@
+{
+  "batch_id": "compatibility-smoke",
+  "status": "DRAFT_REQUIRES_EXPLICIT_HUMAN_APPROVAL",
+  "provider": "bailian-beijing-compatible",
+  "exact_model": "qwen3.5-plus-2026-02-15",
+  "enable_thinking": false,
+  "planned_requests": 6,
+  "retry_slots": 2,
+  "max_http_requests_including_retries": 8,
+  "total_token_hard_cap": 20000,
+  "conservative_reservation": 12600,
+  "per_request_hard_cap": 1821,
+  "output_cap": 128,
+  "concurrency": 1,
+  "wall_clock_seconds": 600,
+  "per_request_seconds": 60,
+  "sdk_retries": 0,
+  "stop_conditions": [
+    "auth/model/region/quota failure",
+    "any unknown usage or disconnect",
+    "tool/usage/schema incompatibility",
+    "request, token or time cap",
+    "human cancellation"
+  ],
+  "forbidden": [
+    "automatic model switch",
+    "automatic batch expansion",
+    "holdout access",
+    "paid overage without separate authorization"
+  ],
+  "requests": [
+    {
+      "scenario": "plain-text",
+      "request": {
+        "model": "qwen3.5-plus-2026-02-15",
+        "messages": [
+          {
+            "role": "user",
+            "content": "Reply with OK."
+          }
+        ],
+        "max_tokens": 128,
+        "stream": false,
+        "enable_thinking": false
+      },
+      "input_bound": 1171,
+      "output_cap": 128,
+      "reserved_bound": 1299
+    },
+    {
+      "scenario": "tool-call",
+      "request": {
+        "model": "qwen3.5-plus-2026-02-15",
+        "messages": [
+          {
+            "role": "user",
+            "content": "Use get_order to read demo order S1002."
+          }
+        ],
+        "max_tokens": 128,
+        "stream": false,
+        "tools": [
+          {
+            "type": "function",
+            "function": {
+              "name": "get_order",
+              "description": "Read the current user's demo order",
+              "parameters": {
+                "type": "object",
+                "properties": {
+                  "order_id": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "order_id"
+                ],
+                "additionalProperties": false
+              }
+            }
+          }
+        ],
+        "enable_thinking": false
+      },
+      "input_bound": 1437,
+      "output_cap": 128,
+      "reserved_bound": 1565
+    },
+    {
+      "scenario": "tool-result",
+      "request": {
+        "model": "qwen3.5-plus-2026-02-15",
+        "messages": [
+          {
+            "role": "user",
+            "content": "Read order S1002"
+          },
+          {
+            "role": "assistant",
+            "content": null,
+            "tool_calls": [
+              {
+                "id": "dry-call",
+                "type": "function",
+                "function": {
+                  "name": "get_order",
+                  "arguments": "{\"order_id\":\"S1002\"}"
+                }
+              }
+            ]
+          },
+          {
+            "role": "tool",
+            "tool_call_id": "dry-call",
+            "content": "{\"ok\":true,\"data\":{\"id\":\"S1002\",\"status\":\"DELIVERED\"}}"
+          }
+        ],
+        "max_tokens": 128,
+        "stream": false,
+        "tools": [
+          {
+            "type": "function",
+            "function": {
+              "name": "get_order",
+              "description": "Read the current user's demo order",
+              "parameters": {
+                "type": "object",
+                "properties": {
+                  "order_id": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "order_id"
+                ],
+                "additionalProperties": false
+              }
+            }
+          }
+        ],
+        "enable_thinking": false
+      },
+      "input_bound": 1693,
+      "output_cap": 128,
+      "reserved_bound": 1821
+    },
+    {
+      "scenario": "stream-usage",
+      "request": {
+        "model": "qwen3.5-plus-2026-02-15",
+        "messages": [
+          {
+            "role": "user",
+            "content": "Reply OK in one word."
+          }
+        ],
+        "max_tokens": 128,
+        "stream": true,
+        "enable_thinking": false,
+        "stream_options": {
+          "include_usage": true
+        }
+      },
+      "input_bound": 1217,
+      "output_cap": 128,
+      "reserved_bound": 1345
+    },
+    {
+      "scenario": "validated-json",
+      "request": {
+        "model": "qwen3.5-plus-2026-02-15",
+        "messages": [
+          {
+            "role": "user",
+            "content": "Return JSON with action=\"query\" and order_id=\"S1002\"."
+          }
+        ],
+        "max_tokens": 128,
+        "stream": false,
+        "enable_thinking": false
+      },
+      "input_bound": 1214,
+      "output_cap": 128,
+      "reserved_bound": 1342
+    },
+    {
+      "scenario": "tool-schema-check",
+      "request": {
+        "model": "qwen3.5-plus-2026-02-15",
+        "messages": [
+          {
+            "role": "user",
+            "content": "Read S1002. Never invent identity fields or extra arguments."
+          }
+        ],
+        "max_tokens": 128,
+        "stream": false,
+        "tools": [
+          {
+            "type": "function",
+            "function": {
+              "name": "get_order",
+              "description": "Read the current user's demo order",
+              "parameters": {
+                "type": "object",
+                "properties": {
+                  "order_id": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "order_id"
+                ],
+                "additionalProperties": false
+              }
+            }
+          }
+        ],
+        "enable_thinking": false
+      },
+      "input_bound": 1458,
+      "output_cap": 128,
+      "reserved_bound": 1586
+    }
+  ],
+  "real_api_calls": 0,
+  "follow_up": "Only this compatibility batch; development-pilot and formal comparison need separate plans and approval.",
+  "plan_sha256": "3392fe79d3877477b2d8acc2cfebbd58a46c6486b0b77279c632af967e8357f1"
+}

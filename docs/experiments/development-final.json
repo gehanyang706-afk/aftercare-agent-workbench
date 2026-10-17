@@ -1,0 +1,1037 @@
+{
+  "provider": "scripted",
+  "profile": "full",
+  "real_api_calls": 0,
+  "attempted_tasks": 60,
+  "conversations": 60,
+  "passed_tasks": 60,
+  "eligible_completed": 35,
+  "eligible_tasks": 35,
+  "categories": {
+    "basic": {
+      "passed": 15,
+      "attempted": 15
+    },
+    "revision": {
+      "passed": 15,
+      "attempted": 15
+    },
+    "boundary": {
+      "passed": 15,
+      "attempted": 15
+    },
+    "recovery": {
+      "passed": 15,
+      "attempted": 15
+    }
+  },
+  "process_failure_tasks": 0,
+  "state_failure_tasks": 0,
+  "communication_failure_tasks": 0,
+  "system_error_tasks": 0,
+  "synthetic_model_calls": 377,
+  "synthetic_usage": 1214471,
+  "unknown_usage_calls": 0,
+  "latency_seconds": [
+    2.495,
+    1.867,
+    1.924,
+    1.931,
+    1.94,
+    1.897,
+    1.712,
+    2.031,
+    2.012,
+    2.077,
+    1.69,
+    1.915,
+    1.873,
+    1.867,
+    1.717,
+    2.125,
+    2.12,
+    2.124,
+    2.149,
+    2.42,
+    2.186,
+    2.373,
+    1.936,
+    1.954,
+    2.059,
+    1.932,
+    2.222,
+    1.983,
+    2.093,
+    2.109,
+    1.856,
+    1.777,
+    1.948,
+    1.806,
+    1.749,
+    1.666,
+    1.775,
+    1.706,
+    1.8,
+    1.73,
+    1.821,
+    1.712,
+    1.796,
+    1.708,
+    1.775,
+    1.936,
+    2.18,
+    1.955,
+    3.331,
+    3.377,
+    3.379,
+    1.891,
+    1.955,
+    2.001,
+    1.727,
+    1.896,
+    2.426,
+    1.835,
+    1.871,
+    1.833
+  ],
+  "raw_directory": "/Users/gehanyang/编程/aftercare-agent-workbench/runtime/phase-05/dev-full-20261017-151146",
+  "limitations": [
+    "规则脚本只验证工程链路，不代表真实语言理解质量",
+    "每题导出后重置隔离 test DB；仅允许离线模拟",
+    "未运行 holdout 或真实模型",
+    "非重复稳定性或统计显著性实验"
+  ],
+  "tasks": [
+    {
+      "scenario_id": "d-001",
+      "category": "basic",
+      "result": {
+        "success": true,
+        "state_ok": true,
+        "process_ok": true,
+        "communication_ok": true,
+        "state_failures": [],
+        "process_failures": [],
+        "communication_failures": [],
+        "system_error": null
+      },
+      "latency_seconds": 2.495
+    },
+    {
+      "scenario_id": "d-002",
+      "category": "basic",
+      "result": {
+        "success": true,
+        "state_ok": true,
+        "process_ok": true,
+        "communication_ok": true,
+        "state_failures": [],
+        "process_failures": [],
+        "communication_failures": [],
+        "system_error": null
+      },
+      "latency_seconds": 1.867
+    },
+    {
+      "scenario_id": "d-003",
+      "category": "basic",
+      "result": {
+        "success": true,
+        "state_ok": true,
+        "process_ok": true,
+        "communication_ok": true,
+        "state_failures": [],
+        "process_failures": [],
+        "communication_failures": [],
+        "system_error": null
+      },
+      "latency_seconds": 1.924
+    },
+    {
+      "scenario_id": "d-004",
+      "category": "basic",
+      "result": {
+        "success": true,
+        "state_ok": true,
+        "process_ok": true,
+        "communication_ok": true,
+        "state_failures": [],
+        "process_failures": [],
+        "communication_failures": [],
+        "system_error": null
+      },
+      "latency_seconds": 1.931
+    },
+    {
+      "scenario_id": "d-005",
+      "category": "basic",
+      "result": {
+        "success": true,
+        "state_ok": true,
+        "process_ok": true,
+        "communication_ok": true,
+        "state_failures": [],
+        "process_failures": [],
+        "communication_failures": [],
+        "system_error": null
+      },
+      "latency_seconds": 1.94
+    },
+    {
+      "scenario_id": "d-006",
+      "category": "basic",
+      "result": {
+        "success": true,
+        "state_ok": true,
+        "process_ok": true,
+        "communication_ok": true,
+        "state_failures": [],
+        "process_failures": [],
+        "communication_failures": [],
+        "system_error": null
+      },
+      "latency_seconds": 1.897
+    },
+    {
+      "scenario_id": "d-007",
+      "category": "basic",
+      "result": {
+        "success": true,
+        "state_ok": true,
+        "process_ok": true,
+        "communication_ok": true,
+        "state_failures": [],
+        "process_failures": [],
+        "communication_failures": [],
+        "system_error": null
+      },
+      "latency_seconds": 1.712
+    },
+    {
+      "scenario_id": "d-008",
+      "category": "basic",
+      "result": {
+        "success": true,
+        "state_ok": true,
+        "process_ok": true,
+        "communication_ok": true,
+        "state_failures": [],
+        "process_failures": [],
+        "communication_failures": [],
+        "system_error": null
+      },
+      "latency_seconds": 2.031
+    },
+    {
+      "scenario_id": "d-009",
+      "category": "basic",
+      "result": {
+        "success": true,
+        "state_ok": true,
+        "process_ok": true,
+        "communication_ok": true,
+        "state_failures": [],
+        "process_failures": [],
+        "communication_failures": [],
+        "system_error": null
+      },
+      "latency_seconds": 2.012
+    },
+    {
+      "scenario_id": "d-010",
+      "category": "basic",
+      "result": {
+        "success": true,
+        "state_ok": true,
+        "process_ok": true,
+        "communication_ok": true,
+        "state_failures": [],
+        "process_failures": [],
+        "communication_failures": [],
+        "system_error": null
+      },
+      "latency_seconds": 2.077
+    },
+    {
+      "scenario_id": "d-011",
+      "category": "basic",
+      "result": {
+        "success": true,
+        "state_ok": true,
+        "process_ok": true,
+        "communication_ok": true,
+        "state_failures": [],
+        "process_failures": [],
+        "communication_failures": [],
+        "system_error": null
+      },
+      "latency_seconds": 1.69
+    },
+    {
+      "scenario_id": "d-012",
+      "category": "basic",
+      "result": {
+        "success": true,
+        "state_ok": true,
+        "process_ok": true,
+        "communication_ok": true,
+        "state_failures": [],
+        "process_failures": [],
+        "communication_failures": [],
+        "system_error": null
+      },
+      "latency_seconds": 1.915
+    },
+    {
+      "scenario_id": "d-013",
+      "category": "basic",
+      "result": {
+        "success": true,
+        "state_ok": true,
+        "process_ok": true,
+        "communication_ok": true,
+        "state_failures": [],
+        "process_failures": [],
+        "communication_failures": [],
+        "system_error": null
+      },
+      "latency_seconds": 1.873
+    },
+    {
+      "scenario_id": "d-014",
+      "category": "basic",
+      "result": {
+        "success": true,
+        "state_ok": true,
+        "process_ok": true,
+        "communication_ok": true,
+        "state_failures": [],
+        "process_failures": [],
+        "communication_failures": [],
+        "system_error": null
+      },
+      "latency_seconds": 1.867
+    },
+    {
+      "scenario_id": "d-015",
+      "category": "basic",
+      "result": {
+        "success": true,
+        "state_ok": true,
+        "process_ok": true,
+        "communication_ok": true,
+        "state_failures": [],
+        "process_failures": [],
+        "communication_failures": [],
+        "system_error": null
+      },
+      "latency_seconds": 1.717
+    },
+    {
+      "scenario_id": "d-016",
+      "category": "revision",
+      "result": {
+        "success": true,
+        "state_ok": true,
+        "process_ok": true,
+        "communication_ok": true,
+        "state_failures": [],
+        "process_failures": [],
+        "communication_failures": [],
+        "system_error": null
+      },
+      "latency_seconds": 2.125
+    },
+    {
+      "scenario_id": "d-017",
+      "category": "revision",
+      "result": {
+        "success": true,
+        "state_ok": true,
+        "process_ok": true,
+        "communication_ok": true,
+        "state_failures": [],
+        "process_failures": [],
+        "communication_failures": [],
+        "system_error": null
+      },
+      "latency_seconds": 2.12
+    },
+    {
+      "scenario_id": "d-018",
+      "category": "revision",
+      "result": {
+        "success": true,
+        "state_ok": true,
+        "process_ok": true,
+        "communication_ok": true,
+        "state_failures": [],
+        "process_failures": [],
+        "communication_failures": [],
+        "system_error": null
+      },
+      "latency_seconds": 2.124
+    },
+    {
+      "scenario_id": "d-019",
+      "category": "revision",
+      "result": {
+        "success": true,
+        "state_ok": true,
+        "process_ok": true,
+        "communication_ok": true,
+        "state_failures": [],
+        "process_failures": [],
+        "communication_failures": [],
+        "system_error": null
+      },
+      "latency_seconds": 2.149
+    },
+    {
+      "scenario_id": "d-020",
+      "category": "revision",
+      "result": {
+        "success": true,
+        "state_ok": true,
+        "process_ok": true,
+        "communication_ok": true,
+        "state_failures": [],
+        "process_failures": [],
+        "communication_failures": [],
+        "system_error": null
+      },
+      "latency_seconds": 2.42
+    },
+    {
+      "scenario_id": "d-021",
+      "category": "revision",
+      "result": {
+        "success": true,
+        "state_ok": true,
+        "process_ok": true,
+        "communication_ok": true,
+        "state_failures": [],
+        "process_failures": [],
+        "communication_failures": [],
+        "system_error": null
+      },
+      "latency_seconds": 2.186
+    },
+    {
+      "scenario_id": "d-022",
+      "category": "revision",
+      "result": {
+        "success": true,
+        "state_ok": true,
+        "process_ok": true,
+        "communication_ok": true,
+        "state_failures": [],
+        "process_failures": [],
+        "communication_failures": [],
+        "system_error": null
+      },
+      "latency_seconds": 2.373
+    },
+    {
+      "scenario_id": "d-023",
+      "category": "revision",
+      "result": {
+        "success": true,
+        "state_ok": true,
+        "process_ok": true,
+        "communication_ok": true,
+        "state_failures": [],
+        "process_failures": [],
+        "communication_failures": [],
+        "system_error": null
+      },
+      "latency_seconds": 1.936
+    },
+    {
+      "scenario_id": "d-024",
+      "category": "revision",
+      "result": {
+        "success": true,
+        "state_ok": true,
+        "process_ok": true,
+        "communication_ok": true,
+        "state_failures": [],
+        "process_failures": [],
+        "communication_failures": [],
+        "system_error": null
+      },
+      "latency_seconds": 1.954
+    },
+    {
+      "scenario_id": "d-025",
+      "category": "revision",
+      "result": {
+        "success": true,
+        "state_ok": true,
+        "process_ok": true,
+        "communication_ok": true,
+        "state_failures": [],
+        "process_failures": [],
+        "communication_failures": [],
+        "system_error": null
+      },
+      "latency_seconds": 2.059
+    },
+    {
+      "scenario_id": "d-026",
+      "category": "revision",
+      "result": {
+        "success": true,
+        "state_ok": true,
+        "process_ok": true,
+        "communication_ok": true,
+        "state_failures": [],
+        "process_failures": [],
+        "communication_failures": [],
+        "system_error": null
+      },
+      "latency_seconds": 1.932
+    },
+    {
+      "scenario_id": "d-027",
+      "category": "revision",
+      "result": {
+        "success": true,
+        "state_ok": true,
+        "process_ok": true,
+        "communication_ok": true,
+        "state_failures": [],
+        "process_failures": [],
+        "communication_failures": [],
+        "system_error": null
+      },
+      "latency_seconds": 2.222
+    },
+    {
+      "scenario_id": "d-028",
+      "category": "revision",
+      "result": {
+        "success": true,
+        "state_ok": true,
+        "process_ok": true,
+        "communication_ok": true,
+        "state_failures": [],
+        "process_failures": [],
+        "communication_failures": [],
+        "system_error": null
+      },
+      "latency_seconds": 1.983
+    },
+    {
+      "scenario_id": "d-029",
+      "category": "revision",
+      "result": {
+        "success": true,
+        "state_ok": true,
+        "process_ok": true,
+        "communication_ok": true,
+        "state_failures": [],
+        "process_failures": [],
+        "communication_failures": [],
+        "system_error": null
+      },
+      "latency_seconds": 2.093
+    },
+    {
+      "scenario_id": "d-030",
+      "category": "revision",
+      "result": {
+        "success": true,
+        "state_ok": true,
+        "process_ok": true,
+        "communication_ok": true,
+        "state_failures": [],
+        "process_failures": [],
+        "communication_failures": [],
+        "system_error": null
+      },
+      "latency_seconds": 2.109
+    },
+    {
+      "scenario_id": "d-031",
+      "category": "boundary",
+      "result": {
+        "success": true,
+        "state_ok": true,
+        "process_ok": true,
+        "communication_ok": true,
+        "state_failures": [],
+        "process_failures": [],
+        "communication_failures": [],
+        "system_error": null
+      },
+      "latency_seconds": 1.856
+    },
+    {
+      "scenario_id": "d-032",
+      "category": "boundary",
+      "result": {
+        "success": true,
+        "state_ok": true,
+        "process_ok": true,
+        "communication_ok": true,
+        "state_failures": [],
+        "process_failures": [],
+        "communication_failures": [],
+        "system_error": null
+      },
+      "latency_seconds": 1.777
+    },
+    {
+      "scenario_id": "d-033",
+      "category": "boundary",
+      "result": {
+        "success": true,
+        "state_ok": true,
+        "process_ok": true,
+        "communication_ok": true,
+        "state_failures": [],
+        "process_failures": [],
+        "communication_failures": [],
+        "system_error": null
+      },
+      "latency_seconds": 1.948
+    },
+    {
+      "scenario_id": "d-034",
+      "category": "boundary",
+      "result": {
+        "success": true,
+        "state_ok": true,
+        "process_ok": true,
+        "communication_ok": true,
+        "state_failures": [],
+        "process_failures": [],
+        "communication_failures": [],
+        "system_error": null
+      },
+      "latency_seconds": 1.806
+    },
+    {
+      "scenario_id": "d-035",
+      "category": "boundary",
+      "result": {
+        "success": true,
+        "state_ok": true,
+        "process_ok": true,
+        "communication_ok": true,
+        "state_failures": [],
+        "process_failures": [],
+        "communication_failures": [],
+        "system_error": null
+      },
+      "latency_seconds": 1.749
+    },
+    {
+      "scenario_id": "d-036",
+      "category": "boundary",
+      "result": {
+        "success": true,
+        "state_ok": true,
+        "process_ok": true,
+        "communication_ok": true,
+        "state_failures": [],
+        "process_failures": [],
+        "communication_failures": [],
+        "system_error": null
+      },
+      "latency_seconds": 1.666
+    },
+    {
+      "scenario_id": "d-037",
+      "category": "boundary",
+      "result": {
+        "success": true,
+        "state_ok": true,
+        "process_ok": true,
+        "communication_ok": true,
+        "state_failures": [],
+        "process_failures": [],
+        "communication_failures": [],
+        "system_error": null
+      },
+      "latency_seconds": 1.775
+    },
+    {
+      "scenario_id": "d-038",
+      "category": "boundary",
+      "result": {
+        "success": true,
+        "state_ok": true,
+        "process_ok": true,
+        "communication_ok": true,
+        "state_failures": [],
+        "process_failures": [],
+        "communication_failures": [],
+        "system_error": null
+      },
+      "latency_seconds": 1.706
+    },
+    {
+      "scenario_id": "d-039",
+      "category": "boundary",
+      "result": {
+        "success": true,
+        "state_ok": true,
+        "process_ok": true,
+        "communication_ok": true,
+        "state_failures": [],
+        "process_failures": [],
+        "communication_failures": [],
+        "system_error": null
+      },
+      "latency_seconds": 1.8
+    },
+    {
+      "scenario_id": "d-040",
+      "category": "boundary",
+      "result": {
+        "success": true,
+        "state_ok": true,
+        "process_ok": true,
+        "communication_ok": true,
+        "state_failures": [],
+        "process_failures": [],
+        "communication_failures": [],
+        "system_error": null
+      },
+      "latency_seconds": 1.73
+    },
+    {
+      "scenario_id": "d-041",
+      "category": "boundary",
+      "result": {
+        "success": true,
+        "state_ok": true,
+        "process_ok": true,
+        "communication_ok": true,
+        "state_failures": [],
+        "process_failures": [],
+        "communication_failures": [],
+        "system_error": null
+      },
+      "latency_seconds": 1.821
+    },
+    {
+      "scenario_id": "d-042",
+      "category": "boundary",
+      "result": {
+        "success": true,
+        "state_ok": true,
+        "process_ok": true,
+        "communication_ok": true,
+        "state_failures": [],
+        "process_failures": [],
+        "communication_failures": [],
+        "system_error": null
+      },
+      "latency_seconds": 1.712
+    },
+    {
+      "scenario_id": "d-043",
+      "category": "boundary",
+      "result": {
+        "success": true,
+        "state_ok": true,
+        "process_ok": true,
+        "communication_ok": true,
+        "state_failures": [],
+        "process_failures": [],
+        "communication_failures": [],
+        "system_error": null
+      },
+      "latency_seconds": 1.796
+    },
+    {
+      "scenario_id": "d-044",
+      "category": "boundary",
+      "result": {
+        "success": true,
+        "state_ok": true,
+        "process_ok": true,
+        "communication_ok": true,
+        "state_failures": [],
+        "process_failures": [],
+        "communication_failures": [],
+        "system_error": null
+      },
+      "latency_seconds": 1.708
+    },
+    {
+      "scenario_id": "d-045",
+      "category": "boundary",
+      "result": {
+        "success": true,
+        "state_ok": true,
+        "process_ok": true,
+        "communication_ok": true,
+        "state_failures": [],
+        "process_failures": [],
+        "communication_failures": [],
+        "system_error": null
+      },
+      "latency_seconds": 1.775
+    },
+    {
+      "scenario_id": "d-046",
+      "category": "recovery",
+      "result": {
+        "success": true,
+        "state_ok": true,
+        "process_ok": true,
+        "communication_ok": true,
+        "state_failures": [],
+        "process_failures": [],
+        "communication_failures": [],
+        "system_error": null
+      },
+      "latency_seconds": 1.936
+    },
+    {
+      "scenario_id": "d-047",
+      "category": "recovery",
+      "result": {
+        "success": true,
+        "state_ok": true,
+        "process_ok": true,
+        "communication_ok": true,
+        "state_failures": [],
+        "process_failures": [],
+        "communication_failures": [],
+        "system_error": null
+      },
+      "latency_seconds": 2.18
+    },
+    {
+      "scenario_id": "d-048",
+      "category": "recovery",
+      "result": {
+        "success": true,
+        "state_ok": true,
+        "process_ok": true,
+        "communication_ok": true,
+        "state_failures": [],
+        "process_failures": [],
+        "communication_failures": [],
+        "system_error": null
+      },
+      "latency_seconds": 1.955
+    },
+    {
+      "scenario_id": "d-049",
+      "category": "recovery",
+      "result": {
+        "success": true,
+        "state_ok": true,
+        "process_ok": true,
+        "communication_ok": true,
+        "state_failures": [],
+        "process_failures": [],
+        "communication_failures": [],
+        "system_error": null
+      },
+      "latency_seconds": 3.331
+    },
+    {
+      "scenario_id": "d-050",
+      "category": "recovery",
+      "result": {
+        "success": true,
+        "state_ok": true,
+        "process_ok": true,
+        "communication_ok": true,
+        "state_failures": [],
+        "process_failures": [],
+        "communication_failures": [],
+        "system_error": null
+      },
+      "latency_seconds": 3.377
+    },
+    {
+      "scenario_id": "d-051",
+      "category": "recovery",
+      "result": {
+        "success": true,
+        "state_ok": true,
+        "process_ok": true,
+        "communication_ok": true,
+        "state_failures": [],
+        "process_failures": [],
+        "communication_failures": [],
+        "system_error": null
+      },
+      "latency_seconds": 3.379
+    },
+    {
+      "scenario_id": "d-052",
+      "category": "recovery",
+      "result": {
+        "success": true,
+        "state_ok": true,
+        "process_ok": true,
+        "communication_ok": true,
+        "state_failures": [],
+        "process_failures": [],
+        "communication_failures": [],
+        "system_error": null
+      },
+      "latency_seconds": 1.891
+    },
+    {
+      "scenario_id": "d-053",
+      "category": "recovery",
+      "result": {
+        "success": true,
+        "state_ok": true,
+        "process_ok": true,
+        "communication_ok": true,
+        "state_failures": [],
+        "process_failures": [],
+        "communication_failures": [],
+        "system_error": null
+      },
+      "latency_seconds": 1.955
+    },
+    {
+      "scenario_id": "d-054",
+      "category": "recovery",
+      "result": {
+        "success": true,
+        "state_ok": true,
+        "process_ok": true,
+        "communication_ok": true,
+        "state_failures": [],
+        "process_failures": [],
+        "communication_failures": [],
+        "system_error": null
+      },
+      "latency_seconds": 2.001
+    },
+    {
+      "scenario_id": "d-055",
+      "category": "recovery",
+      "result": {
+        "success": true,
+        "state_ok": true,
+        "process_ok": true,
+        "communication_ok": true,
+        "state_failures": [],
+        "process_failures": [],
+        "communication_failures": [],
+        "system_error": null
+      },
+      "latency_seconds": 1.727
+    },
+    {
+      "scenario_id": "d-056",
+      "category": "recovery",
+      "result": {
+        "success": true,
+        "state_ok": true,
+        "process_ok": true,
+        "communication_ok": true,
+        "state_failures": [],
+        "process_failures": [],
+        "communication_failures": [],
+        "system_error": null
+      },
+      "latency_seconds": 1.896
+    },
+    {
+      "scenario_id": "d-057",
+      "category": "recovery",
+      "result": {
+        "success": true,
+        "state_ok": true,
+        "process_ok": true,
+        "communication_ok": true,
+        "state_failures": [],
+        "process_failures": [],
+        "communication_failures": [],
+        "system_error": null
+      },
+      "latency_seconds": 2.426
+    },
+    {
+      "scenario_id": "d-058",
+      "category": "recovery",
+      "result": {
+        "success": true,
+        "state_ok": true,
+        "process_ok": true,
+        "communication_ok": true,
+        "state_failures": [],
+        "process_failures": [],
+        "communication_failures": [],
+        "system_error": null
+      },
+      "latency_seconds": 1.835
+    },
+    {
+      "scenario_id": "d-059",
+      "category": "recovery",
+      "result": {
+        "success": true,
+        "state_ok": true,
+        "process_ok": true,
+        "communication_ok": true,
+        "state_failures": [],
+        "process_failures": [],
+        "communication_failures": [],
+        "system_error": null
+      },
+      "latency_seconds": 1.871
+    },
+    {
+      "scenario_id": "d-060",
+      "category": "recovery",
+      "result": {
+        "success": true,
+        "state_ok": true,
+        "process_ok": true,
+        "communication_ok": true,
+        "state_failures": [],
+        "process_failures": [],
+        "communication_failures": [],
+        "system_error": null
+      },
+      "latency_seconds": 1.833
+    }
+  ],
+  "metrics": {
+    "unauthorized_attempt_tasks": {
+      "n": 0,
+      "N": 60
+    },
+    "wrong_actual_side_effect_tasks": {
+      "n": 0,
+      "N": 60
+    },
+    "expected_rejection_or_no_write_success": {
+      "n": 25,
+      "N": 25
+    },
+    "unnecessary_handoff_on_eligible": {
+      "n": 0,
+      "N": 35
+    },
+    "revision_effective_order_and_intent_fields": {
+      "n": 24,
+      "N": 24
+    },
+    "latency_end_to_end_seconds": {
+      "median": 1.9315,
+      "p95": 2.495,
+      "note": "includes local actor startup; scripted user has no human waiting; n=60 is not a stable production P95"
+    },
+    "real_model_tokens_and_cost": null,
+    "repeated_task_stability": null,
+    "model_retrieval_tool_latency_segments": null,
+    "recall_at_5": "Separate 12-question retrieval-dev report; not business success"
+  }
+}

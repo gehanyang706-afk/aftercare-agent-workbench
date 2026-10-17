@@ -1,9 +1,9 @@
 # 电商售后多轮决策与执行 Agent 工作台
 
-已完成阶段 0—4：可运行三栏工作台、单主 Agent 工具循环、可信确认、真实 PostgreSQL 原子提交、幂等恢复、政策检索与任务队列。
+已完成阶段 0—5：可运行三栏工作台、单主 Agent 工具循环、可信确认、真实 PostgreSQL 原子提交、幂等恢复、政策检索与任务队列。
 默认是明确标记的**脚本模拟模式**，没有真实对话模型效果或生产成功率。
 
-![工作台实际浏览器截图](docs/screenshots/workbench.jpg)
+![工作台实际浏览器截图](docs/screenshots/workbench-phase05.jpg)
 
 ## 运行
 
@@ -25,4 +25,15 @@ docker compose up -d db
 [资源清单](docs/resources.md)、[阶段交接](docs/handoffs/)保留实现与验证边界。
 
 阶段 0—5 禁止真实模型调用；阶段 6 必须另行批准精确模型、场景、请求数、Token 上限与停止条件。
-阶段 5 评测资产尚在建设，不把测试数、脚本流程通过或模型卡数字写成真实业务任务成功率。
+阶段 5 已交付 60 条开发场景、100 条独立验收场景的公开 manifest、独立评分器和冻结清单。
+独立答案未由实现角色读取或运行；开发脚本通过不代表真实模型成功率。
+
+```bash
+.venv/bin/python -m aftercare eval validate --split dev
+.venv/bin/python -m aftercare eval run --split dev --provider scripted
+.venv/bin/python -m aftercare eval verify-grader
+.venv/bin/python -m aftercare eval plan --batch compatibility-smoke --dry-run
+```
+
+[评测说明](evaluation/README.md) · [开发结果](docs/experiments/development-final.md) ·
+[阶段 5 交接](docs/handoffs/phase-05.md) · [真实试跑待批计划](evaluation/manifests/compatibility-smoke.json)

@@ -62,7 +62,7 @@ class Handoff(Strict):
     summary: str
 
 
-def toolset(service, principal, conversation, search):
+def toolset(service, principal, conversation, search, retrieval_profile="bm25"):
     def policies(query, action="all"):
         snapshot = service.snapshot(principal, conversation)
         current = snapshot.get("case", {}).get("facts", {}).get("current_order_id", {}).get("value")
@@ -74,6 +74,7 @@ def toolset(service, principal, conversation, search):
         return search.search(
             query,
             action,
+            profile=retrieval_profile,
             qualification_version=qualification,
             flow_version=flow,
             now=service.clock(),
@@ -142,6 +143,18 @@ def toolset(service, principal, conversation, search):
                     "error_code": code,
                     "retryable": getattr(e, "retryable", False),
                     "user_message": getattr(e, "message", "工具参数不符合约定"),
+                    "trace_id": trace,
+                }
+            except Exception:
+                # A failed transport/transaction may have committed. Never retry a write blindly.
+                result = {
+                    "ok": False,
+                    "data": None,
+                    "error_code": "WRITE_RESULT_UNKNOWN"
+                    if _name == "commit_action"
+                    else "SERVICE_UNAVAILABLE",
+                    "retryable": False,
+                    "user_message": "处理异常，请查询原回执或稍后重试；当前不宣称成功",
                     "trace_id": trace,
                 }
             with service.sessions.begin() as s:

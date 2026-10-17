@@ -41,7 +41,13 @@ def factory(
         ),
     )
     search = PolicySearch()
-    tools = toolset(service, principal, conversation, search)
+    tools = toolset(
+        service,
+        principal,
+        conversation,
+        search,
+        retrieval_profile="full-policy" if profile == "react-full-policy" else "bm25",
+    )
     graph = create_deep_agent(
         model=model,
         tools=tools,
@@ -94,6 +100,12 @@ def run_turn(
     profile="full",
     decision="approve",
 ):
+    if profile == "fixed-workflow":
+        from aftercare.agent.workflow import run_workflow
+
+        return run_workflow(service, principal, conversation, message_id, resume, decision)
+    if profile not in {"full", "retrieval", "react-full-policy"}:
+        raise ValueError("UNKNOWN_AGENT_PROFILE")
     config = {"configurable": {"thread_id": conversation}, "recursion_limit": 96}
     with agent_runtime(
         settings, service, principal, conversation, run_id=run_id, profile=profile

@@ -25,11 +25,15 @@ class BusinessBoundary(AgentMiddleware):
             return AIMessage(content="旧方案已废弃，正在处理新诉求。")
         messages = request.messages
         starts = [i for i, m in enumerate(messages) if isinstance(m, HumanMessage)]
-        if self.profile in ["full", "retrieval"] and len(starts) > 4:
+        if self.profile == "full" and len(starts) > 4:
             messages = messages[starts[-4] :]
         text = "仅处理当前用户售后。不得自批，不得声称退款到账。有效状态：" + json.dumps(
             {
-                "case": {"facts": snapshot.get("case", {}).get("facts", {})},
+                "case": {
+                    "facts": snapshot.get("case", {}).get("facts", {})
+                    if self.profile == "full"
+                    else {}
+                },
                 "intent_revision": snapshot["revision"],
             },
             ensure_ascii=False,
@@ -97,7 +101,7 @@ class BusinessBoundary(AgentMiddleware):
                 "search_policies",
                 "get_operation",
             }
-            while name in reads:
+            while name in reads and self.profile == "full":
                 try:
                     payload = json.loads(str(result.content))
                 except (ValueError, AttributeError):

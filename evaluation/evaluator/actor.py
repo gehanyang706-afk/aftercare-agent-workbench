@@ -1,0 +1,51 @@
+"""Isolated product actor. Receives observable commands only, never scenario goals/oracles."""
+
+import json
+import sys
+from datetime import datetime
+
+from aftercare.agent.runtime import run_turn
+from aftercare.config import Settings
+from aftercare.offline import install_offline_guard
+from aftercare.repositories.database import session_factory
+from aftercare.services.business import BusinessService
+
+
+def main():
+    install_offline_guard()
+    for line in sys.stdin:
+        command = json.loads(line)
+        try:
+            settings = Settings(_env_file=None, database_url=command["database_url"])
+            sessions = session_factory(settings)
+            service = BusinessService(
+                sessions, lambda clock=command["clock"]: datetime.fromisoformat(clock)
+            )
+            if command.get("commit_fault"):
+                service.commit_fault = command["commit_fault"]
+            result = run_turn(
+                settings,
+                service,
+                command["principal"],
+                command["conversation"],
+                message_id=command.get("message_id"),
+                resume=command.get("resume", False),
+                decision=command.get("decision", "approve"),
+                profile=command["profile"],
+            )
+            texts = [
+                str(m.content) for m in result.get("messages", []) if m.type == "ai" and m.content
+            ]
+            output = {
+                "ok": True,
+                "communications": texts,
+                "interrupted": bool(result.get("__interrupt__")),
+            }
+            sessions.kw["bind"].dispose()
+        except Exception as e:
+            output = {"ok": False, "error": type(e).__name__ + ":" + str(e)[:200]}
+        print(json.dumps(output, ensure_ascii=False), flush=True)
+
+
+if __name__ == "__main__":
+    main()

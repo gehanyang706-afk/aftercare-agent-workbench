@@ -1,0 +1,24 @@
+{
+  "fixture_reference":"demo-v1",
+  "clock":"2026-10-17T04:00:00Z",
+  "customers":["alice","bob","carol"],
+  "orders":[
+    {"id":"S1001","customer":"alice","status":"PAID_UNSHIPPED","line":"S1001-1","variant":"tee-white-M","quantity":2,"paid_fen":19800},
+    {"id":"S1002","customer":"alice","status":"DELIVERED","age_hours":48,"line":"S1002-1","variant":"tee-white-M","quantity":2},
+    {"id":"S1003","customer":"alice","status":"DELIVERED","age_hours":240,"line":"S1003-1","variant":"shoe-black-40","quantity":1},
+    {"id":"S1004","customer":"alice","status":"SHIPPED","line":"S1004-1","variant":"tee-white-M","quantity":1},
+    {"id":"S1005","customer":"alice","status":"DELIVERED","age_hours":480,"line":"S1005-1","variant":"tee-white-M","quantity":1},
+    {"id":"S2001","customer":"bob","status":"DELIVERED","age_hours":48,"line":"S2001-1","variant":"tee-white-M","quantity":1},
+    {"id":"S3001","customer":"carol","status":"DELIVERED","age_hours":24,"line":"S3001-1","variant":"custom-M","quantity":1}
+  ],
+  "variants":[
+    {"id":"tee-white-M","family":"tee","size":"M","color":"白色","price_fen":9900,"available":5},
+    {"id":"tee-white-L","family":"tee","size":"L","color":"白色","price_fen":9900,"available":1},
+    {"id":"tee-black-M","family":"tee","size":"M","color":"黑色","price_fen":9900,"available":3},
+    {"id":"tee-white-XL","family":"tee","size":"XL","color":"白色","price_fen":9900,"available":0},
+    {"id":"shoe-black-40","family":"shoe","size":"40","color":"黑色","price_fen":29900,"available":4},
+    {"id":"shoe-black-41","family":"shoe","size":"41","color":"黑色","price_fen":29900,"available":2},
+    {"id":"custom-M","family":"custom","size":"M","color":"白色","price_fen":12900,"available":1,"returnable":false,"exchangeable":false}
+  ],
+  "fixture_change_contract":"Each change: {table: orders|order_lines|inventory|variants, id: existing ID, fields: scalar values}. delivered_age_hours may replace delivered_at. Other fields use frozen table names."
+}

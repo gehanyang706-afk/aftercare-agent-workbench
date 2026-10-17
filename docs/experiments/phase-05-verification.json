@@ -1,0 +1,52 @@
+{
+  "phase": 5,
+  "real_api_calls": 0,
+  "tests": {
+    "tests": "60",
+    "failures": "0",
+    "errors": "0",
+    "skipped": "0",
+    "time": "33.332"
+  },
+  "development": {
+    "attempted_tasks": 60,
+    "passed_tasks": 60,
+    "conversations": 60,
+    "synthetic_model_calls": 377
+  },
+  "mutation": {
+    "passed": true,
+    "checks": {
+      "reference_passes": true,
+      "wrong_order_detected": true,
+      "unauthorized_then_recovered_detected": true,
+      "duplicate_detected": true,
+      "missing_notice_detected": true,
+      "stale_approval_detected": true,
+      "wrong_quantity_detected": true
+    }
+  },
+  "container": {
+    "url": "http://127.0.0.1:8128",
+    "image_id": "sha256:05cb1674d38e77f43b3399254b79973ba512a7cfa9de0a68875713c339f4f7ea",
+    "health": "ready",
+    "dependency_check": "No broken requirements found."
+  },
+  "browser": {
+    "order_id": "S1003",
+    "target": "shoe-black-41",
+    "operation_id": "op_64d089aeb344400da75d12e351cc33ae",
+    "refresh_same_receipt": true,
+    "screenshot": "docs/screenshots/workbench-phase05.jpg"
+  },
+  "holdout": {
+    "implementer_read_answers": false,
+    "executed": false,
+    "manifest": "evaluation/manifests/holdout-manifest.json"
+  },
+  "checks": {
+    "ruff_check": 0,
+    "ruff_format_check": 0,
+    "git_diff_check": 0
+  }
+}

@@ -1,0 +1,19 @@
+{
+  "scenario_count": 100,
+  "category_counts": {
+    "basic": 25,
+    "revision": 25,
+    "boundary": 25,
+    "recovery": 25
+  },
+  "family_count": 20,
+  "family_counts_by_category": {
+    "basic": 5,
+    "revision": 5,
+    "boundary": 5,
+    "recovery": 5
+  },
+  "file_sha256": "b29d81dbbb65d5ff9b7b2a3135c891e85331d4a8ce59c83f8a97f8ac637e5679",
+  "author_isolation_declaration": "Independent evaluator role. After reading its assignment, the author read only docs/business-contract.md, evaluation/schema/scenario.py, and data/demo/catalog.json as reference material. No product implementation, development scenarios, scorer, development traces, or development history were read. Only the assigned holdout and public manifest files were modified. Validation was limited to JSON syntax, the public Scenario schema, and independent structural assertions. No product execution or behavior-based answer adjustment occurred. This manifest contains no scenario answers or future user scripts.",
+  "no_real_model_run_declaration": "No real model calls, external API calls, resource downloads, or external messages were performed. No acceptance success rate is claimed."
+}
