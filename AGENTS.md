@@ -1,16 +1,55 @@
-# 本项目执行约束
+# 售后 Agent 工作台执行约束
 
-项目：电商售后多轮决策与执行 Agent 工作台。只修改本项目；原任务书在 docs/design。
-先读 docs/business-contract.md、docs/architecture.md、docs/decisions.md 和最近的交接记录。
+目标：实现可恢复、可审计的电商售后多轮决策与执行工作台。
+技术栈：Python 3.13、FastAPI、PostgreSQL/pgvector、Deep Agents/LangGraph、原生 HTML/CSS/JS。
+业务限于本机单商户模拟订单的查询、取消、退货、换货和转人工；不连接真实支付或物流。
 
-- 当前完成范围为阶段 0—5。逐阶段实现、验证、修复并写 docs/handoffs/phase-XX.md；不能用目标指标冒充结果。
-- 阶段 0—5 禁止真实模型调用。阶段 6 必须取得精确模型、请求清单、Token 上限、停止条件和计划 hash 的用户授权；不得静默换模型或扩批。
-- 普通项目代码、隔离依赖、测试与修复自主完成。全局软件、模型权重和大型镜像下载需按用户授权清单执行；用户已授权清单内资源下载；真实模型边界不变。
-- 仅 PostgreSQL 验证事务，不用 SQLite 冒充并发验收。模型只能表达意图，业务资格/金额/权限/确认由服务层负责。
-- 单主 Agent；模型可见和分发层双白名单；禁止 shell、任意文件工具、通用子 Agent。不要仅靠提示词限制权限。
-- 导入、健康检查和普通测试不得触发外部推理。所有后续推理入口必须通过预算网关；Key 不进日志和诊断输出。
-- 用户身份由服务端注入。确认绑定对象、参数 hash 和 intent_revision；每条新消息使待确认预览失效。写操作唯一回执、事务原子提交。
-- 不读独立 holdout 答案、不硬编码评测任务、不修改评分提高分数。开发场景可用于修复；已见答案不得称盲测。
-- 每阶段交接必须包含能力、精确命令和退出码/输出路径、数据流、最多五个入口、决定/真实故障、四种状态、一个体验任务和三个问题、后续前置条件。
-- 默认用 .venv/bin/python；唯一应用依赖锁为 requirements.lock，pip-tools 负责更新。不要改全局配置、不推送或公开仓库。
-- 新代码要跑适当的静态和行为检查；跳过必须说明前置条件，不能算通过。
+## 目录与命令
+
+- `src/aftercare/`：API/Web、单主 Agent、业务服务、检索、模型预算与 worker。
+- `data/`、`configs/`、`migrations/`：模拟数据、版本化政策/配置和数据库迁移。
+- `tests/`、`evaluation/`：离线测试、开发场景与独立评分；`runtime/` 保存本机运行资产，不入 Git。
+- `docs/`：详细设计、操作说明和 `handoffs/phase-XX.md` 交接记录。
+
+项目根目录运行；先按 `docs/operations.md` 安装项目隔离依赖。
+
+```bash
+docker compose up -d db
+.venv/bin/python -m aftercare db migrate
+.venv/bin/python -m aftercare demo seed --database demo
+.venv/bin/python -m aftercare serve --offline
+# 另一终端；默认页面 http://127.0.0.1:8000
+.venv/bin/python -m aftercare worker --provider scripted
+# 专用测试库须先初始化；测试与开发评测不能同时运行
+AFTERCARE_TEST_DATABASE_URL=postgresql+psycopg://aftercare:aftercare_local_only@127.0.0.1:55432/aftercare_test .venv/bin/python -m pytest -m 'not live_model'
+.venv/bin/python -m aftercare eval validate --split dev
+.venv/bin/python -m aftercare eval run --split dev --provider scripted
+.venv/bin/ruff check .
+.venv/bin/ruff format --check .
+```
+
+当前完成阶段 0—5。真实发送的 `model smoke`、正式 `eval run --manifest` 等阶段 6 命令尚未实现；
+不得当作可运行功能。每阶段完成后同步更新本文件中的状态与命令。
+
+## 实现、验收与交接
+
+先读 `docs/design/` 四份设计，以及 `docs/business-contract.md`、`docs/architecture.md`、
+`docs/decisions.md` 和最近交接。按阶段顺序实现、验证、必要修复后再推进，不能停在 TODO 或伪实现。
+每阶段保存能力、精确运行/验证命令与结果、核心数据流、最多五个代码入口、决定/真实故障、
+已实现/已验证/待验证/未实现状态、已知限制、一个完整机制、体验任务与三个问题、下一阶段前置条件。
+跳过检查须说明前置条件，目标指标、脚本通过和真实模型效果分别报告。
+
+## 权限、安全与自主执行
+
+- 默认禁止真实模型调用，导入、健康检查和普通测试不能触发外部推理；环境开关不能代替授权。
+  获批后严格按精确模型、请求清单、次数、Token/费用/时间上限、停止条件与计划 hash 执行，
+  所有调用含重试/用户模拟均走预算网关；usage 不明暂停，不擅自换模型或扩批。
+- 只修改本项目；先检查实际目录、适用父目录规则和 Git 状态。不覆盖未知文件、不修改既有项目。
+  密钥不入 Git、日志或诊断输出；不自行推送、公开仓库或部署公网，不修改全局配置。
+- 不读取独立验收答案调参，不硬编码题目或修改评分提高成绩；已见样本不得称盲测。
+- 模型仅表达意图；服务层负责身份、资格、金额、版本、可信确认、幂等及事务提交。
+  新消息使旧预览失效；确认绑定对象、参数 hash 与意图版本。事务用 PostgreSQL 验证，不以 SQLite 替代。
+- 产品保持单主 Agent、请求与执行双白名单，禁止 shell、任意文件和通用子 Agent 工具。
+- 普通实现、项目隔离依赖、测试和修复自主完成。改变范围或增加费用时再确认；
+  全局安装、模型权重及大型镜像先列资源清单，已有明确授权范围不重复询问。
+  唯一依赖锁为 `requirements.lock`，通过 pip-tools 更新；默认使用 `.venv/bin/python`。
