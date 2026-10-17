@@ -226,3 +226,30 @@ class PolicyChunk(Base):
     model_revision: Mapped[str] = mapped_column(String)
     metadata_json: Mapped[dict] = mapped_column(JSON)
     embedding: Mapped[list[float] | None] = mapped_column(Vector(512))
+
+
+class Budget(Base):
+    __tablename__ = "budgets"
+    id: Mapped[str] = mapped_column(String, primary_key=True)
+    cap: Mapped[int] = mapped_column(BigInteger)
+    settled: Mapped[int] = mapped_column(BigInteger, default=0)
+    reserved: Mapped[int] = mapped_column(BigInteger, default=0)
+    paused: Mapped[bool] = mapped_column(Boolean, default=False)
+    __table_args__ = (CheckConstraint("cap >= 0 AND settled >= 0 AND reserved >= 0"),)
+
+
+class ModelCall(Base):
+    __tablename__ = "model_calls"
+    id: Mapped[str] = mapped_column(String, primary_key=True)
+    budget_id: Mapped[str] = mapped_column(ForeignKey("budgets.id"), index=True)
+    provider: Mapped[str] = mapped_column(String)
+    exact_model: Mapped[str] = mapped_column(String)
+    batch_id: Mapped[str] = mapped_column(String)
+    conversation_id: Mapped[str] = mapped_column(ForeignKey("conversations.id"), index=True)
+    run_id: Mapped[str] = mapped_column(String, index=True)
+    reserved: Mapped[int] = mapped_column(Integer)
+    usage: Mapped[int | None] = mapped_column(Integer)
+    status: Mapped[str] = mapped_column(String)
+    request_id: Mapped[str | None] = mapped_column(String)
+    details: Mapped[dict] = mapped_column(JSON, default=dict)
+    created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True))

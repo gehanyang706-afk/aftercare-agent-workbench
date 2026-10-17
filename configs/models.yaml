@@ -1,0 +1,19 @@
+# Protocol candidates only; account compatibility is unverified until phase 6.
+provider: bailian-beijing-compatible
+sdk_retries: 0
+models:
+  qwen3.5-plus-2026-02-15:
+    role: main
+    enable_thinking: false
+    max_output_tokens: 512
+    stream_usage: true
+    verification: offline-request-shape-only
+  glm-5:
+    role: development-optional
+    tool_stream: true
+    max_output_tokens: 512
+    verification: offline-request-shape-only
+  qwen-max:
+    role: user-simulator-optional
+    max_output_tokens: 512
+    verification: offline-request-shape-only

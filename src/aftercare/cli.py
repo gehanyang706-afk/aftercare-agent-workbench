@@ -39,9 +39,12 @@ def parser() -> argparse.ArgumentParser:
             "lost-submit-response",
             "revise-before-confirm",
             "concurrent-stock",
+            "agent-exchange",
+            "restart-after-commit",
         ],
         required=True,
     )
+    run.add_argument("--provider", choices=["scripted"])
     retrieval = commands.add_parser("retrieval")
     rc = retrieval.add_subparsers(dest="retrieval_action", required=True)
     build = rc.add_parser("build")
@@ -116,6 +119,9 @@ def main(argv: list[str] | None = None) -> int:
         try:
             if args.action == "migrate":
                 command.upgrade(config, "head")
+                from aftercare.agent.runtime import setup_checkpoints
+
+                setup_checkpoints(settings)
             else:
                 command.current(config)
         except Exception:
@@ -143,6 +149,17 @@ def main(argv: list[str] | None = None) -> int:
         from aftercare.services.demo import reset_demo, run_case, seed
 
         sessions = session_factory(settings)
+        if args.demo_action == "run" and args.provider == "scripted":
+            from aftercare.agent.demo import run_agent_demo
+
+            print(
+                json.dumps(
+                    run_agent_demo(settings, BusinessService(sessions), args.case),
+                    ensure_ascii=False,
+                    indent=2,
+                )
+            )
+            return 0
         if args.demo_action == "reset":
             print(json.dumps(reset_demo(sessions, args.confirm), ensure_ascii=False))
             sessions.kw["bind"].dispose()

@@ -233,6 +233,11 @@ class BusinessService:
                 .with_for_update()
             )
             require(order is not None, "NOT_FOUND")
+            constraints = conv.case.get("facts", {}).get("constraints", {}).get("value", {})
+            require(
+                action.action == "cancel" or constraints.get("unused") is not False,
+                "ITEM_INELIGIBLE",
+            )
             info = self._eligibility(s, order, payload, self.clock())
             if (
                 existing
