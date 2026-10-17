@@ -1,0 +1,44 @@
+name: aftercare-agent-workbench
+services:
+  db:
+    image: pgvector/pgvector:pg17@sha256:ac08538c6f8b9904c33c8224c5e5706dbe760aca29db1d096972b4052c22a75d
+    environment:
+      POSTGRES_DB: aftercare_demo
+      POSTGRES_USER: aftercare
+      POSTGRES_PASSWORD: aftercare_local_only
+    ports:
+      - "127.0.0.1:55432:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+      - pgsocket:/var/run/postgresql
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U aftercare -d aftercare_demo"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+    restart: "no"
+  app:
+    profiles: [app]
+    build: .
+    environment:
+      APP_ENV: local
+      ALLOW_REAL_MODEL_CALLS: "false"
+      # Same-host Unix socket keeps the strict offline network guard intact.
+      DATABASE_URL: "postgresql+psycopg://aftercare:aftercare_local_only@/aftercare_demo?host=/var/run/postgresql"
+    volumes:
+      - pgsocket:/var/run/postgresql:ro
+    depends_on:
+      db:
+        condition: service_healthy
+    ports:
+      - "127.0.0.1:8000:8000"
+    command: ["python", "-m", "aftercare", "serve", "--offline", "--container-network"]
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://127.0.0.1:8000/health/ready', timeout=5)"]
+      interval: 10s
+      timeout: 6s
+      retries: 5
+    restart: "no"
+volumes:
+  pgdata:
+  pgsocket:

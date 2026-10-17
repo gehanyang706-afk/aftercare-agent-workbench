@@ -1,0 +1,358 @@
+{
+  "python": "3.13.14",
+  "platform": "macOS-27.0.1-arm64-arm-64bit-Mach-O",
+  "packages": {
+    "deepagents": {
+      "version": "0.7.28",
+      "requires_python": "<4.0,>=3.11",
+      "requires_dist": [
+        "langchain<2.0.0,>=1.4.6",
+        "langchain-core<2.0.0,>=1.6.11",
+        "langchain-anthropic<2.0.0,>=1.7.6",
+        "langchain-google-genai<5.0.0,>=4.4.2",
+        "langsmith>=0.14.11",
+        "packaging>=23.2",
+        "wcmatch>=11.0",
+        "langchain-aws<2.0.0,>=1.9.0; extra == \"aws\"",
+        "langchain-quickjs>=0.3.9; extra == \"quickjs\"",
+        "av<19.0.0,>=18.0.0; extra == \"video\"",
+        "pillow<13.0.0,>=12.3.0; extra == \"video\""
+      ]
+    },
+    "langgraph": {
+      "version": "1.2.16",
+      "requires_python": ">=3.10",
+      "requires_dist": [
+        "langchain-core<2,>=1.4.7",
+        "langgraph-checkpoint<5.0.0,>=4.3.0",
+        "langgraph-prebuilt<1.2.0,>=1.1.0",
+        "langgraph-sdk<0.5.0,>=0.4.6",
+        "pydantic>=2.7.4",
+        "xxhash>=3.5.0"
+      ]
+    },
+    "langchain": {
+      "version": "1.4.6",
+      "requires_python": "<4.0.0,>=3.10.0",
+      "requires_dist": [
+        "langchain-core<2.0.0,>=1.6.10",
+        "langgraph<1.3.0,>=1.2.12",
+        "pydantic<3.0.0,>=2.7.4",
+        "langchain-anthropic; extra == 'anthropic'",
+        "langchain-aws; extra == 'aws'",
+        "langchain-azure-ai; extra == 'azure-ai'",
+        "langchain-baseten>=0.2.0; extra == 'baseten'",
+        "langchain-community; extra == 'community'",
+        "langchain-deepseek; extra == 'deepseek'",
+        "langchain-fireworks; extra == 'fireworks'",
+        "langchain-google-genai; extra == 'google-genai'",
+        "langchain-google-vertexai; extra == 'google-vertexai'",
+        "langchain-groq; extra == 'groq'",
+        "langchain-huggingface; extra == 'huggingface'",
+        "fastmcp<5.0.0,>=4.0.11; extra == 'mcp'",
+        "langchain-meta; extra == 'meta'",
+        "langchain-mistralai; extra == 'mistralai'",
+        "langchain-ollama; extra == 'ollama'",
+        "langchain-openai; extra == 'openai'",
+        "langchain-perplexity; extra == 'perplexity'",
+        "langchain-together; extra == 'together'",
+        "langchain-xai; extra == 'xai'"
+      ]
+    },
+    "langchain-core": {
+      "version": "1.6.12",
+      "requires_python": "<4.0.0,>=3.10.0",
+      "requires_dist": [
+        "httpx<1.0.0,>=0.23.0",
+        "jsonpatch<2.0.0,>=1.33.0",
+        "langchain-protocol>=0.0.17",
+        "langsmith<1.0.0,>=0.14.9",
+        "packaging>=23.2.0",
+        "pydantic<3.0.0,>=2.7.4",
+        "pyyaml<7.0.0,>=5.3.0",
+        "tenacity!=8.4.0,<10.0.0,>=8.1.0",
+        "typing-extensions<5.0.0,>=4.7.0",
+        "uuid-utils<1.0,>=0.12.0"
+      ]
+    },
+    "langgraph-checkpoint-postgres": {
+      "version": "3.2.0",
+      "requires_python": ">=3.10",
+      "requires_dist": [
+        "langgraph-checkpoint<5.0.0,>=4.3.0",
+        "orjson>=3.11.5",
+        "psycopg-pool>=3.2.0",
+        "psycopg>=3.2.0"
+      ]
+    },
+    "psycopg": {
+      "version": "3.3.6",
+      "requires_python": ">=3.10",
+      "requires_dist": [
+        "typing-extensions>=4.6; python_version < \"3.13\"",
+        "tzdata; sys_platform == \"win32\"",
+        "psycopg-c==3.3.6; implementation_name != \"pypy\" and extra == \"c\"",
+        "psycopg-binary==3.3.6; implementation_name != \"pypy\" and extra == \"binary\"",
+        "psycopg-pool; extra == \"pool\"",
+        "anyio>=4.0; extra == \"test\"",
+        "mypy>=2.1.0; implementation_name != \"pypy\" and extra == \"test\"",
+        "pproxy>=2.7; extra == \"test\"",
+        "pytest>=6.2.5; extra == \"test\"",
+        "pytest-cov>=3.0; extra == \"test\"",
+        "pytest-randomly>=3.5; extra == \"test\"",
+        "ast-comments>=1.1.2; extra == \"dev\"",
+        "black>=26.1.0; extra == \"dev\"",
+        "codespell>=2.2; extra == \"dev\"",
+        "cython-lint>=0.21; extra == \"dev\"",
+        "dnspython>=2.1; extra == \"dev\"",
+        "flake8>=4.0; extra == \"dev\"",
+        "isort[colors]>=6.0; extra == \"dev\"",
+        "isort-psycopg>=0.0.3; extra == \"dev\"",
+        "mypy>=2.1.0; extra == \"dev\"",
+        "pre-commit>=4.0.1; extra == \"dev\"",
+        "types-setuptools>=57.4; extra == \"dev\"",
+        "types-shapely>=2.0; extra == \"dev\"",
+        "wheel>=0.37; extra == \"dev\"",
+        "Sphinx>=9.1; extra == \"docs\"",
+        "furo==2025.12.19; extra == \"docs\"",
+        "sphinx-autobuild>=2025.8.25; extra == \"docs\"",
+        "sphinx-autodoc-typehints>=3.10.2; extra == \"docs\""
+      ]
+    },
+    "psycopg-binary": {
+      "version": "3.3.6",
+      "requires_python": ">=3.10",
+      "requires_dist": null
+    },
+    "psycopg-pool": {
+      "version": "3.3.3",
+      "requires_python": ">=3.10",
+      "requires_dist": [
+        "typing-extensions>=4.6",
+        "anyio>=4.0; extra == \"test\"",
+        "mypy>=2.1.0; extra == \"test\"",
+        "pproxy>=2.7; extra == \"test\"",
+        "pytest>=6.2.5; extra == \"test\"",
+        "pytest-cov>=3.0; extra == \"test\"",
+        "pytest-randomly>=3.5; extra == \"test\""
+      ]
+    },
+    "sqlalchemy": {
+      "version": "2.0.55",
+      "requires_python": ">=3.7",
+      "requires_dist": [
+        "importlib-metadata; python_version < \"3.8\"",
+        "greenlet>=1; platform_machine == \"aarch64\" or (platform_machine == \"ppc64le\" or (platform_machine == \"x86_64\" or (platform_machine == \"amd64\" or (platform_machine == \"AMD64\" or (platform_machine == \"win32\" or platform_machine == \"WIN32\")))))",
+        "typing-extensions>=4.6.0",
+        "greenlet>=1; extra == \"asyncio\"",
+        "mypy>=0.910; extra == \"mypy\"",
+        "pyodbc; extra == \"mssql\"",
+        "pymssql; extra == \"mssql-pymssql\"",
+        "pyodbc; extra == \"mssql-pyodbc\"",
+        "mysqlclient>=1.4.0; extra == \"mysql\"",
+        "mysql-connector-python; extra == \"mysql-connector\"",
+        "mariadb!=1.1.10,!=1.1.2,!=1.1.5,>=1.0.1; extra == \"mariadb-connector\"",
+        "cx_oracle>=8; extra == \"oracle\"",
+        "oracledb>=1.0.1; extra == \"oracle-oracledb\"",
+        "psycopg2>=2.7; extra == \"postgresql\"",
+        "pg8000>=1.29.1; extra == \"postgresql-pg8000\"",
+        "greenlet>=1; extra == \"postgresql-asyncpg\"",
+        "asyncpg; extra == \"postgresql-asyncpg\"",
+        "psycopg2-binary; extra == \"postgresql-psycopg2binary\"",
+        "psycopg2cffi; extra == \"postgresql-psycopg2cffi\"",
+        "psycopg>=3.0.7; extra == \"postgresql-psycopg\"",
+        "psycopg[binary]>=3.0.7; extra == \"postgresql-psycopgbinary\"",
+        "pymysql; extra == \"pymysql\"",
+        "greenlet>=1; extra == \"aiomysql\"",
+        "aiomysql>=0.2.0; extra == \"aiomysql\"",
+        "greenlet>=1; extra == \"aioodbc\"",
+        "aioodbc; extra == \"aioodbc\"",
+        "greenlet>=1; extra == \"asyncmy\"",
+        "asyncmy>=0.2.12; extra == \"asyncmy\"",
+        "greenlet>=1; extra == \"aiosqlite\"",
+        "aiosqlite; extra == \"aiosqlite\"",
+        "typing_extensions!=3.10.0.1; extra == \"aiosqlite\"",
+        "sqlcipher3_binary; extra == \"sqlcipher\""
+      ]
+    },
+    "alembic": {
+      "version": "1.20.0",
+      "requires_python": ">=3.10",
+      "requires_dist": [
+        "SQLAlchemy>=2.0",
+        "Mako",
+        "typing-extensions>=4.12",
+        "tomli; python_version < \"3.11\"",
+        "tzdata; extra == \"tz\""
+      ]
+    },
+    "pgvector": {
+      "version": "0.5.1",
+      "requires_python": ">=3.10",
+      "requires_dist": null
+    },
+    "fastapi": {
+      "version": "0.143.3",
+      "requires_python": ">=3.10",
+      "requires_dist": [
+        "starlette>=0.46.0",
+        "pydantic>=2.9.0",
+        "typing-extensions>=4.8.0",
+        "typing-inspection>=0.4.2",
+        "annotated-doc>=0.0.2",
+        "opentelemetry-api>=1.44.0",
+        "opentelemetry-sdk>=1.44.0; extra == \"opentelemetry\"",
+        "opentelemetry-exporter-otlp-proto-http>=1.44.0; extra == \"opentelemetry\"",
+        "opentelemetry-sdk>=1.44.0; extra == \"standard\"",
+        "opentelemetry-exporter-otlp-proto-http>=1.44.0; extra == \"standard\"",
+        "fastapi-cli[standard]>=0.0.32; extra == \"standard\"",
+        "fastar>=0.9.0; extra == \"standard\"",
+        "httpx<1.0.0,>=0.23.0; extra == \"standard\"",
+        "jinja2>=3.1.5; extra == \"standard\"",
+        "python-multipart>=0.0.18; extra == \"standard\"",
+        "email-validator>=2.0.0; extra == \"standard\"",
+        "uvicorn[standard]>=0.12.0; extra == \"standard\"",
+        "pydantic-settings>=2.0.0; extra == \"standard\"",
+        "pydantic-extra-types>=2.0.0; extra == \"standard\"",
+        "opentelemetry-sdk>=1.44.0; extra == \"standard-no-fastapi-cloud-cli\"",
+        "opentelemetry-exporter-otlp-proto-http>=1.44.0; extra == \"standard-no-fastapi-cloud-cli\"",
+        "fastapi-cli[standard-no-fastapi-cloud-cli]>=0.0.32; extra == \"standard-no-fastapi-cloud-cli\"",
+        "httpx<1.0.0,>=0.23.0; extra == \"standard-no-fastapi-cloud-cli\"",
+        "jinja2>=3.1.5; extra == \"standard-no-fastapi-cloud-cli\"",
+        "python-multipart>=0.0.18; extra == \"standard-no-fastapi-cloud-cli\"",
+        "email-validator>=2.0.0; extra == \"standard-no-fastapi-cloud-cli\"",
+        "uvicorn[standard]>=0.12.0; extra == \"standard-no-fastapi-cloud-cli\"",
+        "pydantic-settings>=2.0.0; extra == \"standard-no-fastapi-cloud-cli\"",
+        "pydantic-extra-types>=2.0.0; extra == \"standard-no-fastapi-cloud-cli\"",
+        "opentelemetry-sdk>=1.44.0; extra == \"all\"",
+        "opentelemetry-exporter-otlp-proto-http>=1.44.0; extra == \"all\"",
+        "fastapi-cli[standard]>=0.0.32; extra == \"all\"",
+        "httpx<1.0.0,>=0.23.0; extra == \"all\"",
+        "jinja2>=3.1.5; extra == \"all\"",
+        "python-multipart>=0.0.18; extra == \"all\"",
+        "itsdangerous>=1.1.0; extra == \"all\"",
+        "pyyaml>=5.3.1; extra == \"all\"",
+        "email-validator>=2.0.0; extra == \"all\"",
+        "uvicorn[standard]>=0.12.0; extra == \"all\"",
+        "pydantic-settings>=2.0.0; extra == \"all\"",
+        "pydantic-extra-types>=2.0.0; extra == \"all\""
+      ]
+    },
+    "pydantic": {
+      "version": "2.14.1",
+      "requires_python": ">=3.10",
+      "requires_dist": [
+        "annotated-types>=0.6.0",
+        "pydantic-core==2.50.1",
+        "typing-extensions>=4.16.0",
+        "typing-inspection>=0.4.4",
+        "email-validator>=2.0.0; extra == 'email'",
+        "tzdata; (platform_system == 'Windows') and extra == 'timezone'"
+      ]
+    },
+    "pydantic-settings": {
+      "version": "2.16.0",
+      "requires_python": ">=3.11",
+      "requires_dist": [
+        "pydantic>=2.7.0",
+        "python-dotenv>=1.2.2",
+        "typing-extensions>=4.0.0",
+        "typing-inspection>=0.4.0",
+        "boto3>=1.35.0; extra == 'aws-secrets-manager'",
+        "boto3>=1.35.0; extra == 'aws-systems-manager'",
+        "azure-identity>=1.16.0; extra == 'azure-key-vault'",
+        "azure-keyvault-secrets>=4.8.0; extra == 'azure-key-vault'",
+        "google-cloud-secret-manager>=2.23.1; extra == 'gcp-secret-manager'",
+        "pyyaml>=6.0.1; extra == 'yaml'"
+      ]
+    },
+    "uvicorn": {
+      "version": "0.54.0",
+      "requires_python": ">=3.10",
+      "requires_dist": [
+        "click>=7.0",
+        "h11>=0.8",
+        "typing-extensions>=4.0; python_version < '3.11'",
+        "httptools>=0.8.0; extra == 'standard'",
+        "python-dotenv>=0.13; extra == 'standard'",
+        "pyyaml>=5.1; extra == 'standard'",
+        "uvloop>=0.15.1; (sys_platform != 'win32' and (sys_platform != 'cygwin' and platform_python_implementation != 'PyPy')) and extra == 'standard'",
+        "watchfiles>=0.20; extra == 'standard'",
+        "websockets>=13.0; extra == 'standard'"
+      ]
+    },
+    "pytest": {
+      "version": "9.1.1",
+      "requires_python": ">=3.10",
+      "requires_dist": [
+        "colorama>=0.4; sys_platform == \"win32\"",
+        "exceptiongroup>=1; python_version < \"3.11\"",
+        "iniconfig>=1.0.1",
+        "packaging>=22",
+        "pluggy<2,>=1.5",
+        "pygments>=2.7.2",
+        "tomli>=1; python_version < \"3.11\"",
+        "argcomplete; extra == \"dev\"",
+        "attrs>=19.2; extra == \"dev\"",
+        "hypothesis>=3.56; extra == \"dev\"",
+        "mock; extra == \"dev\"",
+        "requests; extra == \"dev\"",
+        "setuptools; extra == \"dev\"",
+        "xmlschema; extra == \"dev\""
+      ]
+    },
+    "ruff": {
+      "version": "0.17.1",
+      "requires_python": ">=3.7",
+      "requires_dist": null
+    },
+    "pip-tools": {
+      "version": "7.5.3",
+      "requires_python": ">=3.9",
+      "requires_dist": [
+        "build>=1.0.0",
+        "click>=8",
+        "pip>=22.2",
+        "pyproject_hooks",
+        "tomli; python_version < \"3.11\"",
+        "setuptools",
+        "wheel",
+        "pytest>=7.2.0; extra == \"testing\"",
+        "pytest-rerunfailures; extra == \"testing\"",
+        "pytest-xdist; extra == \"testing\"",
+        "tomli-w; extra == \"testing\"",
+        "flit_core<4,>=2; extra == \"testing\"",
+        "poetry_core>=1.0.0; extra == \"testing\"",
+        "covdefaults; extra == \"coverage\"",
+        "pytest-cov; extra == \"coverage\""
+      ]
+    }
+  },
+  "apis": {
+    "create_deep_agent": {
+      "signature": "(model: str | langchain_core.language_models.chat_models.BaseChatModel | None = None, tools: collections.abc.Sequence[langchain_core.tools.base.BaseTool | collections.abc.Callable | dict[str, typing.Any]] | None = None, *, system_prompt: str | langchain_core.messages.system.SystemMessage | None = None, middleware: collections.abc.Sequence[langchain.agents.middleware.types.AgentMiddleware[+StateT_co, ~ContextT, typing.Any]] = (), subagents: collections.abc.Sequence[deepagents.middleware.subagents.SubAgent | deepagents.middleware.subagents.CompiledSubAgent | deepagents.middleware.async_subagents.AsyncSubAgent] | None = None, skills: list[str] | None = None, memory: list[str] | None = None, permissions: list[deepagents.middleware.filesystem.FilesystemPermission] | None = None, backend: deepagents.backends.protocol.BackendProtocol | None = None, interrupt_on: dict[str, bool | langchain.agents.middleware.human_in_the_loop.InterruptOnConfig] | None = None, response_format: Union[langchain.agents.structured_output.ToolStrategy[~ResponseT], langchain.agents.structured_output.ProviderStrategy[~ResponseT], langchain.agents.structured_output.AutoStrategy[~ResponseT], type[~ResponseT], dict[str, Any], NoneType] = None, state_schema: type[deepagents.graph.DeepAgentState] | None = None, context_schema: type[~ContextT] | None = None, checkpointer: None | bool | langgraph.checkpoint.base.BaseCheckpointSaver = None, store: langgraph.store.base.BaseStore | None = None, debug: bool = False, name: str | None = None, cache: langgraph.cache.base.BaseCache | None = None) -> langgraph.graph.state.CompiledStateGraph[langchain.agents.middleware.types.AgentState[~ResponseT], ~ContextT, langchain.agents.middleware.types.InputAgentState, langchain.agents.middleware.types.OutputAgentState[~ResponseT]]",
+      "source_file": "/Users/gehanyang/编程/aftercare-agent-workbench/.venv/lib/python3.13/site-packages/deepagents/graph.py"
+    },
+    "PostgresSaver.from_conn_string": {
+      "signature": "(conn_string: 'str', *, pipeline: 'bool' = False) -> 'Iterator[PostgresSaver]'",
+      "source_file": "/opt/homebrew/Cellar/python@3.13/3.13.14/Frameworks/Python.framework/Versions/3.13/lib/python3.13/contextlib.py"
+    },
+    "PostgresSaver.setup": {
+      "signature": "(self) -> 'None'",
+      "source_file": "/Users/gehanyang/编程/aftercare-agent-workbench/.venv/lib/python3.13/site-packages/langgraph/checkpoint/postgres/__init__.py"
+    },
+    "interrupt": {
+      "signature": "(value: 'Any', *, response_schema: 'dict[str, Any] | type | None' = None) -> 'Any'",
+      "source_file": "/Users/gehanyang/编程/aftercare-agent-workbench/.venv/lib/python3.13/site-packages/langgraph/types.py"
+    },
+    "Command": {
+      "signature": "(*, graph: 'str | None' = None, update: 'Any | None' = None, resume: 'dict[str, Any] | Any | None' = None, goto: 'Send | Sequence[Send | N] | N' = ()) -> None",
+      "source_file": "/Users/gehanyang/编程/aftercare-agent-workbench/.venv/lib/python3.13/site-packages/langgraph/types.py"
+    }
+  },
+  "verification_scope": "imports and signatures only; no agent or model constructed",
+  "linux_aarch64_dependency_marker_check": {
+    "missing_or_incompatible": [],
+    "wheel_install_tested": false
+  }
+}

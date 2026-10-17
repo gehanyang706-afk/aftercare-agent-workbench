@@ -1,0 +1,43 @@
+version: v1
+effective_from: '2026-01-01T00:00:00Z'
+scope: simulated-single-merchant
+currency: CNY
+money_unit: fen
+cancel:
+  allowed_order_states: [PAID_UNSHIPPED]
+  scope: entire-order
+  concurrent_active_aftercare_allowed: false
+  terminal_order_state: CANCELLED
+  refund_kind: simulated-request-only
+return:
+  allowed_order_states: [DELIVERED]
+  window_hours: 168
+  boundary_inclusive: true
+  unused_required: true
+  returnable_required: true
+  terminal_application_state: RETURN_REQUESTED
+exchange:
+  allowed_order_states: [DELIVERED]
+  window_hours: 360
+  boundary_inclusive: true
+  unused_required: true
+  exchangeable_required: true
+  same_product_family: true
+  equal_price_required: true
+  inventory_reservation_required: true
+  terminal_application_state: EXCHANGE_REQUESTED
+shipping:
+  # 自定义模拟报价；V1 不收取、不扣款、不对接物流。
+  normal_return: {payer: customer, quoted_fee_fen: 800}
+  normal_exchange: {payer: customer, quoted_fee_fen: 800}
+  dispute: handoff
+preview:
+  ttl_seconds: 600
+  invalidate_on_new_message: true
+  confirmation_channel: trusted-api-only
+quantity:
+  one_order_line_per_request: true
+  active_requests_cannot_exceed_order_quantity: true
+time:
+  storage_timezone: UTC
+  display_timezone: Asia/Shanghai

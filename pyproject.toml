@@ -1,0 +1,36 @@
+[build-system]
+requires = ["setuptools==82.0.1"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "aftercare-agent-workbench"
+version = "0.1.0"
+description = "Local, auditable aftercare decision and execution workbench"
+requires-python = ">=3.13,<3.14"
+dependencies = [
+  "fastapi>=0.115,<1", "uvicorn>=0.34,<1", "pydantic-settings>=2.8,<3",
+  "sqlalchemy>=2.0,<2.1", "greenlet>=3.2,<4", "alembic>=1.15,<2", "psycopg[binary,pool]>=3.2,<4",
+  "pgvector>=0.4,<1", "deepagents==0.7.28", "langgraph>=1,<2",
+  "langgraph-checkpoint-postgres>=3,<4", "pyyaml>=6,<7", "jinja2>=3.1,<4",
+]
+
+[project.optional-dependencies]
+dev = ["pytest>=8,<10", "pytest-socket>=0.7,<1", "httpx>=0.28,<1", "ruff>=0.11,<1", "pip-tools==7.5.3", "pip==26.1"]
+
+[project.scripts]
+aftercare = "aftercare.cli:main"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "-ra --disable-socket --allow-hosts=127.0.0.1,::1 --allow-unix-socket"
+markers = ["live_model: explicit authorized real inference only", "model_weights: requires authorized local weights", "integration: requires dedicated PostgreSQL"]
+
+[tool.ruff]
+line-length = 100
+target-version = "py313"
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "UP", "B"]

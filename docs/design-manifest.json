@@ -1,0 +1,26 @@
+[
+  {
+    "source": "/Users/gehanyang/Documents/ChatGPT/求职/售后Agent项目设计/00-从这里开始.md",
+    "copy": "docs/design/00-从这里开始.md",
+    "sha256": "3ecedfe9fa9bf0c13d9f6fc537d598db3448a3d6883d40a53b1262f75db66c7b",
+    "matches_source": true
+  },
+  {
+    "source": "/Users/gehanyang/Documents/ChatGPT/求职/售后Agent项目设计/01-架构与验收规格.md",
+    "copy": "docs/design/01-架构与验收规格.md",
+    "sha256": "585b40357747a9b033516ff5311fe2fcbe9cc430a0524151cb3bc992ce703282",
+    "matches_source": true
+  },
+  {
+    "source": "/Users/gehanyang/Documents/ChatGPT/求职/售后Agent项目设计/02-分阶段执行指令.md",
+    "copy": "docs/design/02-分阶段执行指令.md",
+    "sha256": "71c256f851a76a49d34b3fbdfe60a0cfe90ca6ef3eae3b55cd80ce111e15205f",
+    "matches_source": true
+  },
+  {
+    "source": "/Users/gehanyang/Documents/ChatGPT/求职/售后Agent项目设计/03-模型额度与评测计划.md",
+    "copy": "docs/design/03-模型额度与评测计划.md",
+    "sha256": "c2ae5ed307439ef56a4bf1cdadfe41919af627d96ea68d49e84041242d2d3c84",
+    "matches_source": true
+  }
+]

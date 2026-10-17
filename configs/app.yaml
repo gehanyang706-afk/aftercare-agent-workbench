@@ -1,0 +1,8 @@
+phase: 0
+mode: offline
+host: 127.0.0.1
+port: 8000
+# Runtime configuration in phase 0 comes from Settings/.env only.
+# These are the frozen product defaults for subsequent implementation.
+worker: {concurrency: 1, enabled: false}
+inference: {enabled: false}

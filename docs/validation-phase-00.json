@@ -1,0 +1,125 @@
+{
+  "pip_check": {
+    "command": [
+      "/Users/gehanyang/\u7f16\u7a0b/aftercare-agent-workbench/.venv/bin/python",
+      "-m",
+      "pip",
+      "check"
+    ],
+    "exit_code": 0,
+    "expected_exit": 0,
+    "passed": true,
+    "output": "runtime/phase-00/pip-check.log",
+    "output_sha256": "9261363b733079a641c2e4cc9bc46ffa1d8336945a87f807b6cf68847dbc9b09"
+  },
+  "lint": {
+    "command": [
+      "/Users/gehanyang/\u7f16\u7a0b/aftercare-agent-workbench/.venv/bin/python",
+      "-m",
+      "ruff",
+      "check",
+      "."
+    ],
+    "exit_code": 0,
+    "expected_exit": 0,
+    "passed": true,
+    "output": "runtime/phase-00/ruff-check.log",
+    "output_sha256": "82b3e6a6c090a57601d22943bd23fca9218d1031dbe5a7b754092f9a156b4f18"
+  },
+  "format": {
+    "command": [
+      "/Users/gehanyang/\u7f16\u7a0b/aftercare-agent-workbench/.venv/bin/python",
+      "-m",
+      "ruff",
+      "format",
+      "--check",
+      "."
+    ],
+    "exit_code": 0,
+    "expected_exit": 0,
+    "passed": true,
+    "output": "runtime/phase-00/ruff-format.log",
+    "output_sha256": "5a29981aebe12cf610955c0455e62c60bdd53f693ac0d954a67db9c7f9e5042a"
+  },
+  "tests": {
+    "command": [
+      "/Users/gehanyang/\u7f16\u7a0b/aftercare-agent-workbench/.venv/bin/python",
+      "-m",
+      "pytest",
+      "-m",
+      "not live_model and not model_weights",
+      "--junitxml=runtime/phase-00/junit.xml"
+    ],
+    "exit_code": 0,
+    "expected_exit": 0,
+    "passed": true,
+    "output": "runtime/phase-00/pytest.log",
+    "output_sha256": "1957825a8eb7772b2ee1c48a5008138e53e3da6a79f6a9aee059ec96b4be31b5"
+  },
+  "doctor_unavailable": {
+    "command": [
+      "/Users/gehanyang/\u7f16\u7a0b/aftercare-agent-workbench/.venv/bin/python",
+      "-m",
+      "aftercare",
+      "doctor",
+      "--offline"
+    ],
+    "exit_code": 1,
+    "expected_exit": 1,
+    "passed": true,
+    "output": "runtime/phase-00/doctor.log",
+    "output_sha256": "46b06bbd53ff421e054f82e9b98e8ae698c63df058ba1a111d7525adf3d4a2f4"
+  },
+  "compose": {
+    "command": [
+      "docker",
+      "compose",
+      "config",
+      "--quiet"
+    ],
+    "exit_code": 0,
+    "expected_exit": 0,
+    "passed": true,
+    "output": "runtime/phase-00/compose.log",
+    "output_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  "http_startup": {
+    "command": [
+      "/Users/gehanyang/\u7f16\u7a0b/aftercare-agent-workbench/.venv/bin/python",
+      "-m",
+      "aftercare",
+      "serve",
+      "--offline",
+      "--port",
+      "58736"
+    ],
+    "passed": true,
+    "live": {
+      "status": 200,
+      "body": {
+        "status": "alive",
+        "phase": 0,
+        "version": "0.1.0",
+        "mode": "offline"
+      }
+    },
+    "ready": {
+      "status": 503,
+      "body": {
+        "status": "not_ready",
+        "code": "DATABASE_UNAVAILABLE",
+        "scope": "phase-0-infrastructure"
+      }
+    },
+    "database_fixture": "intentionally unavailable loopback port 1",
+    "output": "runtime/phase-00/startup.log"
+  },
+  "hashes": {
+    "requirements.lock": "3db0572e4110a3754ad5e6a9218cf37caeaf04afef530e9905c36d89cac81231",
+    "compose.yaml": "4f593b01a25ec2d5f18f0f0dbfbd11da562862d92fc7f2d4487f8b0d5ee44f31",
+    "Dockerfile": "a8b1d701c960baf48c3ecbfe60ad3ae4bc4fe99a66207bfd4e107cff1ed67a2e"
+  },
+  "real_model_requests": 0,
+  "database_integration": "skipped: dedicated PostgreSQL not provisioned",
+  "passed_available_phase0_checks": true
+}
