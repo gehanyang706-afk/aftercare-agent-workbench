@@ -11,7 +11,7 @@ from aftercare.offline import install_offline_guard
 
 
 def parser() -> argparse.ArgumentParser:
-    result = argparse.ArgumentParser(description="售后 Agent 工作台（阶段 0，仅离线）")
+    result = argparse.ArgumentParser(description="售后 Agent 工作台（默认离线）")
     commands = result.add_subparsers(dest="command", required=True)
     for name in ("doctor", "serve"):
         command = commands.add_parser(name)
@@ -25,6 +25,23 @@ def parser() -> argparse.ArgumentParser:
             )
     db = commands.add_parser("db")
     db.add_argument("action", choices=["migrate", "current"])
+    demo = commands.add_parser("demo")
+    demos = demo.add_subparsers(dest="demo_action", required=True)
+    seed = demos.add_parser("seed")
+    seed.add_argument("--database", choices=["demo"], default="demo")
+    reset = demos.add_parser("reset")
+    reset.add_argument("--confirm", choices=["demo-only"], required=True)
+    run = demos.add_parser("run")
+    run.add_argument(
+        "--case",
+        choices=[
+            "normal-exchange",
+            "lost-submit-response",
+            "revise-before-confirm",
+            "concurrent-stock",
+        ],
+        required=True,
+    )
     return result
 
 
@@ -94,6 +111,24 @@ def main(argv: list[str] | None = None) -> int:
         except Exception:
             print("DATABASE_COMMAND_FAILED: check local database availability and permissions")
             return 1
+        return 0
+    if args.command == "demo":
+        from aftercare.repositories.database import session_factory
+        from aftercare.services.business import BusinessService
+        from aftercare.services.demo import reset_demo, run_case, seed
+
+        sessions = session_factory(settings)
+        if args.demo_action == "reset":
+            print(json.dumps(reset_demo(sessions, args.confirm), ensure_ascii=False))
+            sessions.kw["bind"].dispose()
+            return 0
+        output = (
+            seed(sessions)
+            if args.demo_action == "seed"
+            else run_case(BusinessService(sessions), args.case)
+        )
+        print(json.dumps(output, ensure_ascii=False, indent=2))
+        sessions.kw["bind"].dispose()
         return 0
     return 2
 

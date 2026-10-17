@@ -6,7 +6,7 @@ from sqlalchemy.engine import make_url
 from aftercare.config import HealthResult, Settings
 from aftercare.offline import is_loopback
 
-BASELINE_REVISION = "0001_bootstrap"
+BASELINE_REVISION = "0002_business"
 
 
 def is_local_database(url) -> bool:
@@ -46,3 +46,20 @@ def database_health(settings: Settings) -> HealthResult:
         return HealthResult(status="not_ready", code="DATABASE_UNAVAILABLE")
     finally:
         engine.dispose()
+
+
+def session_factory(settings: Settings):
+    from sqlalchemy.orm import sessionmaker
+
+    url = make_url(settings.database_url.get_secret_value())
+    if settings.offline and not is_local_database(url):
+        raise ValueError("OFFLINE_DATABASE_HOST_DENIED")
+    engine = create_engine(
+        url,
+        pool_pre_ping=True,
+        connect_args={
+            "connect_timeout": 2,
+            "options": "-c statement_timeout=10000 -c lock_timeout=5000",
+        },
+    )
+    return sessionmaker(engine, expire_on_commit=False)
