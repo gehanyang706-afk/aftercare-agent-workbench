@@ -1,0 +1,7 @@
+{
+  "export_reference_max_abs_error": 2.86102294921875e-06,
+  "source_revision": "7999e1d3359715c523056ef9478215996d62a620",
+  "torch": "2.14.1",
+  "exporter": "torch.onnx legacy opset17",
+  "sha256": "6c70a79327b54fcf253f475dd224c2ab54e0b35df1fab5e9d445e3b9c221f4fe"
+}

@@ -1,0 +1,12 @@
+source_id: receipt
+title: 申请成功的告知
+version: v1
+action: all
+kind: process
+category: all
+effective_from: '2026-01-01T00:00:00Z'
+effective_to: null
+sections:
+- section: rule
+  text: 只有 COMMITTED operation 回执能证明提交。退换成功仅代表 RETURN_REQUESTED 或 EXCHANGE_REQUESTED；未完成退款/寄货。提交响应丢失先查原回执。
+  related: []

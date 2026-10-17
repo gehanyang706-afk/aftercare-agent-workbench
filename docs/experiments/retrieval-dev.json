@@ -1,0 +1,606 @@
+{
+  "kind": "public-retrieval-dev",
+  "profiles": {
+    "bm25": {
+      "hits": 11,
+      "questions": 12,
+      "rows": [
+        {
+          "query": "钱付了还没发货能取消吗",
+          "expected": "cancel@v1#rule",
+          "top5": [
+            "cancel@v1#rule",
+            "refund@v1#rule",
+            "receipt@v1#rule",
+            "dispute@v1#rule",
+            "identity@v1#rule"
+          ],
+          "hit": true
+        },
+        {
+          "query": "收到十天了能换大一码吗",
+          "expected": "exchange-window@v1#rule",
+          "top5": [
+            "exchange-window@v1#rule",
+            "size@v1#rule",
+            "same-family@v1#rule",
+            "fallback@v1#rule",
+            "quantity-exchange@v1#rule"
+          ],
+          "hit": true
+        },
+        {
+          "query": "七天内退货可以吗",
+          "expected": "return-window@v1#rule",
+          "top5": [
+            "return-window@v1#rule",
+            "unused-return@v1#rule",
+            "return-fee@v1#rule",
+            "quantity-return@v1#rule",
+            "approval@v1#rule"
+          ],
+          "hit": true
+        },
+        {
+          "query": "定制的衣服穿过能退吗",
+          "expected": "unused-return@v1#rule",
+          "top5": [
+            "unused-return@v1#rule",
+            "identity@v1#rule",
+            "return-window@v1#rule",
+            "quantity-return@v1#rule",
+            "receipt@v1#rule"
+          ],
+          "hit": true
+        },
+        {
+          "query": "换鞋是不是必须同价同系列",
+          "expected": "same-family@v1#rule",
+          "top5": [
+            "same-family@v1#rule",
+            "inventory@v1#rule",
+            "quantity-exchange@v1#rule",
+            "size@v1#rule",
+            "exchange-fee@v1#rule"
+          ],
+          "hit": true
+        },
+        {
+          "query": "退货邮费谁出多少钱",
+          "expected": "return-fee@v1#rule",
+          "top5": [
+            "return-fee@v1#rule",
+            "unused-return@v1#rule",
+            "return-window@v1#rule",
+            "quantity-return@v1#rule",
+            "receipt@v1#rule"
+          ],
+          "hit": true
+        },
+        {
+          "query": "换货运费多少",
+          "expected": "exchange-fee@v1#rule",
+          "top5": [
+            "exchange-fee@v1#rule",
+            "same-family@v1#rule",
+            "exchange-window@v1#rule",
+            "unused-exchange@v1#rule",
+            "quantity-exchange@v1#rule"
+          ],
+          "hit": true
+        },
+        {
+          "query": "大码没库存能直接给我退吗",
+          "expected": "fallback@v1#rule",
+          "top5": [
+            "release@v1#rule",
+            "inventory@v1#rule",
+            "size@v1#rule",
+            "identity@v1#rule",
+            "quantity-exchange@v1#rule"
+          ],
+          "hit": false
+        },
+        {
+          "query": "同一件衣服能同时申请退和换吗",
+          "expected": "quantity-return@v1#rule",
+          "top5": [
+            "quantity-return@v1#rule",
+            "return-window@v1#rule",
+            "receipt@v1#rule",
+            "identity@v1#rule",
+            "version@v1#rule"
+          ],
+          "hit": true
+        },
+        {
+          "query": "取消后钱是否马上到账",
+          "expected": "refund@v1#rule",
+          "top5": [
+            "refund@v1#rule",
+            "cancel@v1#rule",
+            "dispute@v1#rule",
+            "version@v1#rule",
+            "approval@v1#rule"
+          ],
+          "hit": true
+        },
+        {
+          "query": "换货申请撤回库存怎么释放",
+          "expected": "release@v1#rule",
+          "top5": [
+            "release@v1#rule",
+            "inventory@v1#rule",
+            "receipt@v1#rule",
+            "exchange-window@v1#rule",
+            "identity@v1#rule"
+          ],
+          "hit": true
+        },
+        {
+          "query": "质量有争议怎么办",
+          "expected": "dispute@v1#rule",
+          "top5": [
+            "dispute@v1#rule",
+            "unused-exchange@v1#rule",
+            "unused-return@v1#rule",
+            "exchange-fee@v1#rule",
+            "return-fee@v1#rule"
+          ],
+          "hit": true
+        }
+      ]
+    },
+    "dense": {
+      "hits": 12,
+      "questions": 12,
+      "rows": [
+        {
+          "query": "钱付了还没发货能取消吗",
+          "expected": "cancel@v1#rule",
+          "top5": [
+            "cancel@v1#rule",
+            "refund@v1#rule",
+            "receipt@v1#rule",
+            "identity@v1#rule",
+            "approval@v1#rule"
+          ],
+          "hit": true
+        },
+        {
+          "query": "收到十天了能换大一码吗",
+          "expected": "exchange-window@v1#rule",
+          "top5": [
+            "size@v1#rule",
+            "exchange-window@v1#rule",
+            "same-family@v1#rule",
+            "fallback@v1#rule",
+            "release@v1#rule"
+          ],
+          "hit": true
+        },
+        {
+          "query": "七天内退货可以吗",
+          "expected": "return-window@v1#rule",
+          "top5": [
+            "return-window@v1#rule",
+            "unused-return@v1#rule",
+            "receipt@v1#rule",
+            "return-fee@v1#rule",
+            "quantity-return@v1#rule"
+          ],
+          "hit": true
+        },
+        {
+          "query": "定制的衣服穿过能退吗",
+          "expected": "unused-return@v1#rule",
+          "top5": [
+            "unused-return@v1#rule",
+            "quantity-return@v1#rule",
+            "return-window@v1#rule",
+            "return-fee@v1#rule",
+            "receipt@v1#rule"
+          ],
+          "hit": true
+        },
+        {
+          "query": "换鞋是不是必须同价同系列",
+          "expected": "same-family@v1#rule",
+          "top5": [
+            "same-family@v1#rule",
+            "unused-exchange@v1#rule",
+            "quantity-exchange@v1#rule",
+            "exchange-fee@v1#rule",
+            "fallback@v1#rule"
+          ],
+          "hit": true
+        },
+        {
+          "query": "退货邮费谁出多少钱",
+          "expected": "return-fee@v1#rule",
+          "top5": [
+            "return-fee@v1#rule",
+            "quantity-return@v1#rule",
+            "return-window@v1#rule",
+            "receipt@v1#rule",
+            "unused-return@v1#rule"
+          ],
+          "hit": true
+        },
+        {
+          "query": "换货运费多少",
+          "expected": "exchange-fee@v1#rule",
+          "top5": [
+            "exchange-fee@v1#rule",
+            "same-family@v1#rule",
+            "exchange-window@v1#rule",
+            "quantity-exchange@v1#rule",
+            "fallback@v1#rule"
+          ],
+          "hit": true
+        },
+        {
+          "query": "大码没库存能直接给我退吗",
+          "expected": "fallback@v1#rule",
+          "top5": [
+            "release@v1#rule",
+            "inventory@v1#rule",
+            "size@v1#rule",
+            "fallback@v1#rule",
+            "quantity-exchange@v1#rule"
+          ],
+          "hit": true
+        },
+        {
+          "query": "同一件衣服能同时申请退和换吗",
+          "expected": "quantity-return@v1#rule",
+          "top5": [
+            "quantity-return@v1#rule",
+            "unused-return@v1#rule",
+            "receipt@v1#rule",
+            "return-window@v1#rule",
+            "return-fee@v1#rule"
+          ],
+          "hit": true
+        },
+        {
+          "query": "取消后钱是否马上到账",
+          "expected": "refund@v1#rule",
+          "top5": [
+            "refund@v1#rule",
+            "cancel@v1#rule",
+            "receipt@v1#rule",
+            "approval@v1#rule",
+            "version@v1#rule"
+          ],
+          "hit": true
+        },
+        {
+          "query": "换货申请撤回库存怎么释放",
+          "expected": "release@v1#rule",
+          "top5": [
+            "release@v1#rule",
+            "quantity-exchange@v1#rule",
+            "fallback@v1#rule",
+            "exchange-window@v1#rule",
+            "receipt@v1#rule"
+          ],
+          "hit": true
+        },
+        {
+          "query": "质量有争议怎么办",
+          "expected": "dispute@v1#rule",
+          "top5": [
+            "dispute@v1#rule",
+            "unused-exchange@v1#rule",
+            "unused-return@v1#rule",
+            "quantity-exchange@v1#rule",
+            "quantity-return@v1#rule"
+          ],
+          "hit": true
+        }
+      ]
+    },
+    "hybrid": {
+      "hits": 12,
+      "questions": 12,
+      "rows": [
+        {
+          "query": "钱付了还没发货能取消吗",
+          "expected": "cancel@v1#rule",
+          "top5": [
+            "cancel@v1#rule",
+            "refund@v1#rule",
+            "receipt@v1#rule",
+            "identity@v1#rule",
+            "dispute@v1#rule"
+          ],
+          "hit": true
+        },
+        {
+          "query": "收到十天了能换大一码吗",
+          "expected": "exchange-window@v1#rule",
+          "top5": [
+            "exchange-window@v1#rule",
+            "size@v1#rule",
+            "same-family@v1#rule",
+            "fallback@v1#rule",
+            "quantity-exchange@v1#rule"
+          ],
+          "hit": true
+        },
+        {
+          "query": "七天内退货可以吗",
+          "expected": "return-window@v1#rule",
+          "top5": [
+            "return-window@v1#rule",
+            "unused-return@v1#rule",
+            "return-fee@v1#rule",
+            "receipt@v1#rule",
+            "quantity-return@v1#rule"
+          ],
+          "hit": true
+        },
+        {
+          "query": "定制的衣服穿过能退吗",
+          "expected": "unused-return@v1#rule",
+          "top5": [
+            "unused-return@v1#rule",
+            "quantity-return@v1#rule",
+            "return-window@v1#rule",
+            "identity@v1#rule",
+            "receipt@v1#rule"
+          ],
+          "hit": true
+        },
+        {
+          "query": "换鞋是不是必须同价同系列",
+          "expected": "same-family@v1#rule",
+          "top5": [
+            "same-family@v1#rule",
+            "quantity-exchange@v1#rule",
+            "unused-exchange@v1#rule",
+            "exchange-fee@v1#rule",
+            "size@v1#rule"
+          ],
+          "hit": true
+        },
+        {
+          "query": "退货邮费谁出多少钱",
+          "expected": "return-fee@v1#rule",
+          "top5": [
+            "return-fee@v1#rule",
+            "quantity-return@v1#rule",
+            "return-window@v1#rule",
+            "unused-return@v1#rule",
+            "receipt@v1#rule"
+          ],
+          "hit": true
+        },
+        {
+          "query": "换货运费多少",
+          "expected": "exchange-fee@v1#rule",
+          "top5": [
+            "exchange-fee@v1#rule",
+            "same-family@v1#rule",
+            "exchange-window@v1#rule",
+            "quantity-exchange@v1#rule",
+            "unused-exchange@v1#rule"
+          ],
+          "hit": true
+        },
+        {
+          "query": "大码没库存能直接给我退吗",
+          "expected": "fallback@v1#rule",
+          "top5": [
+            "release@v1#rule",
+            "inventory@v1#rule",
+            "size@v1#rule",
+            "fallback@v1#rule",
+            "quantity-exchange@v1#rule"
+          ],
+          "hit": true
+        },
+        {
+          "query": "同一件衣服能同时申请退和换吗",
+          "expected": "quantity-return@v1#rule",
+          "top5": [
+            "quantity-return@v1#rule",
+            "return-window@v1#rule",
+            "receipt@v1#rule",
+            "unused-return@v1#rule",
+            "identity@v1#rule"
+          ],
+          "hit": true
+        },
+        {
+          "query": "取消后钱是否马上到账",
+          "expected": "refund@v1#rule",
+          "top5": [
+            "refund@v1#rule",
+            "cancel@v1#rule",
+            "version@v1#rule",
+            "approval@v1#rule",
+            "dispute@v1#rule"
+          ],
+          "hit": true
+        },
+        {
+          "query": "换货申请撤回库存怎么释放",
+          "expected": "release@v1#rule",
+          "top5": [
+            "release@v1#rule",
+            "inventory@v1#rule",
+            "quantity-exchange@v1#rule",
+            "receipt@v1#rule",
+            "exchange-window@v1#rule"
+          ],
+          "hit": true
+        },
+        {
+          "query": "质量有争议怎么办",
+          "expected": "dispute@v1#rule",
+          "top5": [
+            "dispute@v1#rule",
+            "unused-exchange@v1#rule",
+            "unused-return@v1#rule",
+            "exchange-fee@v1#rule",
+            "quantity-return@v1#rule"
+          ],
+          "hit": true
+        }
+      ]
+    },
+    "hybrid-rerank": {
+      "hits": 12,
+      "questions": 12,
+      "rows": [
+        {
+          "query": "钱付了还没发货能取消吗",
+          "expected": "cancel@v1#rule",
+          "top5": [
+            "cancel@v1#rule",
+            "refund@v1#rule",
+            "receipt@v1#rule",
+            "dispute@v1#rule",
+            "identity@v1#rule"
+          ],
+          "hit": true
+        },
+        {
+          "query": "收到十天了能换大一码吗",
+          "expected": "exchange-window@v1#rule",
+          "top5": [
+            "exchange-window@v1#rule",
+            "quantity-exchange@v1#rule",
+            "fallback@v1#rule",
+            "size@v1#rule",
+            "same-family@v1#rule"
+          ],
+          "hit": true
+        },
+        {
+          "query": "七天内退货可以吗",
+          "expected": "return-window@v1#rule",
+          "top5": [
+            "return-window@v1#rule",
+            "unused-return@v1#rule",
+            "receipt@v1#rule",
+            "quantity-return@v1#rule",
+            "identity@v1#rule"
+          ],
+          "hit": true
+        },
+        {
+          "query": "定制的衣服穿过能退吗",
+          "expected": "unused-return@v1#rule",
+          "top5": [
+            "unused-return@v1#rule",
+            "return-window@v1#rule",
+            "receipt@v1#rule",
+            "dispute@v1#rule",
+            "quantity-return@v1#rule"
+          ],
+          "hit": true
+        },
+        {
+          "query": "换鞋是不是必须同价同系列",
+          "expected": "same-family@v1#rule",
+          "top5": [
+            "same-family@v1#rule",
+            "exchange-fee@v1#rule",
+            "quantity-exchange@v1#rule",
+            "unused-exchange@v1#rule",
+            "size@v1#rule"
+          ],
+          "hit": true
+        },
+        {
+          "query": "退货邮费谁出多少钱",
+          "expected": "return-fee@v1#rule",
+          "top5": [
+            "return-fee@v1#rule",
+            "unused-return@v1#rule",
+            "return-window@v1#rule",
+            "quantity-return@v1#rule",
+            "identity@v1#rule"
+          ],
+          "hit": true
+        },
+        {
+          "query": "换货运费多少",
+          "expected": "exchange-fee@v1#rule",
+          "top5": [
+            "exchange-fee@v1#rule",
+            "quantity-exchange@v1#rule",
+            "exchange-window@v1#rule",
+            "unused-exchange@v1#rule",
+            "same-family@v1#rule"
+          ],
+          "hit": true
+        },
+        {
+          "query": "大码没库存能直接给我退吗",
+          "expected": "fallback@v1#rule",
+          "top5": [
+            "inventory@v1#rule",
+            "fallback@v1#rule",
+            "exchange-window@v1#rule",
+            "release@v1#rule",
+            "quantity-exchange@v1#rule"
+          ],
+          "hit": true
+        },
+        {
+          "query": "同一件衣服能同时申请退和换吗",
+          "expected": "quantity-return@v1#rule",
+          "top5": [
+            "quantity-return@v1#rule",
+            "unused-return@v1#rule",
+            "return-window@v1#rule",
+            "receipt@v1#rule",
+            "dispute@v1#rule"
+          ],
+          "hit": true
+        },
+        {
+          "query": "取消后钱是否马上到账",
+          "expected": "refund@v1#rule",
+          "top5": [
+            "refund@v1#rule",
+            "cancel@v1#rule",
+            "receipt@v1#rule",
+            "approval@v1#rule",
+            "dispute@v1#rule"
+          ],
+          "hit": true
+        },
+        {
+          "query": "换货申请撤回库存怎么释放",
+          "expected": "release@v1#rule",
+          "top5": [
+            "release@v1#rule",
+            "fallback@v1#rule",
+            "receipt@v1#rule",
+            "inventory@v1#rule",
+            "exchange-window@v1#rule"
+          ],
+          "hit": true
+        },
+        {
+          "query": "质量有争议怎么办",
+          "expected": "dispute@v1#rule",
+          "top5": [
+            "unused-exchange@v1#rule",
+            "unused-return@v1#rule",
+            "dispute@v1#rule",
+            "same-family@v1#rule",
+            "exchange-fee@v1#rule"
+          ],
+          "hit": true
+        }
+      ]
+    }
+  },
+  "corpus_hash": "d2b373d6edcd56c8036ab8eafb6982d1a8143f7cb087e9b57307ab83c09907c8"
+}

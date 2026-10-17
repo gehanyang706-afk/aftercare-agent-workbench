@@ -1,0 +1,12 @@
+source_id: release
+title: 库存预留释放
+version: v1
+action: exchange
+kind: process
+category: all
+effective_from: '2026-01-01T00:00:00Z'
+effective_to: null
+sections:
+- section: rule
+  text: 有效换货申请持续预留库存。显式拒绝或撤回才释放；换货完成消耗预留，不重新增加可售库存。没有静默超时释放。
+  related: []

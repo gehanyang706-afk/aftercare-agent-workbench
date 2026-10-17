@@ -1,0 +1,12 @@
+source_id: approval
+title: 可信操作确认
+version: v1
+action: all
+kind: process
+category: all
+effective_from: '2026-01-01T00:00:00Z'
+effective_to: null
+sections:
+- section: rule
+  text: 每次写操作先展示参数、对象、政策和模拟费用，再用结构化确认按钮。聊天“好的”不视为批准；用户改口立刻使旧预览失效。
+  related: []

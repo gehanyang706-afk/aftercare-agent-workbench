@@ -42,6 +42,16 @@ def parser() -> argparse.ArgumentParser:
         ],
         required=True,
     )
+    retrieval = commands.add_parser("retrieval")
+    rc = retrieval.add_subparsers(dest="retrieval_action", required=True)
+    build = rc.add_parser("build")
+    build.add_argument("--profile", default="local-lite")
+    inspect = rc.add_parser("inspect")
+    inspect.add_argument("--query", required=True)
+    inspect.add_argument("--profile", default="bm25")
+    evaluate = rc.add_parser("evaluate")
+    evaluate.add_argument("--split", choices=["dev"], default="dev")
+    evaluate.add_argument("--profiles", default="bm25,dense,hybrid,hybrid-rerank")
     return result
 
 
@@ -111,6 +121,21 @@ def main(argv: list[str] | None = None) -> int:
         except Exception:
             print("DATABASE_COMMAND_FAILED: check local database availability and permissions")
             return 1
+        return 0
+    if args.command == "retrieval":
+        from aftercare.repositories.database import session_factory
+        from aftercare.retrieval.engine import PolicySearch
+        from aftercare.retrieval.evaluate import evaluate_profiles
+
+        sessions = session_factory(settings)
+        engine = PolicySearch(sessions=sessions)
+        if args.retrieval_action == "build":
+            output = engine.build(args.profile)
+        elif args.retrieval_action == "inspect":
+            output = engine.search(args.query, profile=args.profile)
+        else:
+            output = evaluate_profiles(engine, args.profiles.split(","))
+        print(json.dumps(output, ensure_ascii=False, indent=2))
         return 0
     if args.command == "demo":
         from aftercare.repositories.database import session_factory

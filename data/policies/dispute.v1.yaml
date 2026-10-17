@@ -1,0 +1,12 @@
+source_id: dispute
+title: 质量与超范围人工处理
+version: v1
+action: all
+kind: process
+category: all
+effective_from: '2026-01-01T00:00:00Z'
+effective_to: null
+sections:
+- section: rule
+  text: 疑似质量争议、超范围要求和无法确定政策时建立 HANDOFF_PENDING 人工工单，附必要证据摘要；不认定责任、不对外发消息。
+  related: []

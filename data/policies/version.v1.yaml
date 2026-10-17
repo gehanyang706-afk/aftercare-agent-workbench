@@ -1,0 +1,12 @@
+source_id: version
+title: 政策版本选择
+version: v1
+action: all
+kind: process
+category: all
+effective_from: '2026-01-01T00:00:00Z'
+effective_to: null
+sections:
+- section: rule
+  text: 购买时承诺的资格政策随订单固定，流程政策取申请时有效版本。任何被预览依赖的政策改变都要重新校验并生成新的确认。
+  related: []

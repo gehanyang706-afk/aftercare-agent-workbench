@@ -1,0 +1,12 @@
+source_id: same-family
+title: 换货变体限制
+version: v1
+action: exchange
+kind: qualification
+category: all
+effective_from: '2026-01-01T00:00:00Z'
+effective_to: null
+sections:
+- section: rule
+  text: 仅同一商品系列、相同整数分价格的不同变体可以换货。不能将短袖换运动鞋，不得收补差价后跨价办理。
+  related: []

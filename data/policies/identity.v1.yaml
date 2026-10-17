@@ -1,0 +1,12 @@
+source_id: identity
+title: 用户订单权限
+version: v1
+action: all
+kind: process
+category: all
+effective_from: '2026-01-01T00:00:00Z'
+effective_to: null
+sections:
+- section: rule
+  text: 只查询服务端身份所属订单；模型不能指定 principal、批准状态或写库金额。越权与不存在返回统一 NOT_FOUND，不泄露别人的订单内容。
+  related: []

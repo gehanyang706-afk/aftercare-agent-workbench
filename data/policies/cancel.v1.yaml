@@ -1,0 +1,12 @@
+source_id: cancel
+title: 取消订单资格
+version: v1
+action: cancel
+kind: qualification
+category: all
+effective_from: '2026-01-01T00:00:00Z'
+effective_to: null
+sections:
+- section: rule
+  text: 仅 PAID_UNSHIPPED 已支付未发货订单可以整单取消；有活动售后时不得取消。SHIPPED 和 DELIVERED 均不符合取消条件。
+  related: []

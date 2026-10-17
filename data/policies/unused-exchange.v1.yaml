@@ -1,0 +1,13 @@
+source_id: unused-exchange
+title: 换货商品状态
+version: v1
+action: exchange
+kind: qualification
+category: all
+effective_from: '2026-01-01T00:00:00Z'
+effective_to: null
+sections:
+- section: rule
+  text: 商品需未使用且可换。定制品及不可换分类不支持普通换货；质量争议需要人工处理。
+  related:
+  - dispute@v1#rule

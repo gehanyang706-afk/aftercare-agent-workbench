@@ -1,0 +1,20 @@
+{
+  "backend": "ONNX CPU, intra_op_threads=2",
+  "embedding_first_load_and_2_texts_seconds": 1.0090196249984729,
+  "reranker_first_load_and_2_pairs_seconds": 2.547043416998349,
+  "embedding_shape": [
+    2,
+    512
+  ],
+  "reranker_scores": [
+    1.1346745491027832,
+    -2.999084234237671
+  ],
+  "peak_rss_bytes": 1995145216,
+  "weights_bytes": 1320769921,
+  "revisions": {
+    "embedding": "7999e1d3359715c523056ef9478215996d62a620",
+    "reranker": "2cfc18c9415c912f9d8155881c133215df768a70"
+  },
+  "remote_inference_calls": 0
+}

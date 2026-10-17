@@ -1,0 +1,12 @@
+source_id: return-fee
+title: 普通退货运费
+version: v1
+action: return
+kind: process
+category: all
+effective_from: '2026-01-01T00:00:00Z'
+effective_to: null
+sections:
+- section: rule
+  text: 消费者承担普通退货模拟运费报价 800 分（8 元）。V1 仅展示、不实际收款或从退款扣减；运费责任争议转人工。
+  related: []

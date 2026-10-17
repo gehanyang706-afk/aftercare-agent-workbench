@@ -1,0 +1,12 @@
+source_id: return-fee
+title: 未来版运费流程
+version: v2
+action: return
+kind: process
+category: all
+effective_from: '2027-01-01T00:00:00Z'
+effective_to: null
+sections:
+- section: rule
+  text: 未来运费条款，不适用于 2026 年流程；未到生效时间禁止使用。
+  related: []

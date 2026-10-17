@@ -42,18 +42,33 @@ target = {
     "extra": "",
 }
 missing = []
-for distribution in metadata.distributions():
-    for raw in distribution.requires or []:
-        requirement = Requirement(raw)
-        if requirement.marker and not requirement.marker.evaluate(target):
-            continue
-        try:
-            version = metadata.version(requirement.name)
-        except metadata.PackageNotFoundError:
-            missing.append(f"{distribution.name}: {requirement.name} missing")
-            continue
-        if not requirement.specifier.contains(version, prereleases=True):
-            missing.append(f"{distribution.name}: {requirement.name} incompatible")
+queue = [
+    Requirement(raw)
+    for raw in metadata.requires("aftercare-agent-workbench") or []
+    if not Requirement(raw).marker
+    or any(Requirement(raw).marker.evaluate({**target, "extra": extra}) for extra in ["", "dev"])
+]
+seen = set()
+while queue:
+    requirement = queue.pop()
+    identity = (requirement.name, tuple(sorted(requirement.extras)))
+    if identity in seen:
+        continue
+    seen.add(identity)
+    try:
+        version = metadata.version(requirement.name)
+    except metadata.PackageNotFoundError:
+        missing.append(f"{requirement.name}: missing")
+        continue
+    if not requirement.specifier.contains(version, prereleases=True):
+        missing.append(f"{requirement.name}: incompatible")
+    for raw in metadata.requires(requirement.name) or []:
+        child = Requirement(raw)
+        if not child.marker or any(
+            child.marker.evaluate({**target, "extra": extra})
+            for extra in (requirement.extras or {""})
+        ):
+            queue.append(child)
 result = {
     "python": platform.python_version(),
     "platform": platform.platform(),

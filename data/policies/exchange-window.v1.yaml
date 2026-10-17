@@ -1,0 +1,12 @@
+source_id: exchange-window
+title: 换货时效
+version: v1
+action: exchange
+kind: qualification
+category: all
+effective_from: '2026-01-01T00:00:00Z'
+effective_to: null
+sections:
+- section: rule
+  text: 订单 DELIVERED 后 15×24 小时（360 小时）内可以申请换货，含边界；收到十天可按换货规则复核，退货七天时效不能套用换货。
+  related: []

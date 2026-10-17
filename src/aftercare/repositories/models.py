@@ -2,6 +2,7 @@
 
 from datetime import datetime
 
+from pgvector.sqlalchemy import Vector
 from sqlalchemy import (
     JSON,
     BigInteger,
@@ -216,3 +217,12 @@ class IdempotencyBinding(Base):
     key: Mapped[str] = mapped_column(String, primary_key=True)
     request_hash: Mapped[str] = mapped_column(String)
     operation_id: Mapped[str] = mapped_column(ForeignKey("operations.id"))
+
+
+class PolicyChunk(Base):
+    __tablename__ = "policy_chunks"
+    id: Mapped[str] = mapped_column(String, primary_key=True)
+    corpus_hash: Mapped[str] = mapped_column(String)
+    model_revision: Mapped[str] = mapped_column(String)
+    metadata_json: Mapped[dict] = mapped_column(JSON)
+    embedding: Mapped[list[float] | None] = mapped_column(Vector(512))

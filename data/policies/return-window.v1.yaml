@@ -1,0 +1,12 @@
+source_id: return-window
+title: 退货时效
+version: v1
+action: return
+kind: qualification
+category: all
+effective_from: '2026-01-01T00:00:00Z'
+effective_to: null
+sections:
+- section: rule
+  text: 订单 DELIVERED 后 7×24 小时（168 小时）内可申请退货，含恰好 168 小时；超过 1 微秒也不符合普通时效。未交付不能办理。
+  related: []

@@ -1,0 +1,12 @@
+source_id: exchange-fee
+title: 普通换货运费
+version: v1
+action: exchange
+kind: process
+category: all
+effective_from: '2026-01-01T00:00:00Z'
+effective_to: null
+sections:
+- section: rule
+  text: 消费者承担普通换货模拟运费报价 800 分（8 元）。V1 不实际收取，不声称已寄出；争议转人工。
+  related: []

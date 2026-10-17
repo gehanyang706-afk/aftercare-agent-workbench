@@ -1,0 +1,98 @@
+[
+  {
+    "file": "data/policies/cancel.v1.yaml",
+    "sha256": "733d9634f247972c8861f5b54554e3e21be550bbc1bbea621e9434148c53581f"
+  },
+  {
+    "file": "data/policies/refund.v1.yaml",
+    "sha256": "4fa146e9ad497c40de0134563f7f8882f0abff509a4543ce04d24672f12d657a"
+  },
+  {
+    "file": "data/policies/return-window.v1.yaml",
+    "sha256": "8b4e4807a5b7dc126ef9983f25eef335a71d4065a01a393fce75f8b2cb5a0ad9"
+  },
+  {
+    "file": "data/policies/exchange-window.v1.yaml",
+    "sha256": "d98072d3f259b337e48960fcb59b36467454323b51dd4166bf8d12e9cec55669"
+  },
+  {
+    "file": "data/policies/unused-return.v1.yaml",
+    "sha256": "5c5631aab3f2dda5d112598c3a571fab3c1944253542c5c7334a33fd86424509"
+  },
+  {
+    "file": "data/policies/unused-exchange.v1.yaml",
+    "sha256": "0d0a4a230a91a7f5c01b0b88c4bd062900ffd2123a67cdced1685ce8f8721667"
+  },
+  {
+    "file": "data/policies/same-family.v1.yaml",
+    "sha256": "01a33e088cd22a0e269534d056de686a5091f4b2037a473ef4b41aa43d59c190"
+  },
+  {
+    "file": "data/policies/size.v1.yaml",
+    "sha256": "09e509e880993a2a77f43a678a203f6d988a387ee63492a7c7e0190528a08165"
+  },
+  {
+    "file": "data/policies/inventory.v1.yaml",
+    "sha256": "49d4b3b548e90a12cc8b9315846a79c13d75d9480da62379d16976c76fba5526"
+  },
+  {
+    "file": "data/policies/release.v1.yaml",
+    "sha256": "ea03b373858cc1c210ff644fb4dfdf1cdee1a491d17582391440c9e0a741155e"
+  },
+  {
+    "file": "data/policies/return-fee.v1.yaml",
+    "sha256": "c51708ff215ff84d614e487721fc9c19e8b672d411e6ca8a357aee0f3af14d4c"
+  },
+  {
+    "file": "data/policies/exchange-fee.v1.yaml",
+    "sha256": "a02b4c569ae2a8c68d3921f4fd1b285da5d6ae4551d106c2e8060adf77a0eb80"
+  },
+  {
+    "file": "data/policies/quantity-return.v1.yaml",
+    "sha256": "fb7fd7bc03ba2b8ac788c57af04c631dfaf8e63a7ed5eabc3ce9e33b438fcd7e"
+  },
+  {
+    "file": "data/policies/quantity-exchange.v1.yaml",
+    "sha256": "b4a291f5395def15460d8a9a17d3032470a425881297ec6eab18c86bd68e5fe6"
+  },
+  {
+    "file": "data/policies/fallback.v1.yaml",
+    "sha256": "446388ebf882a1350bad62d82ce5167284d198c3d61663daf836eaefdd8545b7"
+  },
+  {
+    "file": "data/policies/approval.v1.yaml",
+    "sha256": "efb2d1f8064c0ebf8456ef3e36ff50ea4324d1bd64ef0d884edc9f86e5fcefcc"
+  },
+  {
+    "file": "data/policies/receipt.v1.yaml",
+    "sha256": "c8c163ee56e63467a50703825056985b885d6857cf04f1afdcf56f83df14d95c"
+  },
+  {
+    "file": "data/policies/identity.v1.yaml",
+    "sha256": "f1a3ac048a3a6029bed01f2685c03f8b8b3a54f81da27bfcea9e639c28437e77"
+  },
+  {
+    "file": "data/policies/dispute.v1.yaml",
+    "sha256": "63e9f7f80f8f1820e8e8beb2322388a824dc53c6cda7a8e825ba0eee20ba4a09"
+  },
+  {
+    "file": "data/policies/version.v1.yaml",
+    "sha256": "033262a1622c5fab4bbc5c004a05f74dd08398c835b5e7849fb113c7c1ba7e34"
+  },
+  {
+    "file": "data/policies/return-window.v0.yaml",
+    "sha256": "a1f52019c025af8d3caf165941c6ee04f45b8bb6a52b9793203842d9ed6fe018"
+  },
+  {
+    "file": "data/policies/exchange-window.v0.yaml",
+    "sha256": "e42d9c9afa02cede19c90ae3d9e5b12ec8e30491ce393a5c10c433455771ec9e"
+  },
+  {
+    "file": "data/policies/return-fee.v2.yaml",
+    "sha256": "505639b744540b7c57a2b1a45feacac2195dfd5aff333767b15fc0ed947b1136"
+  },
+  {
+    "file": "data/policies/exchange-fee.v2.yaml",
+    "sha256": "01e8d10ec8de79773d4d475978323e4f1c19617f5953be21bc7f1cf727405e0c"
+  }
+]

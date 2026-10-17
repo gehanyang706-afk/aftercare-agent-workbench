@@ -1,0 +1,13 @@
+source_id: inventory
+title: 库存预留规则
+version: v1
+action: exchange
+kind: process
+category: all
+effective_from: '2026-01-01T00:00:00Z'
+effective_to: null
+sections:
+- section: rule
+  text: 预览库存只是快照，不占用库存等待用户。提交事务重新查库存；不足则 STATE_CHANGED 并重做方案，不能超卖。
+  related:
+  - release@v1#rule

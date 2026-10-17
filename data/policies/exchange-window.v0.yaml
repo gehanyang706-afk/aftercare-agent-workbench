@@ -1,0 +1,12 @@
+source_id: exchange-window
+title: 旧版exchange时效
+version: v0
+action: exchange
+kind: qualification
+category: all
+effective_from: '2025-01-01T00:00:00Z'
+effective_to: '2026-01-01T00:00:00Z'
+sections:
+- section: rule
+  text: 此为旧版购买资格：交付后 720 小时内，未使用且可退换商品可申请。不得用于 v1 购买承诺订单。
+  related: []

@@ -1,0 +1,12 @@
+source_id: refund
+title: 取消后的模拟退款
+version: v1
+action: cancel
+kind: process
+category: all
+effective_from: '2026-01-01T00:00:00Z'
+effective_to: null
+sections:
+- section: rule
+  text: 取消成功仅创建原支付整数分金额的模拟退款请求。不得告知退款已到账，也不接入支付渠道。
+  related: []

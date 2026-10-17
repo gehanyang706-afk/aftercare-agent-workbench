@@ -1,0 +1,12 @@
+source_id: quantity-exchange
+title: 换货数量
+version: v1
+action: exchange
+kind: qualification
+category: all
+effective_from: '2026-01-01T00:00:00Z'
+effective_to: null
+sections:
+- section: rule
+  text: 一个商品行的活动换货和退货合计不可超过原购买数量，不得同时把同一件商品退又换。数据库事务复核占用数量。
+  related: []

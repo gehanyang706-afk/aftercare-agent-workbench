@@ -1,0 +1,13 @@
+source_id: unused-return
+title: 退货商品状态
+version: v1
+action: return
+kind: qualification
+category: all
+effective_from: '2026-01-01T00:00:00Z'
+effective_to: null
+sections:
+- section: rule
+  text: 普通可退商品必须未使用；已使用、定制印字商品不可走普通退货。质量争议不得擅自判断，应转人工。
+  related:
+  - dispute@v1#rule

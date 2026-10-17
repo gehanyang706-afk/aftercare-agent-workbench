@@ -1,0 +1,12 @@
+source_id: size
+title: 尺码更换
+version: v1
+action: exchange
+kind: process
+category: all
+effective_from: '2026-01-01T00:00:00Z'
+effective_to: null
+sections:
+- section: rule
+  text: 大一码、小一码和颜色变化都需查询实时变体。用户从大一码改成白色原码时，删除旧尺码约束并记录新消息来源；目标仍相同则需澄清。
+  related: []

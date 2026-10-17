@@ -1,0 +1,13 @@
+source_id: fallback
+title: 缺货备选路径
+version: v1
+action: exchange
+kind: process
+category: all
+effective_from: '2026-01-01T00:00:00Z'
+effective_to: null
+sections:
+- section: rule
+  text: 换货缺货时不得自动改成退货。只有用户明确授权可退货备选，才能提出新的退货预览；仍需满足退货七天时效、并再次确认。
+  related:
+  - return-window@v1#rule

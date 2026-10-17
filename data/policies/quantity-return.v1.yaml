@@ -1,0 +1,12 @@
+source_id: quantity-return
+title: 退货数量
+version: v1
+action: return
+kind: qualification
+category: all
+effective_from: '2026-01-01T00:00:00Z'
+effective_to: null
+sections:
+- section: rule
+  text: 一次申请一个订单中的一个商品行和数量。活动退换占用数量总和不得超过购买数量；需先拒绝或撤回才可释放相应申请额度。
+  related: []
