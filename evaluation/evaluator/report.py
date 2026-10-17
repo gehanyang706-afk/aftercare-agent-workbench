@@ -17,7 +17,7 @@ def render(summary, directory):
         "system_error",
         "latency_seconds",
     ]
-    writer = csv.DictWriter(table, fieldnames=columns)
+    writer = csv.DictWriter(table, fieldnames=columns, lineterminator="\n")
     writer.writeheader()
     for row in summary["tasks"]:
         writer.writerow(
