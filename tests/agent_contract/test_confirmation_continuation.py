@@ -355,3 +355,12 @@ def test_model_cannot_report_payment_without_a_real_receipt(service):
     result = run_turn(settings, service, "alice", conv, msg["id"], model=model)
     assert "已到账" not in result["communications"][0]
     assert result["task_state"] != "COMPLETED"
+
+
+def test_legacy_completed_status_without_receipt_is_not_completed_task(service):
+    from aftercare.repositories.models import Conversation
+
+    conv = service.create_conversation("alice")
+    with service.sessions.begin() as s:
+        s.get(Conversation, conv).status = "COMPLETED"
+    assert service.snapshot("alice", conv)["task_state"] == "FAILED"

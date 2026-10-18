@@ -24,7 +24,7 @@
       "task_sha256": "2fd98012f49b0fa832451ebfa0418776c47e901313e8da495343997341a4039b"
     }
   ],
-  "candidate_source_tree_sha256": "2e84758b43348e89b485b8397f34ab12bacf8505794b6d40e305c25832d82b9c",
+  "candidate_source_tree_sha256": "cc773b0711a785f61001e79507555fa56779104f0cf56b49bce92844b7c9befb",
   "frozen_scorer": "evaluation/evaluator/grader.py",
   "frozen_scorer_sha256": "c3c2bbb07956ad4f8f3b629522a0fab4bf981649113c6ce601e31f030057fc3a",
   "max_requests_per_conversation_including_retries": 16,
@@ -124,5 +124,5 @@
     "user_notice": "Application notice must match receipt; preview text cannot satisfy final-notice diagnostics."
   },
   "budget_change_note": "New pending quantity plan raises per-task ceiling 24k -> 32k and batch 48k -> 64k for 2-3 user turns and conservative reservation headroom. These are proposed ceilings requiring new approval; tasks/request ceilings are unchanged.",
-  "plan_sha256": "6c2f70fec083ad581c9fb15576d4f7cbc88d0259f31427c3c70922ea8d251021"
+  "plan_sha256": "112bbbaaf6c655a0db139e2355bfbf8b251d9887804ad8f6beb58533f628166f"
 }

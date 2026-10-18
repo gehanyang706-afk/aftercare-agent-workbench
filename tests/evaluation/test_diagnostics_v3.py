@@ -46,3 +46,10 @@ def test_final_notice_requires_matching_receipt_and_after_commit_order():
 def test_fault_armed_is_not_occurred_or_recovered():
     d = diagnose({"events": [{"event_type": "fault_armed", "payload": {"kind": "lost_response"}}]})
     assert d["fault_configured"] and not d["fault_occurred"] and not d["recovery_success"]
+
+
+def test_workbench_fault_configuration_is_not_lost_response_occurrence():
+    d = diagnose(
+        {"events": [{"event_type": "demo_fault_injected", "payload": {"fault": "lost_response"}}]}
+    )
+    assert d["fault_configured"] and not d["fault_occurred"] and not d["recovery_success"]

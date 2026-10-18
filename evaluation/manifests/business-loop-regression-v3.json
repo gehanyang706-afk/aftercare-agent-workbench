@@ -32,7 +32,7 @@
       "task_sha256": "0fde7b78397d1dec9f84d15207355ffd22a429ce274b9e51852173ffe6d97fe4"
     }
   ],
-  "candidate_source_tree_sha256": "2e84758b43348e89b485b8397f34ab12bacf8505794b6d40e305c25832d82b9c",
+  "candidate_source_tree_sha256": "cc773b0711a785f61001e79507555fa56779104f0cf56b49bce92844b7c9befb",
   "frozen_scorer": "evaluation/evaluator/grader.py",
   "frozen_scorer_sha256": "c3c2bbb07956ad4f8f3b629522a0fab4bf981649113c6ce601e31f030057fc3a",
   "max_requests_per_conversation_including_retries": 16,
@@ -136,5 +136,5 @@
     "user_notice": "Application notice must match receipt; preview text cannot satisfy final-notice diagnostics."
   },
   "budget_change_note": "Business limits unchanged from previous 160k/64 scope, but NO old permission transfers.",
-  "plan_sha256": "9d23e78b3067822846acf71cff2831da6d32b523dfd604c240ab650c1f643025"
+  "plan_sha256": "b4f837fb027c7a8484303b58a7f35edb0a59075c5705c890cfc4532301256fa1"
 }

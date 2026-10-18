@@ -53,7 +53,9 @@ def diagnose(observed):
     output_violations = [
         e["payload"] for e in notices if any(w in e["payload"]["text"] for w in forbidden_terms)
     ]
-    configured = base["fault_armed"]
+    configured = [
+        e["payload"] for e in events if e["event_type"] in {"fault_armed", "demo_fault_injected"}
+    ]
     occurred = [e["payload"] for e in events if e["event_type"] == "fault_occurred"]
     return {
         **base,

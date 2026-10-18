@@ -574,6 +574,9 @@ class BusinessService:
                 task_state = "COMPLETED" if final else "SUBMITTED"
             elif run_state.get("task_state") in {"FAILED", "EXECUTION_UNKNOWN", "REJECTED"}:
                 task_state = run_state["task_state"]
+            if task_state == "COMPLETED" and operation is None:
+                # Neither a graph END nor a legacy status string proves a committed outcome.
+                task_state = "FAILED"
             return {
                 **columns(conv),
                 "task_state": task_state,
