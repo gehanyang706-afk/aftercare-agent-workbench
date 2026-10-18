@@ -1,15 +1,17 @@
 """Seen development regressions only. No real-provider option exists in this entry."""
 
+import argparse
 import hashlib
 import json
 import os
+import subprocess
 import time
 
 from aftercare.config import PROJECT_ROOT, Settings
 from aftercare.offline import install_offline_guard
 from aftercare.repositories.database import session_factory
-from evaluation.evaluator.diagnostics_v2 import VERSION, diagnose, event_chain
-from evaluation.evaluator.runner import run_case
+from evaluation.evaluator.diagnostics_v3 import VERSION, diagnose, event_chain
+from evaluation.evaluator.runner import Actor, run_case
 from evaluation.evaluator.user_policy_v2 import VERSION as USER_VERSION
 from evaluation.schema.scenario import Scenario
 
@@ -18,6 +20,14 @@ FILES = ("evaluation/dev/regression-v1.jsonl", "evaluation/dev/quantity-clarific
 
 def main():
     install_offline_guard()
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--model-mode", choices=["default", "preview-stop"], default="default")
+    mode = parser.parse_args().model_mode
+
+    class OfflineActor(Actor):
+        def invoke(self, command):
+            return super().invoke({**command, "scripted_model_mode": mode})
+
     settings = Settings(
         _env_file=None,
         database_url=os.environ.get(
@@ -34,7 +44,7 @@ def main():
             case = Scenario.model_validate_json(line)
             assert case.split == "dev"
             start = time.monotonic()
-            result = run_case(case, settings, sessions, "full", output)
+            result = run_case(case, settings, sessions, "full", output, actor_factory=OfflineActor)
             result["diagnostics"] = diagnose(result["observed"])
             result["event_chain"] = event_chain(result["observed"])
             result["elapsed_seconds"] = round(time.monotonic() - start, 3)
@@ -56,6 +66,8 @@ def main():
             print(case.scenario_id, result["result"]["success"], flush=True)
     summary = {
         "provider": "scripted",
+        "model_mode": mode,
+        "git_head": subprocess.check_output(["git", "rev-parse", "HEAD"], text=True).strip(),
         "real_http_requests": 0,
         "holdout_access": False,
         "diagnostics_version": VERSION,

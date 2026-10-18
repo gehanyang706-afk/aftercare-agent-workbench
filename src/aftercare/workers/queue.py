@@ -24,10 +24,18 @@ def enqueue(s, service, conversation, revision, kind, message_id=None, preview_i
         result={},
         created_at=service.clock(),
     )
+    if preview_id:
+        from aftercare.repositories.models import Preview
+
+        preview = s.get(Preview, preview_id)
+        binding = getattr(preview, "confirmation_event", None)
+        if binding is None:
+            raise ValueError("CONFIRMATION_EVENT_REQUIRED")
+        row.result = {"confirmation": binding}
     conv = s.get(Conversation, conversation)
     fault = conv.case.get("_demo_fault_next")
     if fault and (kind == "confirm" or fault == "slow"):
-        row.result = {"fault": fault}
+        row.result = {**row.result, "fault": fault}
         updated = dict(conv.case)
         updated.pop("_demo_fault_next", None)
         conv.case = updated

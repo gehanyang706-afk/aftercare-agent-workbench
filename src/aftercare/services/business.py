@@ -53,14 +53,14 @@ class BusinessService:
         self.sessions, self.clock = sessions, clock
 
     def event(self, session, conversation_id, kind, payload):
-        session.add(
-            Event(
-                conversation_id=conversation_id,
-                event_type=kind,
-                payload=payload,
-                created_at=self.clock(),
-            )
+        event = Event(
+            conversation_id=conversation_id,
+            event_type=kind,
+            payload=payload,
+            created_at=self.clock(),
         )
+        session.add(event)
+        return event
 
     def _conversation(self, s, principal, conversation_id):
         row = s.scalar(
@@ -333,15 +333,26 @@ class BusinessService:
                         method="trusted-api",
                     )
                 )
-            self.event(
+            binding = {
+                "preview_id": row.id,
+                "principal": principal,
+                "parameter_hash": row.parameter_hash,
+                "intent_revision": row.revision,
+                "decision": "approve" if accept else "reject",
+            }
+            event = self.event(
                 s,
                 conv.id,
                 "preview_confirmed" if accept else "preview_rejected",
-                {"preview_id": row.id, "revision": conv.revision},
+                {**binding, "revision": conv.revision},
             )
+            s.flush()
+            binding["event_id"] = event.id
+            row.confirmation_event = binding
+            conv.status = "WAITING_SUBMISSION" if accept else "WAITING_USER"
             if enqueue:
                 enqueue(s, conv, row)
-            return {"preview_id": row.id, "status": row.status}
+            return {"preview_id": row.id, "status": row.status, "confirmation": binding}
 
     def commit(self, principal, preview_id, idempotency_key=None, fault=None):
         fault = fault or getattr(self, "commit_fault", None)
@@ -522,8 +533,51 @@ class BusinessService:
     def snapshot(self, principal, conversation_id):
         with self.sessions.begin() as s:
             conv = self._conversation(s, principal, conversation_id)
+            runtime = s.scalar(
+                select(Event)
+                .where(Event.conversation_id == conv.id, Event.event_type == "runtime_state")
+                .order_by(Event.id.desc())
+            )
+            run_state = (
+                runtime.payload
+                if runtime and runtime.payload.get("revision") == conv.revision
+                else {}
+            )
+            pending = s.scalar(
+                select(Preview).where(
+                    Preview.conversation_id == conv.id,
+                    Preview.revision == conv.revision,
+                    Preview.status == "CONFIRMED",
+                )
+            )
+            task_state = (
+                "WAITING_SUBMISSION" if pending else run_state.get("task_state", conv.status)
+            )
+            operation = s.scalar(
+                select(Operation)
+                .join(Preview, Operation.preview_id == Preview.id)
+                .where(Preview.conversation_id == conv.id, Preview.revision == conv.revision)
+            )
+            if operation and run_state.get("task_state") != "EXECUTION_UNKNOWN":
+                notices = list(
+                    s.scalars(
+                        select(Event).where(
+                            Event.conversation_id == conv.id, Event.event_type == "user_notice"
+                        )
+                    )
+                )
+                final = any(
+                    e.payload.get("stage") == "final"
+                    and e.payload.get("operation_id") == operation.id
+                    for e in notices
+                )
+                task_state = "COMPLETED" if final else "SUBMITTED"
+            elif run_state.get("task_state") in {"FAILED", "EXECUTION_UNKNOWN", "REJECTED"}:
+                task_state = run_state["task_state"]
             return {
                 **columns(conv),
+                "task_state": task_state,
+                "graph_state": run_state.get("graph_state", "NOT_RUN"),
                 "messages": [
                     columns(m)
                     for m in s.scalars(
@@ -535,6 +589,12 @@ class BusinessService:
                 "previews": [
                     {
                         **columns(p),
+                        "target_label": (
+                            f"{s.get(Variant, p.payload['target_variant']).color} "
+                            f"{s.get(Variant, p.payload['target_variant']).size} 码"
+                            if p.payload.get("target_variant")
+                            else None
+                        ),
                         "confirmation_available": (
                             p.status in {"PENDING", "CONFIRMED"}
                             and p.revision == conv.revision

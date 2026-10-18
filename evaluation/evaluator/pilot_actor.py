@@ -49,16 +49,13 @@ def main():
                 message_id=command.get("message_id"),
                 resume=command.get("resume", False),
                 decision=command.get("decision", "approve"),
+                confirmation=command.get("confirmation"),
                 profile="full",
                 model=BudgetedBailianModel(gateway=gateway),
             )
             output = {
                 "ok": True,
-                "communications": [
-                    str(m.content)
-                    for m in result.get("messages", [])
-                    if m.type == "ai" and m.content
-                ],
+                "communications": result.get("communications", []),
                 "interrupted": bool(result.get("__interrupt__")),
             }
         except Exception as e:

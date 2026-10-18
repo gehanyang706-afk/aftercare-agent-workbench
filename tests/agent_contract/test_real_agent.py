@@ -375,3 +375,42 @@ def test_preview_requires_current_case_before_generation(service):
     errors = [json.loads(m.content) for m in result["messages"] if isinstance(m, ToolMessage)]
     assert errors[0]["error_code"] == "CASE_UPDATE_REQUIRED"
     assert service.snapshot("alice", conv)["previews"] == []
+
+
+def test_budgeted_wire_model_preview_stop_uses_same_runtime_without_extra_model_request(
+    service, tmp_path, monkeypatch
+):
+    import sys
+
+    from aftercare.llm.scripted import offline_preview_stop
+
+    monkeypatch.setattr(pilot_gateway, "bounded", offline_wire_response)
+    monkeypatch.setattr(sys.modules[__name__], "offline_plan", offline_preview_stop)
+    conv = service.create_conversation("alice")
+    ledger_conv = service.create_conversation("alice")
+    msg = service.append_message("alice", conv, "S1002 中 1 件换大一码", "first")
+    model = model_for(service, conv, ledger_conv, tmp_path)
+    initial = run_turn(Settings(_env_file=None), service, "alice", conv, msg["id"], model=model)
+    assert initial["graph_state"] == "ENDED" and initial["task_state"] == "WAITING_CONFIRMATION"
+    pid = next(
+        p["id"] for p in service.snapshot("alice", conv)["previews"] if p["status"] == "PENDING"
+    )
+    with service.sessions() as s:
+        before = len(
+            list(s.scalars(select(ModelCall).where(ModelCall.conversation_id == ledger_conv)))
+        )
+    event = service.confirm("alice", pid, True)
+    result = run_turn(
+        Settings(_env_file=None),
+        service,
+        "alice",
+        conv,
+        resume=True,
+        confirmation=event["confirmation"],
+        model=model_for(service, conv, ledger_conv, tmp_path),
+    )
+    assert result["task_state"] == "COMPLETED"
+    with service.sessions() as s:
+        after = list(s.scalars(select(ModelCall).where(ModelCall.conversation_id == ledger_conv)))
+        assert len(after) == before and all(c.status == "SETTLED" for c in after)
+        assert len(list(s.scalars(select(Operation)))) == 1

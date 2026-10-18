@@ -84,6 +84,8 @@ def parser() -> argparse.ArgumentParser:
             "development-pilot",
             "business-loop-regression-v2",
             "quantity-clarification-regression-v1",
+            "business-loop-regression-v3",
+            "quantity-clarification-regression-v2",
         ],
         required=True,
     )
@@ -105,6 +107,8 @@ def main(argv: list[str] | None = None) -> int:
             if args.batch in {
                 "business-loop-regression-v2",
                 "quantity-clarification-regression-v1",
+                "business-loop-regression-v3",
+                "quantity-clarification-regression-v2",
             }:
                 sys.path.insert(0, str(PROJECT_ROOT))
                 from evaluation.evaluator.regression_live import run

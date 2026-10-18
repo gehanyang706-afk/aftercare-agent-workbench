@@ -1,0 +1,9 @@
+# Reuse the already installed project runtime. No downloads, installation or global changes.
+FROM aftercare-agent-workbench:local
+USER root
+COPY src /app/src
+COPY configs /app/configs
+COPY data /app/data
+COPY migrations /app/migrations
+COPY alembic.ini /app/alembic.ini
+USER aftercare

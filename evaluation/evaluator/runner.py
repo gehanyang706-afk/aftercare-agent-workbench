@@ -274,7 +274,8 @@ def run_case(scenario, settings, sessions, profile, output, actor_factory=Actor)
                     decision = "reject"
                 try:
                     for _ in range(1 + (step or {}).get("repeat_confirmation", 0)):
-                        service.confirm(principal, preview["id"], decision == "approve")
+                        confirmed = service.confirm(principal, preview["id"], decision == "approve")
+                        base["confirmation"] = confirmed.get("confirmation")
                 except Exception as e:
                     visible.append("可信确认被拒绝：" + str(e))
                     break

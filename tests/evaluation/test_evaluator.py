@@ -60,7 +60,10 @@ def test_profiles_keep_confirmation_boundary(service, profile):
     snapshot = service.snapshot("alice", conv)
     preview = next(p for p in snapshot["previews"] if p["status"] == "PENDING")
     # Even an approved graph decision cannot create a trusted API approval.
-    run_turn(settings, service, "alice", conv, resume=True, profile=profile)
+    from aftercare.domain.contracts import BusinessError
+
+    with pytest.raises(BusinessError, match="CONFIRMATION_EVENT_REQUIRED"):
+        run_turn(settings, service, "alice", conv, resume=True, profile=profile)
     from sqlalchemy import func, select
 
     from aftercare.repositories.models import Operation

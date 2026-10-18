@@ -63,3 +63,10 @@ def test_frozen_scope_rejects_unapproved_old_expanded_or_unprotected_permits(bat
 def test_no_plan_creates_an_approval_file():
     for batch in SCOPES:
         assert not (PROJECT_ROOT / f"runtime/{batch}/batch-state.json").exists()
+
+
+def test_old_live_plan_and_old_quantity_hash_cannot_authorize_new_code():
+    for batch in ["business-loop-regression-v2", "quantity-clarification-regression-v1"]:
+        old = plan_for(batch)
+        with pytest.raises(BusinessError, match="CLOSED_OR_SUPERSEDED"):
+            read_scope({**old, "source": "Explicit user message in this chat"})

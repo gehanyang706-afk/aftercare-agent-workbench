@@ -73,7 +73,7 @@ class BusinessBoundary(AgentMiddleware):
                     with self.service.sessions.begin() as session:
                         self.service._conversation(session, self.principal, self.conversation)
                         self.service.event(
-                            session, self.conversation, "assistant_notice", {"text": content}
+                            session, self.conversation, "model_text_proposal", {"text": content}
                         )
                         for claim in quantity_claims(content, evidence):
                             self.service.event(

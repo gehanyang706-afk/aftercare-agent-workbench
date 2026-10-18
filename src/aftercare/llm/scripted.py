@@ -247,6 +247,19 @@ def offline_plan(messages):
     return response(calls=[call("preview_action", args)])
 
 
+def offline_preview_stop(messages):
+    """Protocol double for models that stop to ask for confirmation after a preview."""
+    start = max(i for i, m in enumerate(messages) if isinstance(m, HumanMessage))
+    current = [m for m in messages[start + 1 :] if isinstance(m, ToolMessage)]
+    if not any(m.name == "commit_action" for m in current):
+        for m in current:
+            if m.name == "preview_action":
+                item = json.loads(str(m.content))
+                if item.get("ok"):
+                    return response("方案已生成，请确认是否继续办理。")
+    return offline_plan(messages)
+
+
 class ScriptedModel(BaseChatModel):
     model_name: str = "aftercare:scripted"
     ledger: Any = Field(exclude=True)

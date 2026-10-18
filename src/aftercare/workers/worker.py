@@ -36,7 +36,9 @@ def execute_job(database_url, principal, conversation, message_id, kind, job_id,
     service = BusinessService(sessions)
     service.run_guard = guard
     with sessions() as s:
-        fault = s.get(Job, job_id).result.get("fault")
+        job_data = s.get(Job, job_id).result
+        fault = job_data.get("fault")
+        confirmation = job_data.get("confirmation")
     if fault in ["lost_response", "before_commit"]:
         service.commit_fault = fault
     if fault == "slow":
@@ -54,12 +56,18 @@ def execute_job(database_url, principal, conversation, message_id, kind, job_id,
             resume=kind != "message",
             run_id=job_id,
             decision="reject" if kind == "reject" else "approve",
+            confirmation=confirmation,
         )
         messages = result.get("messages", [])
         last = messages[-1] if messages else None
         return {
             "text": str(last.content) if last and last.type == "ai" and not last.tool_calls else "",
             "interrupted": bool(result.get("__interrupt__")),
+            "task_state": result.get("task_state", "WAITING_USER"),
+            "graph_state": result.get("graph_state", "ENDED"),
+            "notice_saved": result.get("notice_saved", False),
+            "receipt": result.get("receipt"),
+            "error_code": (result.get("error") or {}).get("error_code"),
         }
     finally:
         sessions.kw["bind"].dispose()
@@ -161,6 +169,13 @@ def run_once(settings, seconds=180):
                 "text": "处理异常，请查看实际操作回执后重试或转人工。",
             }
             BudgetLedger(sessions).mark_unresolved_unknown(claimed["conversation"], claimed["id"])
+        if status == "COMPLETED":
+            task_state = result.get("task_state", "FAILED")
+            status = (
+                "COMPLETED"
+                if task_state in {"COMPLETED", "REJECTED", "HANDOFF_PENDING"}
+                else task_state
+            )
         with sessions.begin() as s:
             conv = s.scalar(
                 select(Conversation)
@@ -174,7 +189,7 @@ def run_once(settings, seconds=180):
             job.result = result
             job.lease_expires_at = None
             if conv.revision == claimed["revision"]:
-                if result.get("text"):
+                if result.get("text") and not result.get("notice_saved"):
                     existing = s.scalar(
                         select(Message.id).where(
                             Message.conversation_id == conv.id,
@@ -193,8 +208,15 @@ def run_once(settings, seconds=180):
                                 created_at=utc_now(),
                             )
                         )
-                if conv.status not in {"WAITING_CONFIRMATION", "COMPLETED", "HANDOFF_PENDING"}:
-                    conv.status = "WAITING_USER" if status == "COMPLETED" else status
+                if conv.status not in {
+                    "WAITING_CONFIRMATION",
+                    "WAITING_SUBMISSION",
+                    "COMPLETED",
+                    "HANDOFF_PENDING",
+                }:
+                    conv.status = (
+                        "WAITING_USER" if status in {"COMPLETED", "WAITING_USER"} else status
+                    )
             service.event(
                 s, conv.id, "job_finished", {"job_id": job.id, "status": status, "result": result}
             )

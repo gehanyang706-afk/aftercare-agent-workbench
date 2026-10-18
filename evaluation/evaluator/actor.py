@@ -23,6 +23,19 @@ def main():
             )
             if command.get("commit_fault"):
                 service.commit_fault = command["commit_fault"]
+            from aftercare.llm.budget import BudgetLedger
+            from aftercare.llm.scripted import ScriptedModel, offline_plan, offline_preview_stop
+
+            mode = command.get("scripted_model_mode", "default")
+            if mode not in {"default", "preview-stop"}:
+                raise ValueError("UNKNOWN_OFFLINE_MODEL_MODE")
+            revision = service.snapshot(command["principal"], command["conversation"])["revision"]
+            model = ScriptedModel(
+                ledger=BudgetLedger(sessions),
+                conversation_id=command["conversation"],
+                run_id=f"offline:{command['conversation']}:{revision}",
+                planner=offline_preview_stop if mode == "preview-stop" else offline_plan,
+            )
             result = run_turn(
                 settings,
                 service,
@@ -31,11 +44,11 @@ def main():
                 message_id=command.get("message_id"),
                 resume=command.get("resume", False),
                 decision=command.get("decision", "approve"),
+                confirmation=command.get("confirmation"),
                 profile=command["profile"],
+                model=model,
             )
-            texts = [
-                str(m.content) for m in result.get("messages", []) if m.type == "ai" and m.content
-            ]
+            texts = result.get("communications", [])
             output = {
                 "ok": True,
                 "communications": texts,

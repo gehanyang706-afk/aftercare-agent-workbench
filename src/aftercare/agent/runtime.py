@@ -89,7 +89,7 @@ def setup_checkpoints(settings):
     sessions.kw["bind"].dispose()
 
 
-def run_turn(
+def _run_turn(
     settings,
     service,
     principal,
@@ -100,11 +100,29 @@ def run_turn(
     profile="full",
     decision="approve",
     model=None,
+    confirmation=None,
 ):
     if profile == "fixed-workflow":
+        from aftercare.agent.presentation import present
+
+        if resume:
+            from types import SimpleNamespace
+
+            from aftercare.agent.continuation import continue_confirmation
+
+            state = SimpleNamespace(tasks=[], next=(), values={"messages": []})
+            result, receipt, error, recovered, pid = continue_confirmation(
+                None, state, None, service, principal, conversation, confirmation, decision
+            )
+            return present(service, principal, conversation, result, receipt, pid, error, recovered)
         from aftercare.agent.workflow import run_workflow
 
-        return run_workflow(service, principal, conversation, message_id, resume, decision)
+        return present(
+            service,
+            principal,
+            conversation,
+            run_workflow(service, principal, conversation, message_id, False, decision),
+        )
     if profile not in {"full", "retrieval", "react-full-policy"}:
         raise ValueError("UNKNOWN_AGENT_PROFILE")
     config = {"configurable": {"thread_id": conversation}, "recursion_limit": 96}
@@ -123,9 +141,16 @@ def run_turn(
             )
             if last_human is not None and last_human.id == message_id:
                 interrupts = [i for task in state.tasks for i in task.interrupts]
+                from aftercare.agent.presentation import present
+
                 if interrupts:
-                    return {**state.values, "__interrupt__": interrupts}
-                return graph.invoke(None, config)
+                    return present(
+                        service,
+                        principal,
+                        conversation,
+                        {**state.values, "__interrupt__": interrupts},
+                    )
+                return present(service, principal, conversation, graph.invoke(None, config))
             # Reject the old interrupt only after the new message invalidates its business preview.
             graph.invoke(
                 Command(
@@ -136,9 +161,13 @@ def run_turn(
                 config,
             )
         if resume:
-            if not state.next:
-                return state.values
-            result = graph.invoke(Command(resume={"decisions": [{"type": decision}]}), config)
+            from aftercare.agent.continuation import continue_confirmation
+            from aftercare.agent.presentation import present
+
+            result, receipt, error, recovered, pid = continue_confirmation(
+                graph, state, config, service, principal, conversation, confirmation, decision
+            )
+            return present(service, principal, conversation, result, receipt, pid, error, recovered)
         else:
             with service.sessions() as s:
                 msg = s.get(Message, message_id)
@@ -148,4 +177,46 @@ def run_turn(
                     content=msg.text, id=msg.id, additional_kwargs={"intent_revision": msg.revision}
                 )
             result = graph.invoke({"messages": [human]}, config)
-        return result
+        from aftercare.agent.presentation import present
+
+        return present(service, principal, conversation, result)
+
+
+def run_turn(
+    settings,
+    service,
+    principal,
+    conversation,
+    message_id=None,
+    resume=False,
+    run_id=None,
+    profile="full",
+    decision="approve",
+    model=None,
+    confirmation=None,
+):
+    # Shared by direct/evaluator and worker paths, including process restarts.
+    from sqlalchemy import text
+
+    with service.sessions.kw["bind"].connect() as lock:
+        lock.execute(text("SELECT pg_advisory_lock(hashtextextended(:id,2))"), {"id": conversation})
+        lock.commit()
+        try:
+            return _run_turn(
+                settings,
+                service,
+                principal,
+                conversation,
+                message_id,
+                resume,
+                run_id,
+                profile,
+                decision,
+                model,
+                confirmation,
+            )
+        finally:
+            lock.execute(
+                text("SELECT pg_advisory_unlock(hashtextextended(:id,2))"), {"id": conversation}
+            )
+            lock.commit()

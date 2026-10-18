@@ -7,9 +7,10 @@ from aftercare.config import PROJECT_ROOT
 from aftercare.domain.rules import require
 
 SCOPES = {
-    "business-loop-regression-v2": (4, 40000, 160000, 64, 1200),
-    "quantity-clarification-regression-v1": (2, 24000, 48000, 32, 600),
+    "business-loop-regression-v3": (4, 40000, 160000, 64, 1200),
+    "quantity-clarification-regression-v2": (2, 32000, 64000, 32, 600),
 }
+CLOSED_OR_SUPERSEDED = {"business-loop-regression-v2", "quantity-clarification-regression-v1"}
 
 
 def code_fingerprint():
@@ -29,6 +30,7 @@ def code_fingerprint():
 
 def read_scope(permit):
     batch = permit.get("batch_id")
+    require(batch not in CLOSED_OR_SUPERSEDED, "BATCH_CLOSED_OR_SUPERSEDED")
     require(batch in SCOPES, "REGRESSION_BATCH_NOT_ALLOWED")
     plan = json.loads((PROJECT_ROOT / f"evaluation/manifests/{batch}.json").read_text())
     unsigned = dict(plan)
