@@ -75,6 +75,7 @@ def test_post_commit_budget_stop_finishes_notice_but_preserves_stop_signal(servi
     assert response["communications"] == result["communications"]
     again = run_turn(settings, service, "alice", conv, resume=True, confirmation=event, model=model)
     assert again["receipt"]["operation_id"] == result["receipt"]["operation_id"]
+    assert again["graph_state"] == "STOPPED"
     assert model.shared["blocked"] == 1
     with service.sessions() as s:
         assert tuple(

@@ -48,7 +48,7 @@
       "task_sha256": "45656171938783379d2abd4653e039bbfe5fa266f307dfb20d5f1d5c34f5ff31"
     }
   ],
-  "candidate_source_tree_sha256": "235c11f5781d5f4f2c00a78c2e91250f7d7ca627afcb2dd0c483b7c0b997d6c1",
+  "candidate_source_tree_sha256": "4475d0bcc4243c53663aafde539e16c18cd5ffdc25285e174eb412ec9516c651",
   "frozen_scorer": "evaluation/evaluator/grader.py",
   "frozen_scorer_sha256": "c3c2bbb07956ad4f8f3b629522a0fab4bf981649113c6ce601e31f030057fc3a",
   "max_requests_per_conversation_including_retries": 16,
@@ -139,5 +139,5 @@
     "known_pre_dispatch_budget_stop_after_commit": "Persist a final notice from the same approved preview receipt without a model request, return execution_stop, stop the batch and keep frozen task failure."
   },
   "budget_change_note": "New eight-task behavior-coverage batch, separately proposed budget 256000 tokens/128 HTTP. No original-task reruns and no unused prior-budget transfer. Not authorized.",
-  "plan_sha256": "c7c28012603a60078e9a77126257f1364da19e19cc4d532374da95b7645b4ed5"
+  "plan_sha256": "f138d009f491c69237e28cd813cb56d59768efcc7c968b52c3b82eea9967e0a2"
 }

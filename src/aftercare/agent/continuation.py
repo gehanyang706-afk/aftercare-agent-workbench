@@ -85,7 +85,10 @@ def continue_confirmation(
         outcome = invoke("get_operation")
         require(outcome["ok"], "RECEIPT_NOT_FOUND")
         return (
-            {**state.values, "_graph_state": "INTERRUPTED" if state.next else "ENDED"},
+            {
+                **state.values,
+                "_graph_state": "INTERRUPTED" if actions else "STOPPED" if state.next else "ENDED",
+            },
             outcome["data"],
             None,
             False,
