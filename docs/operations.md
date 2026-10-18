@@ -119,3 +119,35 @@ docs/experiments/business-loop-regression-v2-first.md。
 源码/环境保持冻结版本；无 pending graph task 的可信确认续跑尚未修复。
 quantity-clarification-regression-v1 仍未授权/未执行，新真实回归均须新明确批准。
 先离线解决确认续跑缺口，再冻结下一批版本；本批余量不转移。
+
+## 可信确认续跑修复版（当前本机工作台）
+
+http://127.0.0.1:8128 的 app/worker 已更新到工程提交 19fe7ad；
+真实开关仍关闭，演示订单/库存/真实账本保持原样。
+完整验证与版本指纹见 docs/experiments/confirmation-continuation.md；
+新方案包含绑定确认事件、图结束后续跑、回执型最终告知与独立任务状态。
+
+运行两种离线协议回归：
+
+    .venv/bin/python -m evaluation.evaluator.regression_offline --model-mode default
+    .venv/bin/python -m evaluation.evaluator.regression_offline --model-mode preview-stop
+
+仅使用 aftercare_test 和 ScriptedModel，不运行真实批次或 holdout。
+不能与 pytest/其他评测并行重置测试库。
+无完整绑定事件的旧确认任务安全拒绝，不能只凭旧 CONFIRMED 状态继续写入。
+
+已有本地项目镜像时，可无网络叠加源码：
+
+    docker build --network=none --pull=false -f Dockerfile.offline-update -t aftercare-agent-workbench:confirmation-offline .
+
+该方式不安装依赖；前提是当前项目镜像的 requirements.lock 与源码一致。
+更新前须确认本项目没有正在执行的任务并保留旧镜像，本次回滚镜像名为
+aftercare-agent-workbench:before-confirmation-continuation，不覆盖该备份。
+
+新版 app/worker 已核对源码 hash 与真实开关；当前 health 的 phase-4-infrastructure
+是历史基础设施标签，版本应以冻结清单、镜像 ID 与源码 hash 为准。
+
+当前专用待批入口为 business-loop-regression-v3 和 quantity-clarification-regression-v2，
+分别需新审批/当前账户确认及新 hash，普通工作台不切换真实模式。
+旧 business-loop-regression-v2、quantity-clarification-regression-v1 在入口明确拒绝。
+不得直接复用历史审批或为了“再次验证”启动旧真实批次。

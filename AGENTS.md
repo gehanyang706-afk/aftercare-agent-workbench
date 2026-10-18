@@ -22,7 +22,8 @@ docker compose up -d db
 .venv/bin/python -m aftercare worker --provider scripted
 # 专用测试库须先初始化；测试与开发评测不能同时运行
 AFTERCARE_TEST_DATABASE_URL=postgresql+psycopg://aftercare:aftercare_local_only@127.0.0.1:55432/aftercare_test .venv/bin/python -m pytest -m 'not live_model'
-.venv/bin/python -m evaluation.evaluator.regression_offline
+.venv/bin/python -m evaluation.evaluator.regression_offline --model-mode default
+.venv/bin/python -m evaluation.evaluator.regression_offline --model-mode preview-stop
 .venv/bin/python -m aftercare eval validate --split dev
 .venv/bin/python -m aftercare eval run --split dev --provider scripted
 .venv/bin/ruff check .
@@ -34,14 +35,17 @@ AFTERCARE_TEST_DATABASE_URL=postgresql+psycopg://aftercare:aftercare_local_only@
 专用入口为 `model smoke --batch compatibility-smoke` 或 `model smoke --batch development-pilot`，
 均需 `--approval`、`--account-confirmation` 与 `--execute`。
 已实现，仅接受各自绑定的获批 hash；必须临时显式启用真实开关，已执行批次禁止直接重跑。
-闭环修复版已通过 118 项离线测试及四题闭环/两题数量澄清。
+当前可信确认续跑修复已通过 144 项离线测试、20 项无网络容器验收，
+HITL 与预览后停止两种模式各六题通过；真实模型效果仍待验证。
 business-loop-regression-v2 已授权并结案：2/4，28 请求、54,787 Token，未知预留 0。
 取消/改口完成；直接换码及丢响应题停在已确认但无图恢复节点，丢响应恢复未覆盖。
 原始轨迹已冻结，不能重复执行或把未使用额度转入新批。
-quantity-clarification-regression-v1 仍未授权/未执行；新真实批次须独立新审批、
-固定指纹及当前免费余量/保护确认，不能沿用旧授权。
-真实结果与待修复缺口见 docs/experiments/business-loop-regression-v2-first.md。
-详细证据与限制见 docs/experiments/business-loop-repair.md。
+当前待批为 business-loop-regression-v3（四题，160k/64 请求）和
+quantity-clarification-regression-v2（两题，64k/32 请求），均未授权/未执行。
+旧闭环批已结案，旧数量计划已过期，入口拒绝旧 hash；不能沿用授权/未用预算。
+新批次须独立新审批、固定指纹及当前免费余量/保护确认。
+修复与当前限制见 docs/experiments/confirmation-continuation.md。
+本机 8128 工作台 app/worker 已更新，真实开关关闭；原始失败与成绩不回写。
 真实模型适配已接入九工具主图，仅专用评测入口注入；普通工作台仍默认离线。
 新的真实回归和正式 `eval run --manifest` 未授权，不能自动运行。
 每阶段完成后同步更新本文件中的状态与命令。
