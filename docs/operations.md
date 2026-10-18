@@ -108,3 +108,14 @@ dev 运行会重置专用 aftercare_test，逐题导出再重置，不触碰 aft
 只接受新计划 hash、固定源码、独立人工审批、当前免费余量/北京地域/FreeTierOnly 确认，
 并临时启用真实进程开关。计划本身不构成批准，本次没有新真实调用。
 完整上限/重试/停止条件在各 evaluation/manifests 同名计划；不得沿用旧 pilot 审批。
+
+## business-loop-regression-v2 已执行结案
+
+首次真实批次 2/4，28 请求/54,787 Token/152.835 秒；完整逐题证据见
+docs/experiments/business-loop-regression-v2-first.md。
+批次状态 COMPLETED 表示四题全部尝试，不代表四题通过；禁止直接重复上述历史执行命令。
+现有启动保护同时检查持久账本及 batch-state.json，不能删除状态绕过。
+
+源码/环境保持冻结版本；无 pending graph task 的可信确认续跑尚未修复。
+quantity-clarification-regression-v1 仍未授权/未执行，新真实回归均须新明确批准。
+先离线解决确认续跑缺口，再冻结下一批版本；本批余量不转移。

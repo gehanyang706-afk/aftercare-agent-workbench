@@ -35,11 +35,15 @@ AFTERCARE_TEST_DATABASE_URL=postgresql+psycopg://aftercare:aftercare_local_only@
 均需 `--approval`、`--account-confirmation` 与 `--execute`。
 已实现，仅接受各自绑定的获批 hash；必须临时显式启用真实开关，已执行批次禁止直接重跑。
 闭环修复版已通过 118 项离线测试及四题闭环/两题数量澄清。
-新增 business-loop-regression-v2、quantity-clarification-regression-v1 专用待批入口，
-均未授权/未执行；需独立新审批、固定指纹及当前免费余量/保护确认，不能沿用旧授权。
+business-loop-regression-v2 已授权并结案：2/4，28 请求、54,787 Token，未知预留 0。
+取消/改口完成；直接换码及丢响应题停在已确认但无图恢复节点，丢响应恢复未覆盖。
+原始轨迹已冻结，不能重复执行或把未使用额度转入新批。
+quantity-clarification-regression-v1 仍未授权/未执行；新真实批次须独立新审批、
+固定指纹及当前免费余量/保护确认，不能沿用旧授权。
+真实结果与待修复缺口见 docs/experiments/business-loop-regression-v2-first.md。
 详细证据与限制见 docs/experiments/business-loop-repair.md。
 真实模型适配已接入九工具主图，仅专用评测入口注入；普通工作台仍默认离线。
-修复后真实回归和正式 `eval run --manifest` 未授权，不能自动运行。
+新的真实回归和正式 `eval run --manifest` 未授权，不能自动运行。
 每阶段完成后同步更新本文件中的状态与命令。
 
 ## 实现、验收与交接
