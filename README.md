@@ -70,3 +70,9 @@ q1-A猜数量的预览被拦；用户明确1件后实际提交，但提交后模
 原始结果保持不变；后续离线修复保留预算停止信号，并从原回执完成告知，不补发模型请求。
 [逐题结果、归因与八题多样表达待批计划](docs/experiments/complementary-regressions-v1.md)。
 新八题仅手工准备和静态校验，尚未授权或执行；普通工作台仍默认离线。
+
+
+当前下一批已缩为四题数量优先验证（换货澄清1件、退货澄清2件、明确2件缺货、澄清2件后缺货），旧八题计划被取代，未授权真实执行。
+常见中文件数、参数级过程诊断及提交后停止的回执告知已完成离线准备，223项测试通过；不代表新的真实效果成绩。
+[简短交接与待批预算/hash](docs/handoffs/phase-06A-quantity-priority-preparation.md) ·
+[四题冻结计划](evaluation/manifests/quantity-priority-development-v1.json)。

@@ -37,7 +37,11 @@ q1-A数量猜测被拦，澄清后提交正确，但提交后模型预算拒绝�
 后续仅做离线通用异常收尾修复：同一批准预览的回执存在才补最终告知，并保留execution_stop停止批次，不重试写入或模型请求。
 离线159 passed/0 skipped，针对性7 passed；两种协议替身各六题通过，不回写真实成绩。
 最新报告 docs/experiments/complementary-regressions-v1.md，交接 docs/handoffs/phase-06A-complementary-regressions-v1.md。
-当前仅准备diverse-behaviors-development-v1八题新计划（最多128请求/256k/2400秒），手工编写且只静态校验，未授权/未执行。
+最新离线数量准备：quantity-evidence-v2支持常见中文件数，process-diagnostic-v5保留无证据参数/预览、拦截及澄清恢复过程缺陷；提示词/冻结评分器/历史场景未改。
+最终全量223 passed/0 skipped，新四题两种离线协议各4/4；0新增真实请求，真实数量能力仍待验证。
+当前待批quantity-priority-development-v1仅四题，16请求/300秒每题；Token分别48k/40k/40k/48k，全批64请求/176k/1200秒。
+逐题cap持久绑定独立账本会话，不能借其他题额度；普通失败继续固定题，安全/协议/usage/预算停止所有后续调用。
+旧八题计划已被新scope取代，其他四种表达保留后续开发。新版本与hash见docs/handoffs/phase-06A-quantity-priority-preparation.md。
 所有旧真实批次scope均关闭，不能继续q1-B、沿用旧批准或转移余额。未来运行需新hash绑定和当前账户确认。
 真实模型仍仅专用源码评测入口注入，普通工作台/worker默认离线。8128仍是19fe7离线镜像，本轮没有重建。
 每阶段完成后同步更新本文件中的状态与命令。
