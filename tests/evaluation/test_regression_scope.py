@@ -66,7 +66,12 @@ def test_no_plan_creates_an_approval_file():
 
 
 def test_old_live_plan_and_old_quantity_hash_cannot_authorize_new_code():
-    for batch in ["business-loop-regression-v2", "quantity-clarification-regression-v1"]:
+    for batch in [
+        "business-loop-regression-v2",
+        "quantity-clarification-regression-v1",
+        "business-loop-regression-v3",
+        "quantity-clarification-regression-v2",
+    ]:
         old = plan_for(batch)
         with pytest.raises(BusinessError, match="CLOSED_OR_SUPERSEDED"):
             read_scope({**old, "source": "Explicit user message in this chat"})

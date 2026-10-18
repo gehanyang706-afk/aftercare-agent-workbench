@@ -7,10 +7,15 @@ from aftercare.config import PROJECT_ROOT
 from aftercare.domain.rules import require
 
 SCOPES = {
-    "business-loop-regression-v3": (4, 40000, 160000, 64, 1200),
-    "quantity-clarification-regression-v2": (2, 32000, 64000, 32, 600),
+    "business-loop-regression-v4": (4, 40000, 160000, 64, 1200),
+    "quantity-clarification-regression-v3": (2, 32000, 64000, 32, 600),
 }
-CLOSED_OR_SUPERSEDED = {"business-loop-regression-v2", "quantity-clarification-regression-v1"}
+CLOSED_OR_SUPERSEDED = {
+    "business-loop-regression-v2",
+    "quantity-clarification-regression-v1",
+    "business-loop-regression-v3",
+    "quantity-clarification-regression-v2",
+}
 
 
 def code_fingerprint():

@@ -10,7 +10,7 @@ import time
 from aftercare.config import PROJECT_ROOT, Settings
 from aftercare.offline import install_offline_guard
 from aftercare.repositories.database import session_factory
-from evaluation.evaluator.diagnostics_v3 import VERSION, diagnose, event_chain
+from evaluation.evaluator.diagnostics_v4 import VERSION, diagnose, event_chain
 from evaluation.evaluator.runner import Actor, run_case
 from evaluation.evaluator.user_policy_v2 import VERSION as USER_VERSION
 from evaluation.schema.scenario import Scenario

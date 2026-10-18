@@ -261,7 +261,7 @@ def run_batch(settings, approval, account, plan, cases, directory):
                             select(ModelCall).where(ModelCall.conversation_id == ledger_conv)
                         )
                     ]
-                from evaluation.evaluator.diagnostics_v3 import diagnose, event_chain
+                from evaluation.evaluator.diagnostics_v4 import diagnose, event_chain
 
                 result["diagnostics"] = diagnose(result["observed"])
                 result["event_chain"] = event_chain(result["observed"])

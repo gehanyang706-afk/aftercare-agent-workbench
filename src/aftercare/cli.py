@@ -86,6 +86,8 @@ def parser() -> argparse.ArgumentParser:
             "quantity-clarification-regression-v1",
             "business-loop-regression-v3",
             "quantity-clarification-regression-v2",
+            "business-loop-regression-v4",
+            "quantity-clarification-regression-v3",
         ],
         required=True,
     )
@@ -109,6 +111,8 @@ def main(argv: list[str] | None = None) -> int:
                 "quantity-clarification-regression-v1",
                 "business-loop-regression-v3",
                 "quantity-clarification-regression-v2",
+                "business-loop-regression-v4",
+                "quantity-clarification-regression-v3",
             }:
                 sys.path.insert(0, str(PROJECT_ROOT))
                 from evaluation.evaluator.regression_live import run
