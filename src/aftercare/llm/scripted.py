@@ -154,9 +154,13 @@ def offline_plan(messages):
             constraints["color"] = color
     if any(w in text for w in ["穿过了", "使用过", "已经穿过"]):
         constraints["unused"] = False
-    quantity = re.search(r"数量\s*(\d+)|(?<!\d)(\d+)\s*件", text)
-    if quantity:
-        constraints["quantity"] = int(quantity.group(1) or quantity.group(2))
+    from aftercare.services.quantity_evidence import quantity_details
+
+    quantity, quantity_unknown = quantity_details(text)
+    if quantity_unknown:
+        constraints.pop("quantity", None)
+    if quantity is not None:
+        constraints["quantity"] = quantity
     if "update_case" not in results:
         changes = {"constraints": constraints}
         if order:

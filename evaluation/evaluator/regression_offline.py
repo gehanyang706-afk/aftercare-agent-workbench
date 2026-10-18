@@ -10,7 +10,7 @@ import time
 from aftercare.config import PROJECT_ROOT, Settings
 from aftercare.offline import install_offline_guard
 from aftercare.repositories.database import session_factory
-from evaluation.evaluator.diagnostics_v4 import VERSION, diagnose, event_chain
+from evaluation.evaluator.diagnostics_v5 import VERSION, diagnose, event_chain
 from evaluation.evaluator.runner import Actor, run_case
 from evaluation.evaluator.user_policy_v2 import VERSION as USER_VERSION
 from evaluation.schema.scenario import Scenario
@@ -22,7 +22,10 @@ def main():
     install_offline_guard()
     parser = argparse.ArgumentParser()
     parser.add_argument("--model-mode", choices=["default", "preview-stop"], default="default")
-    mode = parser.parse_args().model_mode
+    parser.add_argument("--scenario-file", choices=["evaluation/dev/quantity-priority-v1.jsonl"])
+    args = parser.parse_args()
+    mode = args.model_mode
+    files = (args.scenario_file,) if args.scenario_file else FILES
 
     class OfflineActor(Actor):
         def invoke(self, command):
@@ -39,7 +42,7 @@ def main():
     output = PROJECT_ROOT / "runtime/closure-repair" / ("offline-" + time.strftime("%Y%m%d-%H%M%S"))
     output.mkdir(parents=True)
     results = []
-    for file in FILES:
+    for file in files:
         for line in (PROJECT_ROOT / file).read_text().splitlines():
             case = Scenario.model_validate_json(line)
             assert case.split == "dev"
@@ -72,7 +75,7 @@ def main():
         "holdout_access": False,
         "diagnostics_version": VERSION,
         "user_policy_version": USER_VERSION,
-        "files": {f: hashlib.sha256((PROJECT_ROOT / f).read_bytes()).hexdigest() for f in FILES},
+        "files": {f: hashlib.sha256((PROJECT_ROOT / f).read_bytes()).hexdigest() for f in files},
         "scorer_sha256": hashlib.sha256(
             (PROJECT_ROOT / "evaluation/evaluator/grader.py").read_bytes()
         ).hexdigest(),

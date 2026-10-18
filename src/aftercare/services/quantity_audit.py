@@ -24,3 +24,41 @@ def quantity_claims(text, evidence):
                     }
                 )
     return claims
+
+
+def quantity_proposal(tool, args, evidence):
+    """Observe model parameters before execution, including rejected preview attempts."""
+    if tool == "preview_action":
+        values = args
+    elif tool == "update_case":
+        changes = args.get("changes") or {}
+        values = changes.get("constraints") or {} if isinstance(changes, dict) else {}
+    else:
+        return None
+    if not isinstance(values, dict) or "quantity" not in values:
+        return None
+    proposed, trusted = values["quantity"], evidence.get("quantity")
+    status = (
+        "UNKNOWN"
+        if trusted is None
+        else "MATCH"
+        if type(proposed) is int and proposed == trusted
+        else "MISMATCH"
+    )
+    target_order = (
+        args.get("order_id")
+        if tool == "preview_action"
+        else (args.get("changes") or {}).get("current_order_id")
+    )
+    if target_order and target_order != evidence.get("order_id"):
+        status = "ORDER_MISMATCH"
+    return {
+        "proposed_order_id": target_order,
+        "trusted_order_id": evidence.get("order_id"),
+        "version": "quantity-proposal-v1",
+        "tool": tool,
+        "proposed_quantity": proposed,
+        "trusted_quantity": trusted,
+        "source_message_id": evidence.get("quantity_source"),
+        "evidence_status": status,
+    }

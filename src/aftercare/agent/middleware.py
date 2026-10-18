@@ -80,6 +80,15 @@ class BusinessBoundary(AgentMiddleware):
                                 session, self.conversation, "unconfirmed_quantity_claim", claim
                             )
                 for call in getattr(reply, "tool_calls", []):
+                    from aftercare.services.quantity_audit import quantity_proposal
+
+                    proposal = quantity_proposal(call["name"], call["args"], evidence)
+                    if proposal is not None:
+                        with self.service.sessions.begin() as session:
+                            self.service._conversation(session, self.principal, self.conversation)
+                            self.service.event(
+                                session, self.conversation, "quantity_tool_proposal", proposal
+                            )
                     if call["name"] == "commit_action":
                         audit = audit_commit(
                             self.service,

@@ -73,6 +73,7 @@ def test_old_live_plan_and_old_quantity_hash_cannot_authorize_new_code():
         "quantity-clarification-regression-v2",
         "business-loop-regression-v4",
         "quantity-clarification-regression-v3",
+        "diverse-behaviors-development-v1",
     ]:
         old = plan_for(batch)
         with pytest.raises(BusinessError, match="CLOSED_OR_SUPERSEDED"):

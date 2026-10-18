@@ -84,11 +84,25 @@ def continue_confirmation(
     if preview["status"] == "COMMITTED":
         outcome = invoke("get_operation")
         require(outcome["ok"], "RECEIPT_NOT_FOUND")
+        with service.sessions() as session:
+            stopped = session.scalar(
+                select(Event)
+                .where(
+                    Event.conversation_id == conversation,
+                    Event.event_type == "model_execution_stopped",
+                    Event.payload["preview_id"].as_string() == pid,
+                    Event.payload["operation_id"].as_string() == outcome["data"]["operation_id"],
+                )
+                .order_by(Event.id.desc())
+            )
+        replay_state = {
+            **state.values,
+            "_graph_state": "INTERRUPTED" if actions else "STOPPED" if state.next else "ENDED",
+        }
+        if stopped:
+            replay_state["execution_stop"] = stopped.payload["error_code"]
         return (
-            {
-                **state.values,
-                "_graph_state": "INTERRUPTED" if actions else "STOPPED" if state.next else "ENDED",
-            },
+            replay_state,
             outcome["data"],
             None,
             False,
@@ -105,20 +119,22 @@ def continue_confirmation(
 
         from aftercare.domain.contracts import BusinessError
 
-        budget_stop = None
+        model_stop = None
         try:
             result = graph.invoke(Command(resume={"decisions": [{"type": "approve"}]}), config)
         except BusinessError as exc:
-            # These are local pre-dispatch limits, not provider/usage/security errors.
-            # A matching durable receipt can still be told to the user without a model.
+            # Only read the already committed, exactly approved receipt on known model
+            # stop conditions. Preserve the original code so the evaluator still stops.
             if exc.code not in {
                 "CONVERSATION_TOKEN_LIMIT",
                 "BUDGET_EXHAUSTED",
                 "MODEL_CALL_LIMIT",
                 "BATCH_REQUEST_LIMIT",
-            }:
+                "MODEL_BUDGET_PAUSED",
+                "TASK_DEADLINE_EXCEEDED",
+            } and not exc.code.startswith(("PROVIDER_", "USAGE_", "SECURITY_", "BUDGET_")):
                 raise
-            budget_stop = exc
+            model_stop = exc
             result = {
                 **graph.get_state(config).values,
                 "_graph_state": "STOPPED",
@@ -127,7 +143,7 @@ def continue_confirmation(
         # The graph may have caught the unknown write result. Resolve only this event's receipt.
         receipt = invoke("get_operation")
         if receipt["ok"]:
-            if budget_stop is not None:
+            if model_stop is not None:
                 with service.sessions.begin() as session:
                     service._conversation(session, principal, conversation)
                     service.event(
@@ -135,7 +151,7 @@ def continue_confirmation(
                         conversation,
                         "model_execution_stopped",
                         {
-                            "error_code": budget_stop.code,
+                            "error_code": model_stop.code,
                             "preview_id": pid,
                             "operation_id": receipt["data"]["operation_id"],
                             "after_commit": True,
@@ -157,9 +173,9 @@ def continue_confirmation(
                     )
                 )
             return result, receipt["data"], None, recovered, pid
-        if budget_stop is not None:
+        if model_stop is not None:
             # No receipt means there is no authority to fabricate a completed notice.
-            raise budget_stop
+            raise model_stop
         results = [
             json.loads(m.content)
             for m in result.get("messages", [])

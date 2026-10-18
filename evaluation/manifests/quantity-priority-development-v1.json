@@ -1,0 +1,213 @@
+{
+  "batch_id": "quantity-priority-development-v1",
+  "status": "AWAITING_EXPLICIT_APPROVAL",
+  "exact_model": "qwen3.5-plus-2026-02-15",
+  "provider": "bailian-beijing-compatible",
+  "enable_thinking": false,
+  "profile": "full",
+  "user_simulator": "script-user-v2 (no model user)",
+  "user_policy_version": "script-user-v2",
+  "diagnostics_version": "process-diagnostic-v5",
+  "split": "dev",
+  "development_file": "evaluation/dev/quantity-priority-v1.jsonl",
+  "development_file_sha256": "aa85588ddd10d92101f813bed4a85856dc92d561494d6250dfb145f5d99ab3b9",
+  "unique_tasks": 4,
+  "repetitions": 1,
+  "max_conversations": 4,
+  "tasks": [
+    {
+      "scenario_id": "qp1-03",
+      "derived_from": "dv1-03",
+      "task_sha256": "fadaa2961fe94467e7a6001c05fc5e89830747a5d42ac96ca4ac5b6ab6536186",
+      "token_hard_cap": 48000,
+      "max_http_requests": 16,
+      "wall_seconds": 300,
+      "estimated_requests_range": [
+        11,
+        14
+      ],
+      "estimated_input_output_tokens_range": [
+        26000,
+        35000
+      ],
+      "estimated_wall_seconds_range": [
+        55,
+        100
+      ]
+    },
+    {
+      "scenario_id": "qp1-04",
+      "derived_from": "dv1-04",
+      "task_sha256": "741b4f2a4b34233bb019a192896f1249566c998495597f64108c57b9342de9fb",
+      "token_hard_cap": 40000,
+      "max_http_requests": 16,
+      "wall_seconds": 300,
+      "estimated_requests_range": [
+        7,
+        11
+      ],
+      "estimated_input_output_tokens_range": [
+        16000,
+        27000
+      ],
+      "estimated_wall_seconds_range": [
+        35,
+        80
+      ]
+    },
+    {
+      "scenario_id": "qp1-07",
+      "derived_from": "dv1-07",
+      "task_sha256": "eede92e00bacee2349219d25348b42a738a693eeae0293dd3b82fbdab2e36eff",
+      "token_hard_cap": 40000,
+      "max_http_requests": 16,
+      "wall_seconds": 300,
+      "estimated_requests_range": [
+        7,
+        11
+      ],
+      "estimated_input_output_tokens_range": [
+        15000,
+        26000
+      ],
+      "estimated_wall_seconds_range": [
+        35,
+        80
+      ]
+    },
+    {
+      "scenario_id": "qp1-08",
+      "derived_from": "dv1-08",
+      "task_sha256": "0dc2edf3ad42c612f96951e666017ffbfbda6747ef0aa5d08fd65abe756e3698",
+      "token_hard_cap": 48000,
+      "max_http_requests": 16,
+      "wall_seconds": 300,
+      "estimated_requests_range": [
+        11,
+        15
+      ],
+      "estimated_input_output_tokens_range": [
+        24000,
+        38000
+      ],
+      "estimated_wall_seconds_range": [
+        55,
+        110
+      ]
+    }
+  ],
+  "candidate_source_tree_sha256": "ca9790ad6094e314cb36f1d5dd03b02f8960d6718d10e0901b026a9ea0c1ac75",
+  "frozen_scorer": "evaluation/evaluator/grader.py",
+  "frozen_scorer_sha256": "c3c2bbb07956ad4f8f3b629522a0fab4bf981649113c6ce601e31f030057fc3a",
+  "max_requests_per_conversation_including_retries": 16,
+  "max_http_requests_including_retries": 64,
+  "max_requests_per_user_turn_including_auxiliary_reasoning": 8,
+  "max_token_per_conversation_including_input_output": 48000,
+  "total_token_hard_cap": 176000,
+  "max_output_tokens_per_request": 512,
+  "concurrency": 1,
+  "per_conversation_wall_seconds": 300,
+  "batch_wall_seconds": 1200,
+  "sdk_retries": 0,
+  "http_retries": 0,
+  "whole_task_reruns": 0,
+  "additional_paid_cost_cap_cny": 0,
+  "automatic_model_switch": false,
+  "model_user_calls": 0,
+  "no_holdout_access": true,
+  "no_formal_comparison": true,
+  "old_budget_carryover": 0,
+  "estimation": {
+    "measured_reference": {
+      "batch_id": "quantity-clarification-regression-v3",
+      "scenario_id": "q1-A",
+      "http_requests": 11,
+      "input_tokens": 22696,
+      "output_tokens": 741,
+      "known_total_tokens": 23437,
+      "denied_request_bytes": 7526,
+      "denied_request_input_bound": 8550,
+      "denied_request_output_cap": 512,
+      "denied_request_total_reservation": 9062,
+      "would_require_total": 32499,
+      "old_task_cap": 32000
+    },
+    "estimated_total_requests_range": [
+      36,
+      51
+    ],
+    "estimated_total_tokens_range": [
+      81000,
+      126000
+    ],
+    "estimated_wall_seconds_range": [
+      180,
+      370
+    ],
+    "justification": "48k on clarification+exchange and three-turn shortage allows headroom above measured 32,499 pre-dispatch requirement; 40k on shorter return/explicit-shortage paths. No reservation estimator change. Conservative full-request byte bounds and added reasoning may still stop early; ranges are estimates, not guarantees."
+  },
+  "retry_rules": [
+    "No SDK/HTTP automatic retries; no whole-task rerun.",
+    "Recoverable tool-order/schema/business feedback may lead to new budgeted model requests within the same task; each counts against all caps.",
+    "Read tools may retry locally at most twice; writes never retry blindly. WRITE_RESULT_UNKNOWN queries original receipt, not a new write."
+  ],
+  "stop_conditions": [
+    "Before dispatch: hash/code/scenario/diagnostic/approval mismatch, missing key, wrong model/Beijing endpoint, unconfirmed current free quota/protection.",
+    "Any authentication/quota/paid protection/provider protocol/security anomaly; usage unknown or inconsistent: stop batch and keep unknown reservations.",
+    "Any request/token/turn/conversation/batch deadline or human cancellation: stop, preserve first trajectory; do not append tasks or change model.",
+    "Ordinary task failure: save first result, continue only remaining fixed tasks if no batch-stop category; no live code changes."
+  ],
+  "preconditions": [
+    "NEW explicit approval bound to this plan hash and frozen repair source; no previous approval/budget is reusable.",
+    "Fresh human account confirmation for exact model Beijing free quota >= 176000 and FreeTierOnly active; extra paid budget zero.",
+    "Fixed order qp1-03, qp1-04, qp1-07, qp1-08. Each independent fixture resets only aftercare_test. No business-success gate; ordinary failure continues remaining fixed tasks.",
+    "Persistent real BudgetLedger stays in aftercare_demo. Per-task token cap bound durably to its ledger conversation and task index; it cannot borrow a different task cap.",
+    "No concurrent pytest/evaluator. New batch state and ledger must both show never started. Default workbench remains offline.",
+    "Original scenarios/scorer and historical results untouched. New scenario version replaces spoken digits only in selected new development cases, recorded in scenario-version manifest.",
+    "No whole-task rerun, automatic model switch, model user/judge, holdout or architecture comparison. All retries/auxiliary model work count against the same caps.",
+    "On hard limit/auth/quota/protocol/security/unknown usage stop all subsequent requests. Persist first result and not_run reason. A receipt-based notice after stop cannot erase execution_stop or make frozen score pass."
+  ],
+  "entry": "python -m aftercare model smoke --batch quantity-priority-development-v1 --approval <new-approval.json> --account-confirmation <fresh-account.json> --execute",
+  "ledger": "Existing PilotGateway -> BailianAdapter/send_once -> BudgetLedger; no new provider or workbench real-mode opening.",
+  "diagnostic_requirement": "Frozen grader unchanged; process-diagnostic-v5 records every quantity-bearing update_case/preview_action proposal against current user evidence before execution, backend rejections, later clarification recovery, final effects, receipt-bound notice and preserved model stops. A recovered guess remains a process defect.",
+  "notification_policy_version": "receipt-notice-v1",
+  "confirmation_event_version": "trusted-confirmation-v1",
+  "supersedes": "diverse-behaviors-development-v1",
+  "old_approval_reusable": false,
+  "continuation_policy": {
+    "pending_matching_interrupt": "Validate exact persisted confirmation event then resume its interrupt.",
+    "ended_graph": "Validate exact persisted confirmation event then use the same commit tool/business service; no model call is needed.",
+    "duplicate_or_restart": "Query committed receipt or execute the bound operation idempotently; never select an arbitrary CONFIRMED row.",
+    "unknown_result": "Query original preview operation only; never blindly write again.",
+    "model_calls_after_confirmation": "Only existing graph continuation can call the model; all such calls retain original ledger and limits.",
+    "user_notice": "Application notice must match receipt; preview text cannot satisfy final-notice diagnostics.",
+    "known_pre_dispatch_budget_stop_after_commit": "Persist a final notice from the same approved preview receipt without a model request, return execution_stop, stop the batch and keep frozen task failure.",
+    "known_model_stop_after_commit": "Read only the same approved preview receipt, persist canonical final notice if present, preserve the original budget/provider/auth/usage/security/deadline execution_stop, unknown reserves and failing batch status. No extra model request or write retry. Missing receipt still raises original stop."
+  },
+  "budget_change_note": "New four-task priority scope with explicit heterogeneous token caps 48k/40k/40k/48k, total 176k. Not authorized. No transfer from any old batch or pending eight-task budget.",
+  "per_task_token_hard_caps": [
+    48000,
+    40000,
+    40000,
+    48000
+  ],
+  "quantity_evidence_version": "quantity-evidence-v2",
+  "report_requirements": [
+    "frozen_score",
+    "unsupported_quantity_proposals",
+    "preview_proposals_before_quantity_evidence",
+    "backend_quantity_rejections",
+    "quantity_clarification_recovered",
+    "quantity_process_clean",
+    "actual_effects_and_approved_quantity",
+    "no_submit_honored",
+    "receipt_and_notice_complete_when_submitted",
+    "model_execution_stops",
+    "runtime_states",
+    "not_run_and_stop_reason",
+    "actual_requests_input_output_tokens_unknown_reserves_elapsed"
+  ],
+  "scenario_versions_manifest": "evaluation/manifests/quantity-priority-scenarios-v1.json",
+  "scenario_versions_manifest_sha256": "7fb8c47c978aba285a0e8834a1b88a090f4f28e648abaa8e9e27c2e76736c1e3",
+  "plan_sha256": "0eabc9b920ca86a8bfa920bb7dc81a20278f0829299c4857bf0e8324f9ede32b"
+}

@@ -40,7 +40,9 @@ class PilotGateway:
             scope = read_scope(permit)
             self.batch, self.plan_hash = scope["batch_id"], scope["plan_sha256"]
             self.batch_cap = scope["total_token_hard_cap"]
-            self.task_cap = scope["max_token_per_conversation_including_input_output"]
+            from aftercare.llm.regression_scope import bound_task_token_cap
+
+            self.task_cap = bound_task_token_cap(scope, ledger_sessions, ledger_conversation)
             self.request_cap = scope["max_http_requests_including_retries"]
         require(settings.allow_real_model_calls, "EXPLICIT_REAL_CALL_FLAG_REQUIRED")
         self.settings = settings

@@ -10,16 +10,8 @@ from sqlalchemy import select
 
 from aftercare.domain.rules import require
 from aftercare.repositories.models import Message
-
-
-def explicit_quantity(text):
-    numbers = set()
-    for match in re.finditer(r"数量\s*(\d+)|(?<!\d)(\d+)\s*件", text):
-        prefix = text[: match.start()]
-        if re.search(r"(?:买了?|购买|收到|库存|订单数量|原数量)[^，。；;!?？]{0,12}$", prefix):
-            continue
-        numbers.add(int(match.group(1) or match.group(2)))
-    return next(iter(numbers)) if len(numbers) == 1 else None
+from aftercare.services.quantity_evidence import explicit_quantity as explicit_quantity
+from aftercare.services.quantity_evidence import quantity_details
 
 
 def user_evidence(messages):
@@ -28,12 +20,20 @@ def user_evidence(messages):
         text = msg.text if hasattr(msg, "text") else msg["text"]
         source = msg.id if hasattr(msg, "text") else msg["id"]
         orders = re.findall(r"\bS\d{4}\b", text, re.I)
+        if len(set(o.upper() for o in orders)) > 1:
+            evidence = {}
+            continue
         if orders:
             order = orders[-1].upper()
             if order != evidence.get("order_id"):
                 evidence = {"order_id": order}
-        qty = explicit_quantity(text)
-        positive = re.sub(r"不(?:是|需要|要)?(?:再)?(?:换货?|退货?|取消)(?:了)?", "", text)
+        previous_action = evidence.get("action")
+        qty, quantity_unknown = quantity_details(text)
+        positive = re.sub(
+            r"(?:不(?:是|需要|要|想|打算|准备|用)?(?:再)?|别|无需)(?:换货?|退货?|取消)(?:了)?",
+            "",
+            text,
+        )
         actions = {
             value
             for token, value in (("退", "return"), ("换", "exchange"), ("取消", "cancel"))
@@ -47,10 +47,18 @@ def user_evidence(messages):
         elif actions or withdrawal:
             evidence.pop("action", None)
         elif qty is None and not re.search(
-            r"大一码|小一码|原码|白色|黑色|尺码|未使用|没穿过", text
+            r"大一码|小一码|原码|白色|黑色|尺码|未使用|没穿过|另(?:外)?一件.*保留", text
         ):
             evidence.pop("action", None)
-        if qty is None and re.search(r"数量\s*\d+|\d+\s*件", text):
+        if len(actions) > 1:
+            qty, quantity_unknown = None, True
+        changed_action_without_count = (
+            qty is None
+            and previous_action is not None
+            and evidence.get("action") not in (None, previous_action)
+            and bool(re.search(r"(?:不(?:想|要|再|打算|准备)?|别)(?:换|退)", text))
+        )
+        if quantity_unknown or changed_action_without_count:
             evidence.pop("quantity", None)
             evidence.pop("quantity_source", None)
         if qty is not None:

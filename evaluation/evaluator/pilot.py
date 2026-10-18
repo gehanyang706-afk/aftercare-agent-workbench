@@ -234,11 +234,15 @@ def run_batch(settings, approval, account, plan, cases, directory):
             start = time.monotonic()
             batch_deadline = time.time() + plan["batch_wall_seconds"]
             ledger_service = BusinessService(ledger_sessions)
-            for case in cases:
+            for task_index, case in enumerate(cases):
                 if time.time() >= batch_deadline:
                     state["stop_reason"] = "BATCH_DEADLINE"
                     break
                 ledger_conv = ledger_service.create_conversation("alice")
+                if "per_task_token_hard_caps" in plan:
+                    from aftercare.llm.regression_scope import bind_task_budget
+
+                    bind_task_budget(plan, ledger_sessions, ledger_conv, task_index)
                 task_start = time.monotonic()
                 deadline = min(batch_deadline, time.time() + plan["per_conversation_wall_seconds"])
 
@@ -261,7 +265,7 @@ def run_batch(settings, approval, account, plan, cases, directory):
                             select(ModelCall).where(ModelCall.conversation_id == ledger_conv)
                         )
                     ]
-                from evaluation.evaluator.diagnostics_v4 import diagnose, event_chain
+                from evaluation.evaluator.diagnostics_v5 import diagnose, event_chain
 
                 result["diagnostics"] = diagnose(result["observed"])
                 result["event_chain"] = event_chain(result["observed"])

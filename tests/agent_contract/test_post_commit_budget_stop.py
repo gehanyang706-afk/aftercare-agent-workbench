@@ -76,6 +76,7 @@ def test_post_commit_budget_stop_finishes_notice_but_preserves_stop_signal(servi
     again = run_turn(settings, service, "alice", conv, resume=True, confirmation=event, model=model)
     assert again["receipt"]["operation_id"] == result["receipt"]["operation_id"]
     assert again["graph_state"] == "STOPPED"
+    assert again["execution_stop"] == code
     assert model.shared["blocked"] == 1
     with service.sessions() as s:
         assert tuple(
@@ -84,11 +85,32 @@ def test_post_commit_budget_stop_finishes_notice_but_preserves_stop_signal(servi
         ) == (1, 1, 1)
 
 
-def test_provider_protocol_exception_is_not_downgraded_to_budget_stop(service):
-    settings, conv, pid, event, model = initial(service, "PROVIDER_PROTOCOL_FINISH")
-    with pytest.raises(BusinessError, match="PROVIDER_PROTOCOL_FINISH"):
-        run_turn(settings, service, "alice", conv, resume=True, confirmation=event, model=model)
-    assert service.snapshot("alice", conv)["task_state"] == "SUBMITTED"
+@pytest.mark.parametrize(
+    "code",
+    [
+        "PROVIDER_PROTOCOL_FINISH",
+        "PROVIDER_HTTP_401",
+        "PROVIDER_HTTP_429",
+        "USAGE_UNKNOWN",
+        "SECURITY_UNAUTHORIZED_TOOL_ATTEMPT",
+        "TASK_DEADLINE_EXCEEDED",
+    ],
+)
+def test_post_commit_model_stop_keeps_original_error_and_failing_evaluation(service, code):
+    from evaluation.evaluator.pilot import stop_batch
+    from evaluation.evaluator.pilot_actor import output_for
+
+    settings, conv, pid, event, model = initial(service, code)
+    result = run_turn(
+        settings, service, "alice", conv, resume=True, confirmation=event, model=model
+    )
+    assert result["task_state"] == "COMPLETED"
+    assert result["graph_state"] == "STOPPED"
+    assert result["execution_stop"] == code
+    assert result["receipt"]["preview_id"] == pid
+    assert output_for(result)["ok"] is False
+    assert output_for(result)["error"] == code
+    assert stop_batch(code)
 
 
 def test_budget_stop_without_receipt_cannot_manufacture_completion(service):
@@ -165,3 +187,44 @@ def test_workbench_queue_uses_same_finalization_and_keeps_stop_metadata(service,
         assert job.result["execution_stop"] == "CONVERSATION_TOKEN_LIMIT"
         assert job.result["receipt"]["preview_id"] == pid
         assert "已提交换货申请" in job.result["text"]
+
+
+def test_receipt_notice_does_not_zero_or_unpause_unknown_model_usage(service):
+    from aftercare.repositories.models import Budget, ModelCall
+
+    class UnknownUsageModel(PostCommitLimitModel):
+        def _generate(self, messages, **kwargs):
+            if any(
+                isinstance(m, ToolMessage)
+                and m.name == "commit_action"
+                and json.loads(m.content).get("ok")
+                for m in messages
+            ):
+                call = self.ledger.reserve(
+                    "scripted",
+                    self.model_name,
+                    "offline",
+                    self.conversation_id,
+                    "unknown",
+                    1024,
+                    512,
+                    self.cap,
+                )
+                self.ledger.settle(call, None)
+                self.shared["unknown_call"] = call
+                raise BusinessError("USAGE_UNKNOWN")
+            return super()._generate(messages, **kwargs)
+
+    settings, conv, pid, event, original = initial(service, "USAGE_UNKNOWN")
+    model = UnknownUsageModel(ledger=original.ledger, conversation_id=conv, run_id="unknown")
+    result = run_turn(
+        settings, service, "alice", conv, resume=True, confirmation=event, model=model
+    )
+    assert result["execution_stop"] == "USAGE_UNKNOWN"
+    assert result["task_state"] == "COMPLETED"
+    with service.sessions() as s:
+        call = s.get(ModelCall, model.shared["unknown_call"])
+        budget = s.get(Budget, call.budget_id)
+        assert call.usage is None and call.status == "USAGE_UNKNOWN"
+        assert call.reserved == budget.reserved == 1536
+        assert budget.paused

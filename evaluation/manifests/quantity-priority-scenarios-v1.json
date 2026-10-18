@@ -1,0 +1,40 @@
+{
+  "version": "quantity-priority-v1",
+  "manually_authored": true,
+  "seen_development_not_holdout": true,
+  "source_file": "evaluation/dev/diverse-behaviors-v1.jsonl",
+  "source_sha256": "97cd9d3323d0aba9540deb6f7523bdbc0b3a40bd202b1c8b21222038b301957b",
+  "new_file": "evaluation/dev/quantity-priority-v1.jsonl",
+  "new_sha256": "aa85588ddd10d92101f813bed4a85856dc92d561494d6250dfb145f5d99ab3b9",
+  "task_changes": [
+    {
+      "scenario_id": "qp1-03",
+      "derived_from": "dv1-03",
+      "change": "New ID/family; clarification replies use 其中一件/全部两件, no-submit replies 保留两件; explicit-stock case uses 这两件. Goals/branch triggers/oracles unchanged."
+    },
+    {
+      "scenario_id": "qp1-04",
+      "derived_from": "dv1-04",
+      "change": "New ID/family; clarification replies use 其中一件/全部两件, no-submit replies 保留两件; explicit-stock case uses 这两件. Goals/branch triggers/oracles unchanged."
+    },
+    {
+      "scenario_id": "qp1-07",
+      "derived_from": "dv1-07",
+      "change": "New ID/family; clarification replies use 其中一件/全部两件, no-submit replies 保留两件; explicit-stock case uses 这两件. Goals/branch triggers/oracles unchanged."
+    },
+    {
+      "scenario_id": "qp1-08",
+      "derived_from": "dv1-08",
+      "change": "New ID/family; clarification replies use 其中一件/全部两件, no-submit replies 保留两件; explicit-stock case uses 这两件. Goals/branch triggers/oracles unchanged."
+    }
+  ],
+  "deferred_task_ids": [
+    "dv1-01",
+    "dv1-02",
+    "dv1-05",
+    "dv1-06"
+  ],
+  "original_files_modified": false,
+  "scorer_modified": false,
+  "real_model_calls": 0
+}
