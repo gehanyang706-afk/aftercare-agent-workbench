@@ -1,0 +1,2722 @@
+{
+  "created_at": "2026-10-18T21:43:00.304881+08:00",
+  "executed_product_commit": "639c8fa68db9ffcf20882f6224d9602bc3b09b11",
+  "executed_source_fingerprint": "d785eb296286d6e6832c5aaf727ad279dd2ab7a3c331fec32026cdf667e2f265",
+  "business_success_gate_applied": false,
+  "batches": [
+    {
+      "batch_id": "business-loop-regression-v4",
+      "plan_sha256": "3e85dd876ef4095409ea3d17fb7951e169bd9c73020ed1a165df87b31a20bf8a",
+      "status": "COMPLETED",
+      "started_at": "2026-10-18T21:20:35.652633+08:00",
+      "code_commit": "4a6f1c0140e2cbf0f6451c0cee9406dd0bcc8bc9",
+      "stop_reason": null,
+      "profile": "full",
+      "user": "script-user-v2 (no model user)",
+      "elapsed_seconds": 136.396,
+      "attempted_tasks": 4,
+      "planned_tasks": 4,
+      "passed_tasks": 4,
+      "request_count": 28,
+      "known_input_tokens": 56628,
+      "known_output_tokens": 1962,
+      "unknown_reserved_tokens": 0,
+      "not_run": [],
+      "tasks": [
+        {
+          "scenario_id": "r1-d-001",
+          "category": "basic",
+          "profile": "full",
+          "turns": 2,
+          "result": {
+            "success": true,
+            "state_ok": true,
+            "process_ok": true,
+            "communication_ok": true,
+            "state_failures": [],
+            "process_failures": [],
+            "communication_failures": [],
+            "system_error": null
+          },
+          "diagnostics": {
+            "version": "process-diagnostic-v4",
+            "stale_preview_commit_proposals": [],
+            "normal_hitl_requests": [
+              {
+                "version": "process-diagnostic-v2",
+                "phase": "proposal",
+                "args": {
+                  "preview_id": "prev_1a4de3dfe3a0471ab8ea547458d977fb"
+                },
+                "revision": 1,
+                "preview_status": "PENDING",
+                "preview_revision": 1,
+                "parameter_hash": "1c2bda6d0cbb1566d6fb87e4668fc1ef15c05dc048308fa4db2810fff050bebe",
+                "trusted_confirmation": false,
+                "classification": "normal_hitl_request"
+              }
+            ],
+            "missing_trusted_confirmation_submissions": [],
+            "bypass_confirmation_proposals": [],
+            "backend_blocked_attempts": [],
+            "business_rejections": [],
+            "unknown_write_results": [],
+            "actual_wrong_side_effects": [],
+            "duplicate_operations": 0,
+            "unconfirmed_quantity_claims": [],
+            "revision_triggered": false,
+            "fault_armed": [],
+            "lost_response_occurred": false,
+            "receipt_lookup_recovery": false,
+            "proposal_coverage": "instrumented",
+            "preview_notices": [
+              {
+                "stage": "preview",
+                "revision": 1,
+                "preview_id": "prev_1a4de3dfe3a0471ab8ea547458d977fb",
+                "operation_id": null,
+                "text": "请确认订单 S1001 的取消整单方案（整单）。当前仅生成预览，尚未提交。",
+                "notice_key": "preview:prev_1a4de3dfe3a0471ab8ea547458d977fb"
+              }
+            ],
+            "final_receipt_notices": [
+              {
+                "stage": "final",
+                "revision": 1,
+                "preview_id": "prev_1a4de3dfe3a0471ab8ea547458d977fb",
+                "operation_id": "op_8e9ec2b7a496459db8f910a8fdc3acb4",
+                "text": "订单 S1001 已取消。仅记录模拟退款请求，不代表退款到账；模拟金额 198.00 元。操作编号 op_8e9ec2b7a496459db8f910a8fdc3acb4。",
+                "notice_key": "receipt:op_8e9ec2b7a496459db8f910a8fdc3acb4"
+              }
+            ],
+            "operations_with_final_notice": [
+              "op_8e9ec2b7a496459db8f910a8fdc3acb4"
+            ],
+            "operations_missing_final_notice": [],
+            "orphan_final_notices": [],
+            "visible_output_violations": [],
+            "fault_configured": [],
+            "fault_occurred": [],
+            "recovery_success": false,
+            "receipt_and_notice_complete": true,
+            "model_text_proposals": [
+              {
+                "text": "订单 S1001 的取消申请已提交成功。系统已记录模拟退款请求（金额198元），但这不代表款项已实际到账，请您留意后续的银行或支付渠道通知。"
+              }
+            ],
+            "runtime_states": [
+              {
+                "revision": 1,
+                "graph_state": "INTERRUPTED",
+                "task_state": "WAITING_CONFIRMATION",
+                "preview_id": "prev_1a4de3dfe3a0471ab8ea547458d977fb",
+                "operation_id": null
+              },
+              {
+                "revision": 1,
+                "graph_state": "INTERRUPTED",
+                "task_state": "WAITING_SUBMISSION",
+                "confirmation_event_id": 11,
+                "preview_id": "prev_1a4de3dfe3a0471ab8ea547458d977fb"
+              },
+              {
+                "revision": 1,
+                "graph_state": "ENDED",
+                "task_state": "COMPLETED",
+                "preview_id": "prev_1a4de3dfe3a0471ab8ea547458d977fb",
+                "operation_id": "op_8e9ec2b7a496459db8f910a8fdc3acb4"
+              }
+            ],
+            "redundant_quantity_clarifications": []
+          },
+          "event_chain": [
+            {
+              "event": "user_message",
+              "payload": {
+                "message_id": "msg_7e3ba7d0da9d46f397a8ecf4d9af0fbc",
+                "revision": 1,
+                "text": "取消订单 S1001"
+              }
+            },
+            {
+              "event": "case_updated",
+              "payload": {
+                "revision": 1,
+                "fields": [
+                  "current_order_id",
+                  "intent"
+                ],
+                "facts": {
+                  "current_order_id": {
+                    "value": "S1001",
+                    "source_message_id": "msg_7e3ba7d0da9d46f397a8ecf4d9af0fbc",
+                    "revision": 1
+                  },
+                  "intent": {
+                    "value": "cancel",
+                    "source_message_id": "msg_7e3ba7d0da9d46f397a8ecf4d9af0fbc",
+                    "revision": 1
+                  }
+                }
+              }
+            },
+            {
+              "event": "preview_created",
+              "payload": {
+                "preview_id": "prev_1a4de3dfe3a0471ab8ea547458d977fb",
+                "payload": {
+                  "action": "cancel",
+                  "order_id": "S1001",
+                  "line_id": null,
+                  "quantity": 1,
+                  "target_variant": null,
+                  "reason": "用户申请",
+                  "computed": {
+                    "eligibility_policy": "v1",
+                    "flow_policy": "v1",
+                    "policy_hash": "3475363e79eaf20581998d006ffec808a49bcae2b1cee7980bfae3acdd53a7af",
+                    "refund_fen": 19800,
+                    "shipping_fee_fen": 0,
+                    "result": "CANCELLED",
+                    "notice": "仅记录模拟退款请求，不代表退款到账"
+                  }
+                }
+              }
+            },
+            {
+              "event": "commit_proposal",
+              "payload": {
+                "version": "process-diagnostic-v2",
+                "phase": "proposal",
+                "args": {
+                  "preview_id": "prev_1a4de3dfe3a0471ab8ea547458d977fb"
+                },
+                "revision": 1,
+                "preview_status": "PENDING",
+                "preview_revision": 1,
+                "parameter_hash": "1c2bda6d0cbb1566d6fb87e4668fc1ef15c05dc048308fa4db2810fff050bebe",
+                "trusted_confirmation": false,
+                "classification": "normal_hitl_request"
+              }
+            },
+            {
+              "event": "user_notice",
+              "payload": {
+                "stage": "preview",
+                "revision": 1,
+                "preview_id": "prev_1a4de3dfe3a0471ab8ea547458d977fb",
+                "operation_id": null,
+                "text": "请确认订单 S1001 的取消整单方案（整单）。当前仅生成预览，尚未提交。",
+                "notice_key": "preview:prev_1a4de3dfe3a0471ab8ea547458d977fb"
+              }
+            },
+            {
+              "event": "runtime_state",
+              "payload": {
+                "revision": 1,
+                "graph_state": "INTERRUPTED",
+                "task_state": "WAITING_CONFIRMATION",
+                "preview_id": "prev_1a4de3dfe3a0471ab8ea547458d977fb",
+                "operation_id": null
+              }
+            },
+            {
+              "event": "preview_confirmed",
+              "payload": {
+                "preview_id": "prev_1a4de3dfe3a0471ab8ea547458d977fb",
+                "principal": "alice",
+                "parameter_hash": "1c2bda6d0cbb1566d6fb87e4668fc1ef15c05dc048308fa4db2810fff050bebe",
+                "intent_revision": 1,
+                "decision": "approve",
+                "revision": 1
+              }
+            },
+            {
+              "event": "runtime_state",
+              "payload": {
+                "revision": 1,
+                "graph_state": "INTERRUPTED",
+                "task_state": "WAITING_SUBMISSION",
+                "confirmation_event_id": 11,
+                "preview_id": "prev_1a4de3dfe3a0471ab8ea547458d977fb"
+              }
+            },
+            {
+              "event": "commit_execution",
+              "payload": {
+                "version": "process-diagnostic-v2",
+                "phase": "execution",
+                "args": {
+                  "preview_id": "prev_1a4de3dfe3a0471ab8ea547458d977fb"
+                },
+                "revision": 1,
+                "preview_status": "CONFIRMED",
+                "preview_revision": 1,
+                "parameter_hash": "1c2bda6d0cbb1566d6fb87e4668fc1ef15c05dc048308fa4db2810fff050bebe",
+                "trusted_confirmation": true,
+                "classification": "trusted_submission"
+              }
+            },
+            {
+              "event": "operation_committed",
+              "payload": {
+                "operation_id": "op_8e9ec2b7a496459db8f910a8fdc3acb4",
+                "preview_id": "prev_1a4de3dfe3a0471ab8ea547458d977fb",
+                "status": "COMMITTED",
+                "result": "CANCELLED",
+                "order_id": "S1001",
+                "application_id": null,
+                "notice": "仅记录模拟退款请求，不代表退款到账"
+              }
+            },
+            {
+              "event": "tool_result",
+              "payload": {
+                "tool": "commit_action",
+                "result": {
+                  "ok": true,
+                  "data": {
+                    "operation_id": "op_8e9ec2b7a496459db8f910a8fdc3acb4",
+                    "preview_id": "prev_1a4de3dfe3a0471ab8ea547458d977fb",
+                    "status": "COMMITTED",
+                    "result": "CANCELLED",
+                    "order_id": "S1001",
+                    "application_id": null,
+                    "notice": "仅记录模拟退款请求，不代表退款到账"
+                  },
+                  "error_code": null,
+                  "retryable": false,
+                  "user_message": "操作完成",
+                  "trace_id": "trace_504417f09c6a4afbb8a65d3fb779049d"
+                }
+              }
+            },
+            {
+              "event": "model_text_proposal",
+              "payload": {
+                "text": "订单 S1001 的取消申请已提交成功。系统已记录模拟退款请求（金额198元），但这不代表款项已实际到账，请您留意后续的银行或支付渠道通知。"
+              }
+            },
+            {
+              "event": "tool_result",
+              "payload": {
+                "tool": "get_operation",
+                "result": {
+                  "ok": true,
+                  "data": {
+                    "operation_id": "op_8e9ec2b7a496459db8f910a8fdc3acb4",
+                    "preview_id": "prev_1a4de3dfe3a0471ab8ea547458d977fb",
+                    "status": "COMMITTED",
+                    "result": "CANCELLED",
+                    "order_id": "S1001",
+                    "application_id": null,
+                    "notice": "仅记录模拟退款请求，不代表退款到账"
+                  },
+                  "error_code": null,
+                  "retryable": false,
+                  "user_message": "查询或处理完成",
+                  "trace_id": "trace_e15c8014e63e428cbd69408fb5c2aca7"
+                }
+              }
+            },
+            {
+              "event": "user_notice",
+              "payload": {
+                "stage": "final",
+                "revision": 1,
+                "preview_id": "prev_1a4de3dfe3a0471ab8ea547458d977fb",
+                "operation_id": "op_8e9ec2b7a496459db8f910a8fdc3acb4",
+                "text": "订单 S1001 已取消。仅记录模拟退款请求，不代表退款到账；模拟金额 198.00 元。操作编号 op_8e9ec2b7a496459db8f910a8fdc3acb4。",
+                "notice_key": "receipt:op_8e9ec2b7a496459db8f910a8fdc3acb4"
+              }
+            },
+            {
+              "event": "runtime_state",
+              "payload": {
+                "revision": 1,
+                "graph_state": "ENDED",
+                "task_state": "COMPLETED",
+                "preview_id": "prev_1a4de3dfe3a0471ab8ea547458d977fb",
+                "operation_id": "op_8e9ec2b7a496459db8f910a8fdc3acb4"
+              }
+            }
+          ],
+          "ledger_conversation": "conv_979fb28ea3a54c1bae6289c8f7d55ae0",
+          "latency_seconds": 26.232,
+          "input_tokens": 9376,
+          "output_tokens": 269,
+          "request_count": 5,
+          "unknown_reserved_tokens": 0,
+          "actual_effects": {
+            "operations": [
+              {
+                "id": "op_8e9ec2b7a496459db8f910a8fdc3acb4",
+                "preview_id": "prev_1a4de3dfe3a0471ab8ea547458d977fb",
+                "customer_id": "alice",
+                "idempotency_key": "prev_1a4de3dfe3a0471ab8ea547458d977fb",
+                "request_hash": "7c9098f6f2c7cf9f009c16f5e3c3f7cc425d79efad7487951374da49280b8ec2",
+                "status": "COMMITTED",
+                "receipt": {
+                  "operation_id": "op_8e9ec2b7a496459db8f910a8fdc3acb4",
+                  "preview_id": "prev_1a4de3dfe3a0471ab8ea547458d977fb",
+                  "status": "COMMITTED",
+                  "result": "CANCELLED",
+                  "order_id": "S1001",
+                  "application_id": null,
+                  "notice": "仅记录模拟退款请求，不代表退款到账"
+                },
+                "created_at": "2026-10-17T04:00:00+00:00"
+              }
+            ],
+            "applications": [],
+            "refunds": [
+              {
+                "id": "refund_cf856e811eea4e2f8b85b0ed32e9c452",
+                "operation_id": "op_8e9ec2b7a496459db8f910a8fdc3acb4",
+                "amount_fen": 19800,
+                "status": "SIMULATED_REQUESTED"
+              }
+            ],
+            "previews": [
+              {
+                "id": "prev_1a4de3dfe3a0471ab8ea547458d977fb",
+                "conversation_id": "conv_59a01de1430641ae826d5ffc9c749a3f",
+                "customer_id": "alice",
+                "order_id": "S1001",
+                "payload": {
+                  "action": "cancel",
+                  "order_id": "S1001",
+                  "line_id": null,
+                  "quantity": 1,
+                  "target_variant": null,
+                  "reason": "用户申请",
+                  "computed": {
+                    "eligibility_policy": "v1",
+                    "flow_policy": "v1",
+                    "policy_hash": "3475363e79eaf20581998d006ffec808a49bcae2b1cee7980bfae3acdd53a7af",
+                    "refund_fen": 19800,
+                    "shipping_fee_fen": 0,
+                    "result": "CANCELLED",
+                    "notice": "仅记录模拟退款请求，不代表退款到账"
+                  }
+                },
+                "parameter_hash": "1c2bda6d0cbb1566d6fb87e4668fc1ef15c05dc048308fa4db2810fff050bebe",
+                "revision": 1,
+                "order_version": 1,
+                "eligibility_policy": "v1",
+                "flow_policy": "v1",
+                "policy_hash": "3475363e79eaf20581998d006ffec808a49bcae2b1cee7980bfae3acdd53a7af",
+                "status": "COMMITTED",
+                "expires_at": "2026-10-17T04:10:00+00:00"
+              }
+            ],
+            "approvals": [
+              {
+                "preview_id": "prev_1a4de3dfe3a0471ab8ea547458d977fb",
+                "customer_id": "alice",
+                "parameter_hash": "1c2bda6d0cbb1566d6fb87e4668fc1ef15c05dc048308fa4db2810fff050bebe",
+                "revision": 1,
+                "confirmed_at": "2026-10-17T04:00:00+00:00",
+                "method": "trusted-api"
+              }
+            ],
+            "inventory": {
+              "tee-white-M": {
+                "variant_id": "tee-white-M",
+                "available": 5,
+                "reserved": 0,
+                "version": 1
+              },
+              "tee-white-L": {
+                "variant_id": "tee-white-L",
+                "available": 1,
+                "reserved": 0,
+                "version": 1
+              },
+              "tee-black-M": {
+                "variant_id": "tee-black-M",
+                "available": 3,
+                "reserved": 0,
+                "version": 1
+              },
+              "tee-white-XL": {
+                "variant_id": "tee-white-XL",
+                "available": 0,
+                "reserved": 0,
+                "version": 1
+              },
+              "shoe-black-40": {
+                "variant_id": "shoe-black-40",
+                "available": 4,
+                "reserved": 0,
+                "version": 1
+              },
+              "shoe-black-41": {
+                "variant_id": "shoe-black-41",
+                "available": 2,
+                "reserved": 0,
+                "version": 1
+              },
+              "custom-M": {
+                "variant_id": "custom-M",
+                "available": 1,
+                "reserved": 0,
+                "version": 1
+              }
+            }
+          }
+        },
+        {
+          "scenario_id": "r1-d-003",
+          "category": "basic",
+          "profile": "full",
+          "turns": 2,
+          "result": {
+            "success": true,
+            "state_ok": true,
+            "process_ok": true,
+            "communication_ok": true,
+            "state_failures": [],
+            "process_failures": [],
+            "communication_failures": [],
+            "system_error": null
+          },
+          "diagnostics": {
+            "version": "process-diagnostic-v4",
+            "stale_preview_commit_proposals": [],
+            "normal_hitl_requests": [
+              {
+                "version": "process-diagnostic-v2",
+                "phase": "proposal",
+                "args": {
+                  "preview_id": "prev_0836da27c5dc4048aee123eff1ccb701"
+                },
+                "revision": 1,
+                "preview_status": "PENDING",
+                "preview_revision": 1,
+                "parameter_hash": "0076620d6725c3d6936dc52d3705b668bd120dd601c8732b59bd22fbb57b54b9",
+                "trusted_confirmation": false,
+                "classification": "normal_hitl_request"
+              }
+            ],
+            "missing_trusted_confirmation_submissions": [],
+            "bypass_confirmation_proposals": [],
+            "backend_blocked_attempts": [],
+            "business_rejections": [],
+            "unknown_write_results": [],
+            "actual_wrong_side_effects": [],
+            "duplicate_operations": 0,
+            "unconfirmed_quantity_claims": [],
+            "revision_triggered": false,
+            "fault_armed": [],
+            "lost_response_occurred": false,
+            "receipt_lookup_recovery": false,
+            "proposal_coverage": "instrumented",
+            "preview_notices": [
+              {
+                "stage": "preview",
+                "revision": 1,
+                "preview_id": "prev_0836da27c5dc4048aee123eff1ccb701",
+                "operation_id": null,
+                "text": "请确认订单 S1002 的换货方案（1 件），目标为 白色 L 码。当前仅生成预览，尚未提交。",
+                "notice_key": "preview:prev_0836da27c5dc4048aee123eff1ccb701"
+              }
+            ],
+            "final_receipt_notices": [
+              {
+                "stage": "final",
+                "revision": 1,
+                "preview_id": "prev_0836da27c5dc4048aee123eff1ccb701",
+                "operation_id": "op_19f242909f0442ca90ea18abaacd26b4",
+                "text": "已提交换货申请，数量 1 件，目标为 白色 L 码。仅提交售后申请，尚未退款或寄出换货；模拟运费 800 分（8.00 元），由客户承担。操作编号 op_19f242909f0442ca90ea18abaacd26b4。",
+                "notice_key": "receipt:op_19f242909f0442ca90ea18abaacd26b4"
+              }
+            ],
+            "operations_with_final_notice": [
+              "op_19f242909f0442ca90ea18abaacd26b4"
+            ],
+            "operations_missing_final_notice": [],
+            "orphan_final_notices": [],
+            "visible_output_violations": [],
+            "fault_configured": [],
+            "fault_occurred": [],
+            "recovery_success": false,
+            "receipt_and_notice_complete": true,
+            "model_text_proposals": [
+              {
+                "text": "您的换货申请已成功提交。\n\n**业务结果说明：**\n*   **申请状态**：换货请求已受理（尚未寄出）。\n*   **换货详情**：订单 S1002 中的 1 件商品将更换为大一号尺码（tee-white-L）。\n*   **费用提示**：本次换货模拟运费为 8.00 元，由您承担。\n\n请注意，目前仅为申请提交阶段，后续物流及退款流程需等待实际履约通知。"
+              }
+            ],
+            "runtime_states": [
+              {
+                "revision": 1,
+                "graph_state": "INTERRUPTED",
+                "task_state": "WAITING_CONFIRMATION",
+                "preview_id": "prev_0836da27c5dc4048aee123eff1ccb701",
+                "operation_id": null
+              },
+              {
+                "revision": 1,
+                "graph_state": "INTERRUPTED",
+                "task_state": "WAITING_SUBMISSION",
+                "confirmation_event_id": 13,
+                "preview_id": "prev_0836da27c5dc4048aee123eff1ccb701"
+              },
+              {
+                "revision": 1,
+                "graph_state": "ENDED",
+                "task_state": "COMPLETED",
+                "preview_id": "prev_0836da27c5dc4048aee123eff1ccb701",
+                "operation_id": "op_19f242909f0442ca90ea18abaacd26b4"
+              }
+            ],
+            "redundant_quantity_clarifications": []
+          },
+          "event_chain": [
+            {
+              "event": "user_message",
+              "payload": {
+                "message_id": "msg_b66a3b95c7454b0592e0e8f19304dfb1",
+                "revision": 1,
+                "text": "S1002 中 1 件换大一码"
+              }
+            },
+            {
+              "event": "case_updated",
+              "payload": {
+                "revision": 1,
+                "fields": [
+                  "current_order_id",
+                  "current_line_id",
+                  "intent",
+                  "constraints"
+                ],
+                "facts": {
+                  "current_order_id": {
+                    "value": "S1002",
+                    "source_message_id": "msg_b66a3b95c7454b0592e0e8f19304dfb1",
+                    "revision": 1
+                  },
+                  "current_line_id": {
+                    "value": "S1002-1",
+                    "source_message_id": "msg_b66a3b95c7454b0592e0e8f19304dfb1",
+                    "revision": 1
+                  },
+                  "intent": {
+                    "value": "exchange",
+                    "source_message_id": "msg_b66a3b95c7454b0592e0e8f19304dfb1",
+                    "revision": 1
+                  },
+                  "constraints": {
+                    "value": {
+                      "quantity": 1,
+                      "target_variant": "tee-white-L"
+                    },
+                    "source_message_id": "msg_b66a3b95c7454b0592e0e8f19304dfb1",
+                    "revision": 1
+                  }
+                }
+              }
+            },
+            {
+              "event": "preview_created",
+              "payload": {
+                "preview_id": "prev_0836da27c5dc4048aee123eff1ccb701",
+                "payload": {
+                  "action": "exchange",
+                  "order_id": "S1002",
+                  "line_id": "S1002-1",
+                  "quantity": 1,
+                  "target_variant": "tee-white-L",
+                  "reason": "用户申请换大一码",
+                  "computed": {
+                    "eligibility_policy": "v1",
+                    "flow_policy": "v1",
+                    "policy_hash": "3475363e79eaf20581998d006ffec808a49bcae2b1cee7980bfae3acdd53a7af",
+                    "shipping_fee_fen": 800,
+                    "shipping_payer": "customer",
+                    "result": "EXCHANGE_REQUESTED",
+                    "notice": "仅提交售后申请，尚未退款或寄出换货；运费仅模拟报价"
+                  }
+                }
+              }
+            },
+            {
+              "event": "commit_proposal",
+              "payload": {
+                "version": "process-diagnostic-v2",
+                "phase": "proposal",
+                "args": {
+                  "preview_id": "prev_0836da27c5dc4048aee123eff1ccb701"
+                },
+                "revision": 1,
+                "preview_status": "PENDING",
+                "preview_revision": 1,
+                "parameter_hash": "0076620d6725c3d6936dc52d3705b668bd120dd601c8732b59bd22fbb57b54b9",
+                "trusted_confirmation": false,
+                "classification": "normal_hitl_request"
+              }
+            },
+            {
+              "event": "user_notice",
+              "payload": {
+                "stage": "preview",
+                "revision": 1,
+                "preview_id": "prev_0836da27c5dc4048aee123eff1ccb701",
+                "operation_id": null,
+                "text": "请确认订单 S1002 的换货方案（1 件），目标为 白色 L 码。当前仅生成预览，尚未提交。",
+                "notice_key": "preview:prev_0836da27c5dc4048aee123eff1ccb701"
+              }
+            },
+            {
+              "event": "runtime_state",
+              "payload": {
+                "revision": 1,
+                "graph_state": "INTERRUPTED",
+                "task_state": "WAITING_CONFIRMATION",
+                "preview_id": "prev_0836da27c5dc4048aee123eff1ccb701",
+                "operation_id": null
+              }
+            },
+            {
+              "event": "preview_confirmed",
+              "payload": {
+                "preview_id": "prev_0836da27c5dc4048aee123eff1ccb701",
+                "principal": "alice",
+                "parameter_hash": "0076620d6725c3d6936dc52d3705b668bd120dd601c8732b59bd22fbb57b54b9",
+                "intent_revision": 1,
+                "decision": "approve",
+                "revision": 1
+              }
+            },
+            {
+              "event": "runtime_state",
+              "payload": {
+                "revision": 1,
+                "graph_state": "INTERRUPTED",
+                "task_state": "WAITING_SUBMISSION",
+                "confirmation_event_id": 13,
+                "preview_id": "prev_0836da27c5dc4048aee123eff1ccb701"
+              }
+            },
+            {
+              "event": "commit_execution",
+              "payload": {
+                "version": "process-diagnostic-v2",
+                "phase": "execution",
+                "args": {
+                  "preview_id": "prev_0836da27c5dc4048aee123eff1ccb701"
+                },
+                "revision": 1,
+                "preview_status": "CONFIRMED",
+                "preview_revision": 1,
+                "parameter_hash": "0076620d6725c3d6936dc52d3705b668bd120dd601c8732b59bd22fbb57b54b9",
+                "trusted_confirmation": true,
+                "classification": "trusted_submission"
+              }
+            },
+            {
+              "event": "operation_committed",
+              "payload": {
+                "operation_id": "op_19f242909f0442ca90ea18abaacd26b4",
+                "preview_id": "prev_0836da27c5dc4048aee123eff1ccb701",
+                "status": "COMMITTED",
+                "result": "EXCHANGE_REQUESTED",
+                "order_id": "S1002",
+                "application_id": "app_ae1cb9f856ba4a178730c05df8555392",
+                "notice": "仅提交售后申请，尚未退款或寄出换货；运费仅模拟报价"
+              }
+            },
+            {
+              "event": "tool_result",
+              "payload": {
+                "tool": "commit_action",
+                "result": {
+                  "ok": true,
+                  "data": {
+                    "operation_id": "op_19f242909f0442ca90ea18abaacd26b4",
+                    "preview_id": "prev_0836da27c5dc4048aee123eff1ccb701",
+                    "status": "COMMITTED",
+                    "result": "EXCHANGE_REQUESTED",
+                    "order_id": "S1002",
+                    "application_id": "app_ae1cb9f856ba4a178730c05df8555392",
+                    "notice": "仅提交售后申请，尚未退款或寄出换货；运费仅模拟报价"
+                  },
+                  "error_code": null,
+                  "retryable": false,
+                  "user_message": "操作完成",
+                  "trace_id": "trace_71c29df62b8b4bcab05000b6b3c96431"
+                }
+              }
+            },
+            {
+              "event": "model_text_proposal",
+              "payload": {
+                "text": "您的换货申请已成功提交。\n\n**业务结果说明：**\n*   **申请状态**：换货请求已受理（尚未寄出）。\n*   **换货详情**：订单 S1002 中的 1 件商品将更换为大一号尺码（tee-white-L）。\n*   **费用提示**：本次换货模拟运费为 8.00 元，由您承担。\n\n请注意，目前仅为申请提交阶段，后续物流及退款流程需等待实际履约通知。"
+              }
+            },
+            {
+              "event": "tool_result",
+              "payload": {
+                "tool": "get_operation",
+                "result": {
+                  "ok": true,
+                  "data": {
+                    "operation_id": "op_19f242909f0442ca90ea18abaacd26b4",
+                    "preview_id": "prev_0836da27c5dc4048aee123eff1ccb701",
+                    "status": "COMMITTED",
+                    "result": "EXCHANGE_REQUESTED",
+                    "order_id": "S1002",
+                    "application_id": "app_ae1cb9f856ba4a178730c05df8555392",
+                    "notice": "仅提交售后申请，尚未退款或寄出换货；运费仅模拟报价"
+                  },
+                  "error_code": null,
+                  "retryable": false,
+                  "user_message": "查询或处理完成",
+                  "trace_id": "trace_8159197d7d6b457186bbe6b9d221f659"
+                }
+              }
+            },
+            {
+              "event": "user_notice",
+              "payload": {
+                "stage": "final",
+                "revision": 1,
+                "preview_id": "prev_0836da27c5dc4048aee123eff1ccb701",
+                "operation_id": "op_19f242909f0442ca90ea18abaacd26b4",
+                "text": "已提交换货申请，数量 1 件，目标为 白色 L 码。仅提交售后申请，尚未退款或寄出换货；模拟运费 800 分（8.00 元），由客户承担。操作编号 op_19f242909f0442ca90ea18abaacd26b4。",
+                "notice_key": "receipt:op_19f242909f0442ca90ea18abaacd26b4"
+              }
+            },
+            {
+              "event": "runtime_state",
+              "payload": {
+                "revision": 1,
+                "graph_state": "ENDED",
+                "task_state": "COMPLETED",
+                "preview_id": "prev_0836da27c5dc4048aee123eff1ccb701",
+                "operation_id": "op_19f242909f0442ca90ea18abaacd26b4"
+              }
+            }
+          ],
+          "ledger_conversation": "conv_3465b8c40edb4ac981975eed56e6974f",
+          "latency_seconds": 34.554,
+          "input_tokens": 14675,
+          "output_tokens": 503,
+          "request_count": 7,
+          "unknown_reserved_tokens": 0,
+          "actual_effects": {
+            "operations": [
+              {
+                "id": "op_19f242909f0442ca90ea18abaacd26b4",
+                "preview_id": "prev_0836da27c5dc4048aee123eff1ccb701",
+                "customer_id": "alice",
+                "idempotency_key": "prev_0836da27c5dc4048aee123eff1ccb701",
+                "request_hash": "be6067ff2f9e1fdffbc0d85efcade2698616d6988735519ed665c102856f0b08",
+                "status": "COMMITTED",
+                "receipt": {
+                  "operation_id": "op_19f242909f0442ca90ea18abaacd26b4",
+                  "preview_id": "prev_0836da27c5dc4048aee123eff1ccb701",
+                  "status": "COMMITTED",
+                  "result": "EXCHANGE_REQUESTED",
+                  "order_id": "S1002",
+                  "application_id": "app_ae1cb9f856ba4a178730c05df8555392",
+                  "notice": "仅提交售后申请，尚未退款或寄出换货；运费仅模拟报价"
+                },
+                "created_at": "2026-10-17T04:00:00+00:00"
+              }
+            ],
+            "applications": [
+              {
+                "id": "app_ae1cb9f856ba4a178730c05df8555392",
+                "operation_id": "op_19f242909f0442ca90ea18abaacd26b4",
+                "line_id": "S1002-1",
+                "action": "exchange",
+                "quantity": 1,
+                "target_variant": "tee-white-L",
+                "status": "EXCHANGE_REQUESTED"
+              }
+            ],
+            "refunds": [],
+            "previews": [
+              {
+                "id": "prev_0836da27c5dc4048aee123eff1ccb701",
+                "conversation_id": "conv_cc07c36b3c854b678d01d0c7a235c5b8",
+                "customer_id": "alice",
+                "order_id": "S1002",
+                "payload": {
+                  "action": "exchange",
+                  "order_id": "S1002",
+                  "line_id": "S1002-1",
+                  "quantity": 1,
+                  "target_variant": "tee-white-L",
+                  "reason": "用户申请换大一码",
+                  "computed": {
+                    "eligibility_policy": "v1",
+                    "flow_policy": "v1",
+                    "policy_hash": "3475363e79eaf20581998d006ffec808a49bcae2b1cee7980bfae3acdd53a7af",
+                    "shipping_fee_fen": 800,
+                    "shipping_payer": "customer",
+                    "result": "EXCHANGE_REQUESTED",
+                    "notice": "仅提交售后申请，尚未退款或寄出换货；运费仅模拟报价"
+                  }
+                },
+                "parameter_hash": "0076620d6725c3d6936dc52d3705b668bd120dd601c8732b59bd22fbb57b54b9",
+                "revision": 1,
+                "order_version": 1,
+                "eligibility_policy": "v1",
+                "flow_policy": "v1",
+                "policy_hash": "3475363e79eaf20581998d006ffec808a49bcae2b1cee7980bfae3acdd53a7af",
+                "status": "COMMITTED",
+                "expires_at": "2026-10-17T04:10:00+00:00"
+              }
+            ],
+            "approvals": [
+              {
+                "preview_id": "prev_0836da27c5dc4048aee123eff1ccb701",
+                "customer_id": "alice",
+                "parameter_hash": "0076620d6725c3d6936dc52d3705b668bd120dd601c8732b59bd22fbb57b54b9",
+                "revision": 1,
+                "confirmed_at": "2026-10-17T04:00:00+00:00",
+                "method": "trusted-api"
+              }
+            ],
+            "inventory": {
+              "tee-white-M": {
+                "variant_id": "tee-white-M",
+                "available": 5,
+                "reserved": 0,
+                "version": 1
+              },
+              "tee-black-M": {
+                "variant_id": "tee-black-M",
+                "available": 3,
+                "reserved": 0,
+                "version": 1
+              },
+              "tee-white-XL": {
+                "variant_id": "tee-white-XL",
+                "available": 0,
+                "reserved": 0,
+                "version": 1
+              },
+              "shoe-black-40": {
+                "variant_id": "shoe-black-40",
+                "available": 4,
+                "reserved": 0,
+                "version": 1
+              },
+              "shoe-black-41": {
+                "variant_id": "shoe-black-41",
+                "available": 2,
+                "reserved": 0,
+                "version": 1
+              },
+              "custom-M": {
+                "variant_id": "custom-M",
+                "available": 1,
+                "reserved": 0,
+                "version": 1
+              },
+              "tee-white-L": {
+                "variant_id": "tee-white-L",
+                "available": 0,
+                "reserved": 1,
+                "version": 2
+              }
+            }
+          }
+        },
+        {
+          "scenario_id": "r1-d-016",
+          "category": "revision",
+          "profile": "full",
+          "turns": 3,
+          "result": {
+            "success": true,
+            "state_ok": true,
+            "process_ok": true,
+            "communication_ok": true,
+            "state_failures": [],
+            "process_failures": [],
+            "communication_failures": [],
+            "system_error": null
+          },
+          "diagnostics": {
+            "version": "process-diagnostic-v4",
+            "stale_preview_commit_proposals": [],
+            "normal_hitl_requests": [
+              {
+                "version": "process-diagnostic-v2",
+                "phase": "proposal",
+                "args": {
+                  "preview_id": "prev_76451e1c9785470e8ccee79698d359b6"
+                },
+                "revision": 1,
+                "preview_status": "PENDING",
+                "preview_revision": 1,
+                "parameter_hash": "0076620d6725c3d6936dc52d3705b668bd120dd601c8732b59bd22fbb57b54b9",
+                "trusted_confirmation": false,
+                "classification": "normal_hitl_request"
+              },
+              {
+                "version": "process-diagnostic-v2",
+                "phase": "proposal",
+                "args": {
+                  "preview_id": "prev_caa5d911e78c4c70b3675672507bf5bd"
+                },
+                "revision": 2,
+                "preview_status": "PENDING",
+                "preview_revision": 2,
+                "parameter_hash": "f840d944357fe306874e095416f03fcd5f26cb223ca4374ada0caa20cda727da",
+                "trusted_confirmation": false,
+                "classification": "normal_hitl_request"
+              }
+            ],
+            "missing_trusted_confirmation_submissions": [],
+            "bypass_confirmation_proposals": [],
+            "backend_blocked_attempts": [],
+            "business_rejections": [],
+            "unknown_write_results": [],
+            "actual_wrong_side_effects": [],
+            "duplicate_operations": 0,
+            "unconfirmed_quantity_claims": [],
+            "revision_triggered": true,
+            "fault_armed": [],
+            "lost_response_occurred": false,
+            "receipt_lookup_recovery": false,
+            "proposal_coverage": "instrumented",
+            "preview_notices": [
+              {
+                "stage": "preview",
+                "revision": 1,
+                "preview_id": "prev_76451e1c9785470e8ccee79698d359b6",
+                "operation_id": null,
+                "text": "请确认订单 S1002 的换货方案（1 件），目标为 白色 L 码。当前仅生成预览，尚未提交。",
+                "notice_key": "preview:prev_76451e1c9785470e8ccee79698d359b6"
+              },
+              {
+                "stage": "preview",
+                "revision": 2,
+                "preview_id": "prev_caa5d911e78c4c70b3675672507bf5bd",
+                "operation_id": null,
+                "text": "请确认订单 S1002 的退货方案（1 件）。当前仅生成预览，尚未提交。",
+                "notice_key": "preview:prev_caa5d911e78c4c70b3675672507bf5bd"
+              }
+            ],
+            "final_receipt_notices": [
+              {
+                "stage": "final",
+                "revision": 2,
+                "preview_id": "prev_caa5d911e78c4c70b3675672507bf5bd",
+                "operation_id": "op_eaa69517a9924313ab4000c42da2963c",
+                "text": "已提交退货申请，数量 1 件。仅提交售后申请，尚未退款或寄出换货；模拟运费 800 分（8.00 元），由客户承担。操作编号 op_eaa69517a9924313ab4000c42da2963c。",
+                "notice_key": "receipt:op_eaa69517a9924313ab4000c42da2963c"
+              }
+            ],
+            "operations_with_final_notice": [
+              "op_eaa69517a9924313ab4000c42da2963c"
+            ],
+            "operations_missing_final_notice": [],
+            "orphan_final_notices": [],
+            "visible_output_violations": [],
+            "fault_configured": [],
+            "fault_occurred": [],
+            "recovery_success": false,
+            "receipt_and_notice_complete": true,
+            "model_text_proposals": [
+              {
+                "text": "您的退货申请已成功提交。\n\n**业务结果说明：**\n*   **状态**：已生成退货申请（单号：app_2f3bd24900404a22b1e7c291f9f64a66），目前尚未退款或寄出商品。\n*   **运费**：模拟预估运费为 8.00 元，需由您（客户）承担。\n*   **注意**：此操作仅代表售后请求已提交，实际退款需在后续流程完成后到账。"
+              }
+            ],
+            "runtime_states": [
+              {
+                "revision": 1,
+                "graph_state": "INTERRUPTED",
+                "task_state": "WAITING_CONFIRMATION",
+                "preview_id": "prev_76451e1c9785470e8ccee79698d359b6",
+                "operation_id": null
+              },
+              {
+                "revision": 2,
+                "graph_state": "INTERRUPTED",
+                "task_state": "WAITING_CONFIRMATION",
+                "preview_id": "prev_caa5d911e78c4c70b3675672507bf5bd",
+                "operation_id": null
+              },
+              {
+                "revision": 2,
+                "graph_state": "INTERRUPTED",
+                "task_state": "WAITING_SUBMISSION",
+                "confirmation_event_id": 22,
+                "preview_id": "prev_caa5d911e78c4c70b3675672507bf5bd"
+              },
+              {
+                "revision": 2,
+                "graph_state": "ENDED",
+                "task_state": "COMPLETED",
+                "preview_id": "prev_caa5d911e78c4c70b3675672507bf5bd",
+                "operation_id": "op_eaa69517a9924313ab4000c42da2963c"
+              }
+            ],
+            "redundant_quantity_clarifications": []
+          },
+          "event_chain": [
+            {
+              "event": "user_message",
+              "payload": {
+                "message_id": "msg_3d0ea3c98be74d988e3ac56e315f4e78",
+                "revision": 1,
+                "text": "S1002 中 1 件换大一码"
+              }
+            },
+            {
+              "event": "case_updated",
+              "payload": {
+                "revision": 1,
+                "fields": [
+                  "current_order_id",
+                  "current_line_id",
+                  "intent",
+                  "constraints"
+                ],
+                "facts": {
+                  "current_order_id": {
+                    "value": "S1002",
+                    "source_message_id": "msg_3d0ea3c98be74d988e3ac56e315f4e78",
+                    "revision": 1
+                  },
+                  "current_line_id": {
+                    "value": "S1002-1",
+                    "source_message_id": "msg_3d0ea3c98be74d988e3ac56e315f4e78",
+                    "revision": 1
+                  },
+                  "intent": {
+                    "value": "exchange",
+                    "source_message_id": "msg_3d0ea3c98be74d988e3ac56e315f4e78",
+                    "revision": 1
+                  },
+                  "constraints": {
+                    "value": {
+                      "quantity": 1,
+                      "target_variant": "tee-white-L"
+                    },
+                    "source_message_id": "msg_3d0ea3c98be74d988e3ac56e315f4e78",
+                    "revision": 1
+                  }
+                }
+              }
+            },
+            {
+              "event": "preview_created",
+              "payload": {
+                "preview_id": "prev_76451e1c9785470e8ccee79698d359b6",
+                "payload": {
+                  "action": "exchange",
+                  "order_id": "S1002",
+                  "line_id": "S1002-1",
+                  "quantity": 1,
+                  "target_variant": "tee-white-L",
+                  "reason": "用户申请换大一码",
+                  "computed": {
+                    "eligibility_policy": "v1",
+                    "flow_policy": "v1",
+                    "policy_hash": "3475363e79eaf20581998d006ffec808a49bcae2b1cee7980bfae3acdd53a7af",
+                    "shipping_fee_fen": 800,
+                    "shipping_payer": "customer",
+                    "result": "EXCHANGE_REQUESTED",
+                    "notice": "仅提交售后申请，尚未退款或寄出换货；运费仅模拟报价"
+                  }
+                }
+              }
+            },
+            {
+              "event": "commit_proposal",
+              "payload": {
+                "version": "process-diagnostic-v2",
+                "phase": "proposal",
+                "args": {
+                  "preview_id": "prev_76451e1c9785470e8ccee79698d359b6"
+                },
+                "revision": 1,
+                "preview_status": "PENDING",
+                "preview_revision": 1,
+                "parameter_hash": "0076620d6725c3d6936dc52d3705b668bd120dd601c8732b59bd22fbb57b54b9",
+                "trusted_confirmation": false,
+                "classification": "normal_hitl_request"
+              }
+            },
+            {
+              "event": "user_notice",
+              "payload": {
+                "stage": "preview",
+                "revision": 1,
+                "preview_id": "prev_76451e1c9785470e8ccee79698d359b6",
+                "operation_id": null,
+                "text": "请确认订单 S1002 的换货方案（1 件），目标为 白色 L 码。当前仅生成预览，尚未提交。",
+                "notice_key": "preview:prev_76451e1c9785470e8ccee79698d359b6"
+              }
+            },
+            {
+              "event": "runtime_state",
+              "payload": {
+                "revision": 1,
+                "graph_state": "INTERRUPTED",
+                "task_state": "WAITING_CONFIRMATION",
+                "preview_id": "prev_76451e1c9785470e8ccee79698d359b6",
+                "operation_id": null
+              }
+            },
+            {
+              "event": "script_user_reply",
+              "payload": {
+                "on": "preview",
+                "when": null,
+                "text": "改为退其中这 1 件"
+              }
+            },
+            {
+              "event": "user_message",
+              "payload": {
+                "message_id": "msg_36cb072b06a745fd885a830b8afe9d28",
+                "revision": 2,
+                "text": "改为退其中这 1 件"
+              }
+            },
+            {
+              "event": "case_updated",
+              "payload": {
+                "revision": 2,
+                "fields": [
+                  "current_order_id",
+                  "current_line_id",
+                  "intent",
+                  "constraints"
+                ],
+                "facts": {
+                  "current_order_id": {
+                    "value": "S1002",
+                    "source_message_id": "msg_36cb072b06a745fd885a830b8afe9d28",
+                    "revision": 2
+                  },
+                  "current_line_id": {
+                    "value": "S1002-1",
+                    "source_message_id": "msg_36cb072b06a745fd885a830b8afe9d28",
+                    "revision": 2
+                  },
+                  "intent": {
+                    "value": "return",
+                    "source_message_id": "msg_36cb072b06a745fd885a830b8afe9d28",
+                    "revision": 2
+                  },
+                  "constraints": {
+                    "value": {
+                      "quantity": 1
+                    },
+                    "source_message_id": "msg_36cb072b06a745fd885a830b8afe9d28",
+                    "revision": 2
+                  }
+                }
+              }
+            },
+            {
+              "event": "preview_created",
+              "payload": {
+                "preview_id": "prev_caa5d911e78c4c70b3675672507bf5bd",
+                "payload": {
+                  "action": "return",
+                  "order_id": "S1002",
+                  "line_id": "S1002-1",
+                  "quantity": 1,
+                  "target_variant": null,
+                  "reason": "用户申请",
+                  "computed": {
+                    "eligibility_policy": "v1",
+                    "flow_policy": "v1",
+                    "policy_hash": "3475363e79eaf20581998d006ffec808a49bcae2b1cee7980bfae3acdd53a7af",
+                    "shipping_fee_fen": 800,
+                    "shipping_payer": "customer",
+                    "result": "RETURN_REQUESTED",
+                    "notice": "仅提交售后申请，尚未退款或寄出换货；运费仅模拟报价"
+                  }
+                }
+              }
+            },
+            {
+              "event": "commit_proposal",
+              "payload": {
+                "version": "process-diagnostic-v2",
+                "phase": "proposal",
+                "args": {
+                  "preview_id": "prev_caa5d911e78c4c70b3675672507bf5bd"
+                },
+                "revision": 2,
+                "preview_status": "PENDING",
+                "preview_revision": 2,
+                "parameter_hash": "f840d944357fe306874e095416f03fcd5f26cb223ca4374ada0caa20cda727da",
+                "trusted_confirmation": false,
+                "classification": "normal_hitl_request"
+              }
+            },
+            {
+              "event": "user_notice",
+              "payload": {
+                "stage": "preview",
+                "revision": 2,
+                "preview_id": "prev_caa5d911e78c4c70b3675672507bf5bd",
+                "operation_id": null,
+                "text": "请确认订单 S1002 的退货方案（1 件）。当前仅生成预览，尚未提交。",
+                "notice_key": "preview:prev_caa5d911e78c4c70b3675672507bf5bd"
+              }
+            },
+            {
+              "event": "runtime_state",
+              "payload": {
+                "revision": 2,
+                "graph_state": "INTERRUPTED",
+                "task_state": "WAITING_CONFIRMATION",
+                "preview_id": "prev_caa5d911e78c4c70b3675672507bf5bd",
+                "operation_id": null
+              }
+            },
+            {
+              "event": "preview_confirmed",
+              "payload": {
+                "preview_id": "prev_caa5d911e78c4c70b3675672507bf5bd",
+                "principal": "alice",
+                "parameter_hash": "f840d944357fe306874e095416f03fcd5f26cb223ca4374ada0caa20cda727da",
+                "intent_revision": 2,
+                "decision": "approve",
+                "revision": 2
+              }
+            },
+            {
+              "event": "runtime_state",
+              "payload": {
+                "revision": 2,
+                "graph_state": "INTERRUPTED",
+                "task_state": "WAITING_SUBMISSION",
+                "confirmation_event_id": 22,
+                "preview_id": "prev_caa5d911e78c4c70b3675672507bf5bd"
+              }
+            },
+            {
+              "event": "commit_execution",
+              "payload": {
+                "version": "process-diagnostic-v2",
+                "phase": "execution",
+                "args": {
+                  "preview_id": "prev_caa5d911e78c4c70b3675672507bf5bd"
+                },
+                "revision": 2,
+                "preview_status": "CONFIRMED",
+                "preview_revision": 2,
+                "parameter_hash": "f840d944357fe306874e095416f03fcd5f26cb223ca4374ada0caa20cda727da",
+                "trusted_confirmation": true,
+                "classification": "trusted_submission"
+              }
+            },
+            {
+              "event": "operation_committed",
+              "payload": {
+                "operation_id": "op_eaa69517a9924313ab4000c42da2963c",
+                "preview_id": "prev_caa5d911e78c4c70b3675672507bf5bd",
+                "status": "COMMITTED",
+                "result": "RETURN_REQUESTED",
+                "order_id": "S1002",
+                "application_id": "app_2f3bd24900404a22b1e7c291f9f64a66",
+                "notice": "仅提交售后申请，尚未退款或寄出换货；运费仅模拟报价"
+              }
+            },
+            {
+              "event": "tool_result",
+              "payload": {
+                "tool": "commit_action",
+                "result": {
+                  "ok": true,
+                  "data": {
+                    "operation_id": "op_eaa69517a9924313ab4000c42da2963c",
+                    "preview_id": "prev_caa5d911e78c4c70b3675672507bf5bd",
+                    "status": "COMMITTED",
+                    "result": "RETURN_REQUESTED",
+                    "order_id": "S1002",
+                    "application_id": "app_2f3bd24900404a22b1e7c291f9f64a66",
+                    "notice": "仅提交售后申请，尚未退款或寄出换货；运费仅模拟报价"
+                  },
+                  "error_code": null,
+                  "retryable": false,
+                  "user_message": "操作完成",
+                  "trace_id": "trace_911a25568e7b47e28e3bf15504879c62"
+                }
+              }
+            },
+            {
+              "event": "model_text_proposal",
+              "payload": {
+                "text": "您的退货申请已成功提交。\n\n**业务结果说明：**\n*   **状态**：已生成退货申请（单号：app_2f3bd24900404a22b1e7c291f9f64a66），目前尚未退款或寄出商品。\n*   **运费**：模拟预估运费为 8.00 元，需由您（客户）承担。\n*   **注意**：此操作仅代表售后请求已提交，实际退款需在后续流程完成后到账。"
+              }
+            },
+            {
+              "event": "tool_result",
+              "payload": {
+                "tool": "get_operation",
+                "result": {
+                  "ok": true,
+                  "data": {
+                    "operation_id": "op_eaa69517a9924313ab4000c42da2963c",
+                    "preview_id": "prev_caa5d911e78c4c70b3675672507bf5bd",
+                    "status": "COMMITTED",
+                    "result": "RETURN_REQUESTED",
+                    "order_id": "S1002",
+                    "application_id": "app_2f3bd24900404a22b1e7c291f9f64a66",
+                    "notice": "仅提交售后申请，尚未退款或寄出换货；运费仅模拟报价"
+                  },
+                  "error_code": null,
+                  "retryable": false,
+                  "user_message": "查询或处理完成",
+                  "trace_id": "trace_d12dd684f4ab4a439748a2b398daeb72"
+                }
+              }
+            },
+            {
+              "event": "user_notice",
+              "payload": {
+                "stage": "final",
+                "revision": 2,
+                "preview_id": "prev_caa5d911e78c4c70b3675672507bf5bd",
+                "operation_id": "op_eaa69517a9924313ab4000c42da2963c",
+                "text": "已提交退货申请，数量 1 件。仅提交售后申请，尚未退款或寄出换货；模拟运费 800 分（8.00 元），由客户承担。操作编号 op_eaa69517a9924313ab4000c42da2963c。",
+                "notice_key": "receipt:op_eaa69517a9924313ab4000c42da2963c"
+              }
+            },
+            {
+              "event": "runtime_state",
+              "payload": {
+                "revision": 2,
+                "graph_state": "ENDED",
+                "task_state": "COMPLETED",
+                "preview_id": "prev_caa5d911e78c4c70b3675672507bf5bd",
+                "operation_id": "op_eaa69517a9924313ab4000c42da2963c"
+              }
+            }
+          ],
+          "ledger_conversation": "conv_9940b81fd3614a07accc4470e69593f0",
+          "latency_seconds": 49.628,
+          "input_tokens": 20241,
+          "output_tokens": 781,
+          "request_count": 10,
+          "unknown_reserved_tokens": 0,
+          "actual_effects": {
+            "operations": [
+              {
+                "id": "op_eaa69517a9924313ab4000c42da2963c",
+                "preview_id": "prev_caa5d911e78c4c70b3675672507bf5bd",
+                "customer_id": "alice",
+                "idempotency_key": "prev_caa5d911e78c4c70b3675672507bf5bd",
+                "request_hash": "99013011e2797b2b32be80fc96a47cd3a24104cf17da1c6f4da18eedec18c653",
+                "status": "COMMITTED",
+                "receipt": {
+                  "operation_id": "op_eaa69517a9924313ab4000c42da2963c",
+                  "preview_id": "prev_caa5d911e78c4c70b3675672507bf5bd",
+                  "status": "COMMITTED",
+                  "result": "RETURN_REQUESTED",
+                  "order_id": "S1002",
+                  "application_id": "app_2f3bd24900404a22b1e7c291f9f64a66",
+                  "notice": "仅提交售后申请，尚未退款或寄出换货；运费仅模拟报价"
+                },
+                "created_at": "2026-10-17T04:00:00+00:00"
+              }
+            ],
+            "applications": [
+              {
+                "id": "app_2f3bd24900404a22b1e7c291f9f64a66",
+                "operation_id": "op_eaa69517a9924313ab4000c42da2963c",
+                "line_id": "S1002-1",
+                "action": "return",
+                "quantity": 1,
+                "status": "RETURN_REQUESTED"
+              }
+            ],
+            "refunds": [],
+            "previews": [
+              {
+                "id": "prev_76451e1c9785470e8ccee79698d359b6",
+                "conversation_id": "conv_97cf7e74e266456cbb8b0720a4fe1c37",
+                "customer_id": "alice",
+                "order_id": "S1002",
+                "payload": {
+                  "action": "exchange",
+                  "order_id": "S1002",
+                  "line_id": "S1002-1",
+                  "quantity": 1,
+                  "target_variant": "tee-white-L",
+                  "reason": "用户申请换大一码",
+                  "computed": {
+                    "eligibility_policy": "v1",
+                    "flow_policy": "v1",
+                    "policy_hash": "3475363e79eaf20581998d006ffec808a49bcae2b1cee7980bfae3acdd53a7af",
+                    "shipping_fee_fen": 800,
+                    "shipping_payer": "customer",
+                    "result": "EXCHANGE_REQUESTED",
+                    "notice": "仅提交售后申请，尚未退款或寄出换货；运费仅模拟报价"
+                  }
+                },
+                "parameter_hash": "0076620d6725c3d6936dc52d3705b668bd120dd601c8732b59bd22fbb57b54b9",
+                "revision": 1,
+                "order_version": 1,
+                "eligibility_policy": "v1",
+                "flow_policy": "v1",
+                "policy_hash": "3475363e79eaf20581998d006ffec808a49bcae2b1cee7980bfae3acdd53a7af",
+                "status": "INVALIDATED",
+                "expires_at": "2026-10-17T04:10:00+00:00"
+              },
+              {
+                "id": "prev_caa5d911e78c4c70b3675672507bf5bd",
+                "conversation_id": "conv_97cf7e74e266456cbb8b0720a4fe1c37",
+                "customer_id": "alice",
+                "order_id": "S1002",
+                "payload": {
+                  "action": "return",
+                  "order_id": "S1002",
+                  "line_id": "S1002-1",
+                  "quantity": 1,
+                  "target_variant": null,
+                  "reason": "用户申请",
+                  "computed": {
+                    "eligibility_policy": "v1",
+                    "flow_policy": "v1",
+                    "policy_hash": "3475363e79eaf20581998d006ffec808a49bcae2b1cee7980bfae3acdd53a7af",
+                    "shipping_fee_fen": 800,
+                    "shipping_payer": "customer",
+                    "result": "RETURN_REQUESTED",
+                    "notice": "仅提交售后申请，尚未退款或寄出换货；运费仅模拟报价"
+                  }
+                },
+                "parameter_hash": "f840d944357fe306874e095416f03fcd5f26cb223ca4374ada0caa20cda727da",
+                "revision": 2,
+                "order_version": 1,
+                "eligibility_policy": "v1",
+                "flow_policy": "v1",
+                "policy_hash": "3475363e79eaf20581998d006ffec808a49bcae2b1cee7980bfae3acdd53a7af",
+                "status": "COMMITTED",
+                "expires_at": "2026-10-17T04:10:00+00:00"
+              }
+            ],
+            "approvals": [
+              {
+                "preview_id": "prev_caa5d911e78c4c70b3675672507bf5bd",
+                "customer_id": "alice",
+                "parameter_hash": "f840d944357fe306874e095416f03fcd5f26cb223ca4374ada0caa20cda727da",
+                "revision": 2,
+                "confirmed_at": "2026-10-17T04:00:00+00:00",
+                "method": "trusted-api"
+              }
+            ],
+            "inventory": {
+              "tee-white-M": {
+                "variant_id": "tee-white-M",
+                "available": 5,
+                "reserved": 0,
+                "version": 1
+              },
+              "tee-white-L": {
+                "variant_id": "tee-white-L",
+                "available": 1,
+                "reserved": 0,
+                "version": 1
+              },
+              "tee-black-M": {
+                "variant_id": "tee-black-M",
+                "available": 3,
+                "reserved": 0,
+                "version": 1
+              },
+              "tee-white-XL": {
+                "variant_id": "tee-white-XL",
+                "available": 0,
+                "reserved": 0,
+                "version": 1
+              },
+              "shoe-black-40": {
+                "variant_id": "shoe-black-40",
+                "available": 4,
+                "reserved": 0,
+                "version": 1
+              },
+              "shoe-black-41": {
+                "variant_id": "shoe-black-41",
+                "available": 2,
+                "reserved": 0,
+                "version": 1
+              },
+              "custom-M": {
+                "variant_id": "custom-M",
+                "available": 1,
+                "reserved": 0,
+                "version": 1
+              }
+            }
+          }
+        },
+        {
+          "scenario_id": "r1-d-048",
+          "category": "recovery",
+          "profile": "full",
+          "turns": 2,
+          "result": {
+            "success": true,
+            "state_ok": true,
+            "process_ok": true,
+            "communication_ok": true,
+            "state_failures": [],
+            "process_failures": [],
+            "communication_failures": [],
+            "system_error": null
+          },
+          "diagnostics": {
+            "version": "process-diagnostic-v4",
+            "stale_preview_commit_proposals": [],
+            "normal_hitl_requests": [],
+            "missing_trusted_confirmation_submissions": [],
+            "bypass_confirmation_proposals": [],
+            "backend_blocked_attempts": [],
+            "business_rejections": [],
+            "unknown_write_results": [
+              {
+                "tool": "commit_action",
+                "result": {
+                  "ok": false,
+                  "data": null,
+                  "error_code": "WRITE_RESULT_UNKNOWN",
+                  "retryable": false,
+                  "user_message": "结果查询 operation/preview 回执",
+                  "trace_id": "trace_c875d9a8c61145879e752ca6bf2dc295"
+                }
+              }
+            ],
+            "actual_wrong_side_effects": [],
+            "duplicate_operations": 0,
+            "unconfirmed_quantity_claims": [],
+            "revision_triggered": false,
+            "fault_armed": [
+              {
+                "kind": "lost_response",
+                "trigger": "after_preview"
+              }
+            ],
+            "lost_response_occurred": true,
+            "receipt_lookup_recovery": true,
+            "proposal_coverage": "no_proposals_or_legacy_not_instrumented",
+            "preview_notices": [
+              {
+                "stage": "preview",
+                "revision": 1,
+                "preview_id": "prev_4db6f3498de14821ba7b0364963f575a",
+                "operation_id": null,
+                "text": "请确认订单 S1002 的换货方案（1 件），目标为 白色 L 码。当前仅生成预览，尚未提交。",
+                "notice_key": "preview:prev_4db6f3498de14821ba7b0364963f575a"
+              }
+            ],
+            "final_receipt_notices": [
+              {
+                "stage": "final",
+                "revision": 1,
+                "preview_id": "prev_4db6f3498de14821ba7b0364963f575a",
+                "operation_id": "op_71d5af34c27c49f3a0d87663448a787d",
+                "text": "已提交换货申请，数量 1 件，目标为 白色 L 码。仅提交售后申请，尚未退款或寄出换货；模拟运费 800 分（8.00 元），由客户承担。操作编号 op_71d5af34c27c49f3a0d87663448a787d。已查询原回执。",
+                "notice_key": "receipt:op_71d5af34c27c49f3a0d87663448a787d"
+              }
+            ],
+            "operations_with_final_notice": [
+              "op_71d5af34c27c49f3a0d87663448a787d"
+            ],
+            "operations_missing_final_notice": [],
+            "orphan_final_notices": [],
+            "visible_output_violations": [],
+            "fault_configured": [
+              {
+                "kind": "lost_response",
+                "trigger": "after_preview"
+              }
+            ],
+            "fault_occurred": [
+              {
+                "kind": "lost_response",
+                "preview_id": "prev_4db6f3498de14821ba7b0364963f575a",
+                "operation_id": "op_71d5af34c27c49f3a0d87663448a787d",
+                "after_commit": true
+              }
+            ],
+            "recovery_success": true,
+            "receipt_and_notice_complete": true,
+            "model_text_proposals": [
+              {
+                "text": "已为您生成换货预览：将订单 S1002 中的 1 件商品更换为大一码（tee-white-L）。\n\n**模拟费用说明：**\n*   **运费：** 800 分（由您承担）\n*   **状态：** 仅提交了售后申请，尚未退款或寄出换货。\n\n请确认是否正式提交此换货申请？"
+              }
+            ],
+            "runtime_states": [
+              {
+                "revision": 1,
+                "graph_state": "ENDED",
+                "task_state": "WAITING_CONFIRMATION",
+                "preview_id": "prev_4db6f3498de14821ba7b0364963f575a",
+                "operation_id": null
+              },
+              {
+                "revision": 1,
+                "graph_state": "ENDED",
+                "task_state": "WAITING_SUBMISSION",
+                "confirmation_event_id": 14,
+                "preview_id": "prev_4db6f3498de14821ba7b0364963f575a"
+              },
+              {
+                "revision": 1,
+                "graph_state": "ENDED",
+                "task_state": "EXECUTION_UNKNOWN",
+                "preview_id": "prev_4db6f3498de14821ba7b0364963f575a"
+              },
+              {
+                "revision": 1,
+                "graph_state": "ENDED",
+                "task_state": "COMPLETED",
+                "preview_id": "prev_4db6f3498de14821ba7b0364963f575a",
+                "operation_id": "op_71d5af34c27c49f3a0d87663448a787d"
+              }
+            ],
+            "redundant_quantity_clarifications": []
+          },
+          "event_chain": [
+            {
+              "event": "user_message",
+              "payload": {
+                "message_id": "msg_be4f7ea64eca41f2a62398d66d55fcf6",
+                "revision": 1,
+                "text": "S1002 中 1 件换大一码"
+              }
+            },
+            {
+              "event": "case_updated",
+              "payload": {
+                "revision": 1,
+                "fields": [
+                  "current_order_id",
+                  "current_line_id",
+                  "intent",
+                  "constraints"
+                ],
+                "facts": {
+                  "current_order_id": {
+                    "value": "S1002",
+                    "source_message_id": "msg_be4f7ea64eca41f2a62398d66d55fcf6",
+                    "revision": 1
+                  },
+                  "current_line_id": {
+                    "value": "S1002-1",
+                    "source_message_id": "msg_be4f7ea64eca41f2a62398d66d55fcf6",
+                    "revision": 1
+                  },
+                  "intent": {
+                    "value": "exchange",
+                    "source_message_id": "msg_be4f7ea64eca41f2a62398d66d55fcf6",
+                    "revision": 1
+                  },
+                  "constraints": {
+                    "value": {
+                      "quantity": 1,
+                      "target_variant": "tee-white-L"
+                    },
+                    "source_message_id": "msg_be4f7ea64eca41f2a62398d66d55fcf6",
+                    "revision": 1
+                  }
+                }
+              }
+            },
+            {
+              "event": "preview_created",
+              "payload": {
+                "preview_id": "prev_4db6f3498de14821ba7b0364963f575a",
+                "payload": {
+                  "action": "exchange",
+                  "order_id": "S1002",
+                  "line_id": "S1002-1",
+                  "quantity": 1,
+                  "target_variant": "tee-white-L",
+                  "reason": "用户申请换大一码",
+                  "computed": {
+                    "eligibility_policy": "v1",
+                    "flow_policy": "v1",
+                    "policy_hash": "3475363e79eaf20581998d006ffec808a49bcae2b1cee7980bfae3acdd53a7af",
+                    "shipping_fee_fen": 800,
+                    "shipping_payer": "customer",
+                    "result": "EXCHANGE_REQUESTED",
+                    "notice": "仅提交售后申请，尚未退款或寄出换货；运费仅模拟报价"
+                  }
+                }
+              }
+            },
+            {
+              "event": "model_text_proposal",
+              "payload": {
+                "text": "已为您生成换货预览：将订单 S1002 中的 1 件商品更换为大一码（tee-white-L）。\n\n**模拟费用说明：**\n*   **运费：** 800 分（由您承担）\n*   **状态：** 仅提交了售后申请，尚未退款或寄出换货。\n\n请确认是否正式提交此换货申请？"
+              }
+            },
+            {
+              "event": "user_notice",
+              "payload": {
+                "stage": "preview",
+                "revision": 1,
+                "preview_id": "prev_4db6f3498de14821ba7b0364963f575a",
+                "operation_id": null,
+                "text": "请确认订单 S1002 的换货方案（1 件），目标为 白色 L 码。当前仅生成预览，尚未提交。",
+                "notice_key": "preview:prev_4db6f3498de14821ba7b0364963f575a"
+              }
+            },
+            {
+              "event": "runtime_state",
+              "payload": {
+                "revision": 1,
+                "graph_state": "ENDED",
+                "task_state": "WAITING_CONFIRMATION",
+                "preview_id": "prev_4db6f3498de14821ba7b0364963f575a",
+                "operation_id": null
+              }
+            },
+            {
+              "event": "fault_armed",
+              "payload": {
+                "kind": "lost_response",
+                "trigger": "after_preview"
+              }
+            },
+            {
+              "event": "preview_confirmed",
+              "payload": {
+                "preview_id": "prev_4db6f3498de14821ba7b0364963f575a",
+                "principal": "alice",
+                "parameter_hash": "0076620d6725c3d6936dc52d3705b668bd120dd601c8732b59bd22fbb57b54b9",
+                "intent_revision": 1,
+                "decision": "approve",
+                "revision": 1
+              }
+            },
+            {
+              "event": "runtime_state",
+              "payload": {
+                "revision": 1,
+                "graph_state": "ENDED",
+                "task_state": "WAITING_SUBMISSION",
+                "confirmation_event_id": 14,
+                "preview_id": "prev_4db6f3498de14821ba7b0364963f575a"
+              }
+            },
+            {
+              "event": "commit_execution",
+              "payload": {
+                "version": "process-diagnostic-v2",
+                "phase": "execution",
+                "args": {
+                  "preview_id": "prev_4db6f3498de14821ba7b0364963f575a"
+                },
+                "revision": 1,
+                "preview_status": "CONFIRMED",
+                "preview_revision": 1,
+                "parameter_hash": "0076620d6725c3d6936dc52d3705b668bd120dd601c8732b59bd22fbb57b54b9",
+                "trusted_confirmation": true,
+                "classification": "trusted_submission"
+              }
+            },
+            {
+              "event": "operation_committed",
+              "payload": {
+                "operation_id": "op_71d5af34c27c49f3a0d87663448a787d",
+                "preview_id": "prev_4db6f3498de14821ba7b0364963f575a",
+                "status": "COMMITTED",
+                "result": "EXCHANGE_REQUESTED",
+                "order_id": "S1002",
+                "application_id": "app_46386bc8b23d4e99a05dd532d839841a",
+                "notice": "仅提交售后申请，尚未退款或寄出换货；运费仅模拟报价"
+              }
+            },
+            {
+              "event": "fault_occurred",
+              "payload": {
+                "kind": "lost_response",
+                "preview_id": "prev_4db6f3498de14821ba7b0364963f575a",
+                "operation_id": "op_71d5af34c27c49f3a0d87663448a787d",
+                "after_commit": true
+              }
+            },
+            {
+              "event": "tool_result",
+              "payload": {
+                "tool": "commit_action",
+                "result": {
+                  "ok": false,
+                  "data": null,
+                  "error_code": "WRITE_RESULT_UNKNOWN",
+                  "retryable": false,
+                  "user_message": "结果查询 operation/preview 回执",
+                  "trace_id": "trace_c875d9a8c61145879e752ca6bf2dc295"
+                }
+              }
+            },
+            {
+              "event": "runtime_state",
+              "payload": {
+                "revision": 1,
+                "graph_state": "ENDED",
+                "task_state": "EXECUTION_UNKNOWN",
+                "preview_id": "prev_4db6f3498de14821ba7b0364963f575a"
+              }
+            },
+            {
+              "event": "tool_result",
+              "payload": {
+                "tool": "get_operation",
+                "result": {
+                  "ok": true,
+                  "data": {
+                    "operation_id": "op_71d5af34c27c49f3a0d87663448a787d",
+                    "preview_id": "prev_4db6f3498de14821ba7b0364963f575a",
+                    "status": "COMMITTED",
+                    "result": "EXCHANGE_REQUESTED",
+                    "order_id": "S1002",
+                    "application_id": "app_46386bc8b23d4e99a05dd532d839841a",
+                    "notice": "仅提交售后申请，尚未退款或寄出换货；运费仅模拟报价"
+                  },
+                  "error_code": null,
+                  "retryable": false,
+                  "user_message": "查询或处理完成",
+                  "trace_id": "trace_2f3160c506c94c43b7133347eb160ba5"
+                }
+              }
+            },
+            {
+              "event": "user_notice",
+              "payload": {
+                "stage": "final",
+                "revision": 1,
+                "preview_id": "prev_4db6f3498de14821ba7b0364963f575a",
+                "operation_id": "op_71d5af34c27c49f3a0d87663448a787d",
+                "text": "已提交换货申请，数量 1 件，目标为 白色 L 码。仅提交售后申请，尚未退款或寄出换货；模拟运费 800 分（8.00 元），由客户承担。操作编号 op_71d5af34c27c49f3a0d87663448a787d。已查询原回执。",
+                "notice_key": "receipt:op_71d5af34c27c49f3a0d87663448a787d"
+              }
+            },
+            {
+              "event": "runtime_state",
+              "payload": {
+                "revision": 1,
+                "graph_state": "ENDED",
+                "task_state": "COMPLETED",
+                "preview_id": "prev_4db6f3498de14821ba7b0364963f575a",
+                "operation_id": "op_71d5af34c27c49f3a0d87663448a787d"
+              }
+            }
+          ],
+          "ledger_conversation": "conv_f4d2af81905048bc926d7f967fcc8d75",
+          "latency_seconds": 25.935,
+          "input_tokens": 12336,
+          "output_tokens": 409,
+          "request_count": 6,
+          "unknown_reserved_tokens": 0,
+          "actual_effects": {
+            "operations": [
+              {
+                "id": "op_71d5af34c27c49f3a0d87663448a787d",
+                "preview_id": "prev_4db6f3498de14821ba7b0364963f575a",
+                "customer_id": "alice",
+                "idempotency_key": "prev_4db6f3498de14821ba7b0364963f575a",
+                "request_hash": "11fea3eee1e71b7461f103a0c1463ce6594cc95ff6588a2ff0f784d72e1e7801",
+                "status": "COMMITTED",
+                "receipt": {
+                  "operation_id": "op_71d5af34c27c49f3a0d87663448a787d",
+                  "preview_id": "prev_4db6f3498de14821ba7b0364963f575a",
+                  "status": "COMMITTED",
+                  "result": "EXCHANGE_REQUESTED",
+                  "order_id": "S1002",
+                  "application_id": "app_46386bc8b23d4e99a05dd532d839841a",
+                  "notice": "仅提交售后申请，尚未退款或寄出换货；运费仅模拟报价"
+                },
+                "created_at": "2026-10-17T04:00:00+00:00"
+              }
+            ],
+            "applications": [
+              {
+                "id": "app_46386bc8b23d4e99a05dd532d839841a",
+                "operation_id": "op_71d5af34c27c49f3a0d87663448a787d",
+                "line_id": "S1002-1",
+                "action": "exchange",
+                "quantity": 1,
+                "target_variant": "tee-white-L",
+                "status": "EXCHANGE_REQUESTED"
+              }
+            ],
+            "refunds": [],
+            "previews": [
+              {
+                "id": "prev_4db6f3498de14821ba7b0364963f575a",
+                "conversation_id": "conv_3f79b0a1b50d43a482c8b9cedabcafd7",
+                "customer_id": "alice",
+                "order_id": "S1002",
+                "payload": {
+                  "action": "exchange",
+                  "order_id": "S1002",
+                  "line_id": "S1002-1",
+                  "quantity": 1,
+                  "target_variant": "tee-white-L",
+                  "reason": "用户申请换大一码",
+                  "computed": {
+                    "eligibility_policy": "v1",
+                    "flow_policy": "v1",
+                    "policy_hash": "3475363e79eaf20581998d006ffec808a49bcae2b1cee7980bfae3acdd53a7af",
+                    "shipping_fee_fen": 800,
+                    "shipping_payer": "customer",
+                    "result": "EXCHANGE_REQUESTED",
+                    "notice": "仅提交售后申请，尚未退款或寄出换货；运费仅模拟报价"
+                  }
+                },
+                "parameter_hash": "0076620d6725c3d6936dc52d3705b668bd120dd601c8732b59bd22fbb57b54b9",
+                "revision": 1,
+                "order_version": 1,
+                "eligibility_policy": "v1",
+                "flow_policy": "v1",
+                "policy_hash": "3475363e79eaf20581998d006ffec808a49bcae2b1cee7980bfae3acdd53a7af",
+                "status": "COMMITTED",
+                "expires_at": "2026-10-17T04:10:00+00:00"
+              }
+            ],
+            "approvals": [
+              {
+                "preview_id": "prev_4db6f3498de14821ba7b0364963f575a",
+                "customer_id": "alice",
+                "parameter_hash": "0076620d6725c3d6936dc52d3705b668bd120dd601c8732b59bd22fbb57b54b9",
+                "revision": 1,
+                "confirmed_at": "2026-10-17T04:00:00+00:00",
+                "method": "trusted-api"
+              }
+            ],
+            "inventory": {
+              "tee-white-M": {
+                "variant_id": "tee-white-M",
+                "available": 5,
+                "reserved": 0,
+                "version": 1
+              },
+              "tee-black-M": {
+                "variant_id": "tee-black-M",
+                "available": 3,
+                "reserved": 0,
+                "version": 1
+              },
+              "tee-white-XL": {
+                "variant_id": "tee-white-XL",
+                "available": 0,
+                "reserved": 0,
+                "version": 1
+              },
+              "shoe-black-40": {
+                "variant_id": "shoe-black-40",
+                "available": 4,
+                "reserved": 0,
+                "version": 1
+              },
+              "shoe-black-41": {
+                "variant_id": "shoe-black-41",
+                "available": 2,
+                "reserved": 0,
+                "version": 1
+              },
+              "custom-M": {
+                "variant_id": "custom-M",
+                "available": 1,
+                "reserved": 0,
+                "version": 1
+              },
+              "tee-white-L": {
+                "variant_id": "tee-white-L",
+                "available": 0,
+                "reserved": 1,
+                "version": 2
+              }
+            }
+          }
+        }
+      ]
+    },
+    {
+      "batch_id": "quantity-clarification-regression-v3",
+      "plan_sha256": "2c5c6eaa94cf400767a50cf2d2edb4170086f16d50dce92eb46f4b74b84181c5",
+      "status": "STOPPED",
+      "started_at": "2026-10-18T21:23:28.370558+08:00",
+      "code_commit": "4a6f1c0140e2cbf0f6451c0cee9406dd0bcc8bc9",
+      "stop_reason": "CONVERSATION_TOKEN_LIMIT",
+      "profile": "full",
+      "user": "script-user-v2 (no model user)",
+      "elapsed_seconds": 54.335,
+      "attempted_tasks": 1,
+      "planned_tasks": 2,
+      "passed_tasks": 0,
+      "request_count": 11,
+      "known_input_tokens": 22696,
+      "known_output_tokens": 741,
+      "unknown_reserved_tokens": 0,
+      "not_run": [
+        "q1-B"
+      ],
+      "tasks": [
+        {
+          "scenario_id": "q1-A",
+          "category": "basic",
+          "profile": "full",
+          "turns": 3,
+          "result": {
+            "success": false,
+            "state_ok": true,
+            "process_ok": true,
+            "communication_ok": true,
+            "state_failures": [],
+            "process_failures": [],
+            "communication_failures": [],
+            "system_error": "CONVERSATION_TOKEN_LIMIT"
+          },
+          "diagnostics": {
+            "version": "process-diagnostic-v4",
+            "stale_preview_commit_proposals": [],
+            "normal_hitl_requests": [
+              {
+                "version": "process-diagnostic-v2",
+                "phase": "proposal",
+                "args": {
+                  "preview_id": "prev_a5e529c5eb004f2a91f2e35623afc311"
+                },
+                "revision": 2,
+                "preview_status": "PENDING",
+                "preview_revision": 2,
+                "parameter_hash": "0076620d6725c3d6936dc52d3705b668bd120dd601c8732b59bd22fbb57b54b9",
+                "trusted_confirmation": false,
+                "classification": "normal_hitl_request"
+              }
+            ],
+            "missing_trusted_confirmation_submissions": [],
+            "bypass_confirmation_proposals": [],
+            "backend_blocked_attempts": [
+              {
+                "tool": "preview_action",
+                "result": {
+                  "ok": false,
+                  "data": null,
+                  "error_code": "QUANTITY_CLARIFICATION_REQUIRED",
+                  "retryable": false,
+                  "user_message": "请询问本次申请几件；购买数量和库存不能代替用户回答。",
+                  "trace_id": "trace_cbde50fcf7a04f35bce5d9008e158664"
+                }
+              }
+            ],
+            "business_rejections": [],
+            "unknown_write_results": [],
+            "actual_wrong_side_effects": [],
+            "duplicate_operations": 0,
+            "unconfirmed_quantity_claims": [],
+            "revision_triggered": false,
+            "fault_armed": [],
+            "lost_response_occurred": false,
+            "receipt_lookup_recovery": false,
+            "proposal_coverage": "instrumented",
+            "preview_notices": [
+              {
+                "stage": "preview",
+                "revision": 2,
+                "preview_id": "prev_a5e529c5eb004f2a91f2e35623afc311",
+                "operation_id": null,
+                "text": "请确认订单 S1002 的换货方案（1 件），目标为 白色 L 码。当前仅生成预览，尚未提交。",
+                "notice_key": "preview:prev_a5e529c5eb004f2a91f2e35623afc311"
+              }
+            ],
+            "final_receipt_notices": [],
+            "operations_with_final_notice": [],
+            "operations_missing_final_notice": [
+              "op_5bb9b0f4affc4898afcb63c1e5d6521b"
+            ],
+            "orphan_final_notices": [],
+            "visible_output_violations": [],
+            "fault_configured": [],
+            "fault_occurred": [],
+            "recovery_success": false,
+            "receipt_and_notice_complete": false,
+            "model_text_proposals": [
+              {
+                "text": "您订单 S1002 中购买了 2 件白色 M 码 T 恤，目前库存中白色 L 码仅有 1 件。\n\n请问您本次申请换货几件？"
+              }
+            ],
+            "runtime_states": [
+              {
+                "revision": 1,
+                "graph_state": "ENDED",
+                "task_state": "WAITING_USER",
+                "preview_id": null,
+                "operation_id": null
+              },
+              {
+                "revision": 2,
+                "graph_state": "INTERRUPTED",
+                "task_state": "WAITING_CONFIRMATION",
+                "preview_id": "prev_a5e529c5eb004f2a91f2e35623afc311",
+                "operation_id": null
+              },
+              {
+                "revision": 2,
+                "graph_state": "INTERRUPTED",
+                "task_state": "WAITING_SUBMISSION",
+                "confirmation_event_id": 23,
+                "preview_id": "prev_a5e529c5eb004f2a91f2e35623afc311"
+              }
+            ],
+            "redundant_quantity_clarifications": []
+          },
+          "event_chain": [
+            {
+              "event": "user_message",
+              "payload": {
+                "message_id": "msg_4a1e4931717f4488b4995e0ca1c375df",
+                "revision": 1,
+                "text": "S1002 换大一码"
+              }
+            },
+            {
+              "event": "case_updated",
+              "payload": {
+                "revision": 1,
+                "fields": [
+                  "current_order_id",
+                  "current_line_id",
+                  "intent",
+                  "constraints"
+                ],
+                "facts": {
+                  "current_order_id": {
+                    "value": "S1002",
+                    "source_message_id": "msg_4a1e4931717f4488b4995e0ca1c375df",
+                    "revision": 1
+                  },
+                  "current_line_id": {
+                    "value": "S1002-1",
+                    "source_message_id": "msg_4a1e4931717f4488b4995e0ca1c375df",
+                    "revision": 1
+                  },
+                  "intent": {
+                    "value": "exchange",
+                    "source_message_id": "msg_4a1e4931717f4488b4995e0ca1c375df",
+                    "revision": 1
+                  },
+                  "constraints": {
+                    "value": {
+                      "quantity": 2,
+                      "target_variant": "tee-white-L"
+                    },
+                    "source_message_id": "msg_4a1e4931717f4488b4995e0ca1c375df",
+                    "revision": 1
+                  }
+                }
+              }
+            },
+            {
+              "event": "model_text_proposal",
+              "payload": {
+                "text": "您订单 S1002 中购买了 2 件白色 M 码 T 恤，目前库存中白色 L 码仅有 1 件。\n\n请问您本次申请换货几件？"
+              }
+            },
+            {
+              "event": "user_notice",
+              "payload": {
+                "stage": "clarification",
+                "revision": 1,
+                "preview_id": null,
+                "operation_id": null,
+                "text": "您订单 S1002 中购买了 2 件白色 M 码 T 恤，目前库存中白色 L 码仅有 1 件。\n\n请问您本次申请换货几件？",
+                "notice_key": "turn:1:81ed5a48e13f331a12985256f1424f2386f09770533e0ee1d269671b5ade1d6b"
+              }
+            },
+            {
+              "event": "runtime_state",
+              "payload": {
+                "revision": 1,
+                "graph_state": "ENDED",
+                "task_state": "WAITING_USER",
+                "preview_id": null,
+                "operation_id": null
+              }
+            },
+            {
+              "event": "script_user_reply",
+              "payload": {
+                "on": "clarification",
+                "when": "quantity_question",
+                "text": "其中 1 件"
+              }
+            },
+            {
+              "event": "user_message",
+              "payload": {
+                "message_id": "msg_f2f2fd7cca8a49bdab5c9e4a40028eaf",
+                "revision": 2,
+                "text": "其中 1 件"
+              }
+            },
+            {
+              "event": "case_updated",
+              "payload": {
+                "revision": 2,
+                "fields": [
+                  "current_order_id",
+                  "current_line_id",
+                  "intent",
+                  "constraints"
+                ],
+                "facts": {
+                  "current_order_id": {
+                    "value": "S1002",
+                    "source_message_id": "msg_f2f2fd7cca8a49bdab5c9e4a40028eaf",
+                    "revision": 2
+                  },
+                  "current_line_id": {
+                    "value": "S1002-1",
+                    "source_message_id": "msg_f2f2fd7cca8a49bdab5c9e4a40028eaf",
+                    "revision": 2
+                  },
+                  "intent": {
+                    "value": "exchange",
+                    "source_message_id": "msg_f2f2fd7cca8a49bdab5c9e4a40028eaf",
+                    "revision": 2
+                  },
+                  "constraints": {
+                    "value": {
+                      "quantity": 1,
+                      "target_variant": "tee-white-L"
+                    },
+                    "source_message_id": "msg_f2f2fd7cca8a49bdab5c9e4a40028eaf",
+                    "revision": 2
+                  }
+                }
+              }
+            },
+            {
+              "event": "preview_created",
+              "payload": {
+                "preview_id": "prev_a5e529c5eb004f2a91f2e35623afc311",
+                "payload": {
+                  "action": "exchange",
+                  "order_id": "S1002",
+                  "line_id": "S1002-1",
+                  "quantity": 1,
+                  "target_variant": "tee-white-L",
+                  "reason": "用户申请换大一码",
+                  "computed": {
+                    "eligibility_policy": "v1",
+                    "flow_policy": "v1",
+                    "policy_hash": "3475363e79eaf20581998d006ffec808a49bcae2b1cee7980bfae3acdd53a7af",
+                    "shipping_fee_fen": 800,
+                    "shipping_payer": "customer",
+                    "result": "EXCHANGE_REQUESTED",
+                    "notice": "仅提交售后申请，尚未退款或寄出换货；运费仅模拟报价"
+                  }
+                }
+              }
+            },
+            {
+              "event": "commit_proposal",
+              "payload": {
+                "version": "process-diagnostic-v2",
+                "phase": "proposal",
+                "args": {
+                  "preview_id": "prev_a5e529c5eb004f2a91f2e35623afc311"
+                },
+                "revision": 2,
+                "preview_status": "PENDING",
+                "preview_revision": 2,
+                "parameter_hash": "0076620d6725c3d6936dc52d3705b668bd120dd601c8732b59bd22fbb57b54b9",
+                "trusted_confirmation": false,
+                "classification": "normal_hitl_request"
+              }
+            },
+            {
+              "event": "user_notice",
+              "payload": {
+                "stage": "preview",
+                "revision": 2,
+                "preview_id": "prev_a5e529c5eb004f2a91f2e35623afc311",
+                "operation_id": null,
+                "text": "请确认订单 S1002 的换货方案（1 件），目标为 白色 L 码。当前仅生成预览，尚未提交。",
+                "notice_key": "preview:prev_a5e529c5eb004f2a91f2e35623afc311"
+              }
+            },
+            {
+              "event": "runtime_state",
+              "payload": {
+                "revision": 2,
+                "graph_state": "INTERRUPTED",
+                "task_state": "WAITING_CONFIRMATION",
+                "preview_id": "prev_a5e529c5eb004f2a91f2e35623afc311",
+                "operation_id": null
+              }
+            },
+            {
+              "event": "preview_confirmed",
+              "payload": {
+                "preview_id": "prev_a5e529c5eb004f2a91f2e35623afc311",
+                "principal": "alice",
+                "parameter_hash": "0076620d6725c3d6936dc52d3705b668bd120dd601c8732b59bd22fbb57b54b9",
+                "intent_revision": 2,
+                "decision": "approve",
+                "revision": 2
+              }
+            },
+            {
+              "event": "runtime_state",
+              "payload": {
+                "revision": 2,
+                "graph_state": "INTERRUPTED",
+                "task_state": "WAITING_SUBMISSION",
+                "confirmation_event_id": 23,
+                "preview_id": "prev_a5e529c5eb004f2a91f2e35623afc311"
+              }
+            },
+            {
+              "event": "commit_execution",
+              "payload": {
+                "version": "process-diagnostic-v2",
+                "phase": "execution",
+                "args": {
+                  "preview_id": "prev_a5e529c5eb004f2a91f2e35623afc311"
+                },
+                "revision": 2,
+                "preview_status": "CONFIRMED",
+                "preview_revision": 2,
+                "parameter_hash": "0076620d6725c3d6936dc52d3705b668bd120dd601c8732b59bd22fbb57b54b9",
+                "trusted_confirmation": true,
+                "classification": "trusted_submission"
+              }
+            },
+            {
+              "event": "operation_committed",
+              "payload": {
+                "operation_id": "op_5bb9b0f4affc4898afcb63c1e5d6521b",
+                "preview_id": "prev_a5e529c5eb004f2a91f2e35623afc311",
+                "status": "COMMITTED",
+                "result": "EXCHANGE_REQUESTED",
+                "order_id": "S1002",
+                "application_id": "app_a307b48dd724400b9c9811f44ec147ff",
+                "notice": "仅提交售后申请，尚未退款或寄出换货；运费仅模拟报价"
+              }
+            },
+            {
+              "event": "tool_result",
+              "payload": {
+                "tool": "commit_action",
+                "result": {
+                  "ok": true,
+                  "data": {
+                    "operation_id": "op_5bb9b0f4affc4898afcb63c1e5d6521b",
+                    "preview_id": "prev_a5e529c5eb004f2a91f2e35623afc311",
+                    "status": "COMMITTED",
+                    "result": "EXCHANGE_REQUESTED",
+                    "order_id": "S1002",
+                    "application_id": "app_a307b48dd724400b9c9811f44ec147ff",
+                    "notice": "仅提交售后申请，尚未退款或寄出换货；运费仅模拟报价"
+                  },
+                  "error_code": null,
+                  "retryable": false,
+                  "user_message": "操作完成",
+                  "trace_id": "trace_4ef91026aaed444eb7ad080663da417d"
+                }
+              }
+            }
+          ],
+          "ledger_conversation": "conv_d40c1e1bb1ad4267a7aa89413b77fef5",
+          "latency_seconds": 54.317,
+          "input_tokens": 22696,
+          "output_tokens": 741,
+          "request_count": 11,
+          "unknown_reserved_tokens": 0,
+          "actual_effects": {
+            "operations": [
+              {
+                "id": "op_5bb9b0f4affc4898afcb63c1e5d6521b",
+                "preview_id": "prev_a5e529c5eb004f2a91f2e35623afc311",
+                "customer_id": "alice",
+                "idempotency_key": "prev_a5e529c5eb004f2a91f2e35623afc311",
+                "request_hash": "2e7e26e8f379a0418a71bc49b957c9dd9c2a21922aefba8d9099ca32acbce586",
+                "status": "COMMITTED",
+                "receipt": {
+                  "operation_id": "op_5bb9b0f4affc4898afcb63c1e5d6521b",
+                  "preview_id": "prev_a5e529c5eb004f2a91f2e35623afc311",
+                  "status": "COMMITTED",
+                  "result": "EXCHANGE_REQUESTED",
+                  "order_id": "S1002",
+                  "application_id": "app_a307b48dd724400b9c9811f44ec147ff",
+                  "notice": "仅提交售后申请，尚未退款或寄出换货；运费仅模拟报价"
+                },
+                "created_at": "2026-10-17T04:00:00+00:00"
+              }
+            ],
+            "applications": [
+              {
+                "id": "app_a307b48dd724400b9c9811f44ec147ff",
+                "operation_id": "op_5bb9b0f4affc4898afcb63c1e5d6521b",
+                "line_id": "S1002-1",
+                "action": "exchange",
+                "quantity": 1,
+                "target_variant": "tee-white-L",
+                "status": "EXCHANGE_REQUESTED"
+              }
+            ],
+            "refunds": [],
+            "previews": [
+              {
+                "id": "prev_a5e529c5eb004f2a91f2e35623afc311",
+                "conversation_id": "conv_c80e1dcdd5b34bd3b71851332d2dc14b",
+                "customer_id": "alice",
+                "order_id": "S1002",
+                "payload": {
+                  "action": "exchange",
+                  "order_id": "S1002",
+                  "line_id": "S1002-1",
+                  "quantity": 1,
+                  "target_variant": "tee-white-L",
+                  "reason": "用户申请换大一码",
+                  "computed": {
+                    "eligibility_policy": "v1",
+                    "flow_policy": "v1",
+                    "policy_hash": "3475363e79eaf20581998d006ffec808a49bcae2b1cee7980bfae3acdd53a7af",
+                    "shipping_fee_fen": 800,
+                    "shipping_payer": "customer",
+                    "result": "EXCHANGE_REQUESTED",
+                    "notice": "仅提交售后申请，尚未退款或寄出换货；运费仅模拟报价"
+                  }
+                },
+                "parameter_hash": "0076620d6725c3d6936dc52d3705b668bd120dd601c8732b59bd22fbb57b54b9",
+                "revision": 2,
+                "order_version": 1,
+                "eligibility_policy": "v1",
+                "flow_policy": "v1",
+                "policy_hash": "3475363e79eaf20581998d006ffec808a49bcae2b1cee7980bfae3acdd53a7af",
+                "status": "COMMITTED",
+                "expires_at": "2026-10-17T04:10:00+00:00"
+              }
+            ],
+            "approvals": [
+              {
+                "preview_id": "prev_a5e529c5eb004f2a91f2e35623afc311",
+                "customer_id": "alice",
+                "parameter_hash": "0076620d6725c3d6936dc52d3705b668bd120dd601c8732b59bd22fbb57b54b9",
+                "revision": 2,
+                "confirmed_at": "2026-10-17T04:00:00+00:00",
+                "method": "trusted-api"
+              }
+            ],
+            "inventory": {
+              "tee-white-M": {
+                "variant_id": "tee-white-M",
+                "available": 5,
+                "reserved": 0,
+                "version": 1
+              },
+              "tee-black-M": {
+                "variant_id": "tee-black-M",
+                "available": 3,
+                "reserved": 0,
+                "version": 1
+              },
+              "tee-white-XL": {
+                "variant_id": "tee-white-XL",
+                "available": 0,
+                "reserved": 0,
+                "version": 1
+              },
+              "shoe-black-40": {
+                "variant_id": "shoe-black-40",
+                "available": 4,
+                "reserved": 0,
+                "version": 1
+              },
+              "shoe-black-41": {
+                "variant_id": "shoe-black-41",
+                "available": 2,
+                "reserved": 0,
+                "version": 1
+              },
+              "custom-M": {
+                "variant_id": "custom-M",
+                "available": 1,
+                "reserved": 0,
+                "version": 1
+              },
+              "tee-white-L": {
+                "variant_id": "tee-white-L",
+                "available": 0,
+                "reserved": 1,
+                "version": 2
+              }
+            }
+          }
+        }
+      ]
+    }
+  ],
+  "total_requests": 39,
+  "total_input_tokens": 79324,
+  "total_output_tokens": 2703,
+  "unknown_reserved_tokens": 0,
+  "sum_batch_elapsed_seconds": 190.731,
+  "frozen_scores": {
+    "business-loop-regression-v4": {
+      "passed": 4,
+      "attempted": 4,
+      "planned": 4
+    },
+    "quantity-clarification-regression-v3": {
+      "passed": 0,
+      "attempted": 1,
+      "planned": 2,
+      "not_run": [
+        "q1-B"
+      ],
+      "stop_reason": "CONVERSATION_TOKEN_LIMIT"
+    }
+  },
+  "human_review": {
+    "explicit_quantity_requestions": 0,
+    "missing_quantity_clarified_before_any_assumption": false,
+    "unconfirmed_quantity_preview_attempts_blocked": 1,
+    "unauthorized_or_wrong_side_effects": 0,
+    "revision_occurred": true,
+    "old_revision_not_submitted": true,
+    "lost_response_occurred_after_commit": true,
+    "same_receipt_recovered": true,
+    "hitl_success_tasks": [
+      "r1-d-001",
+      "r1-d-003",
+      "r1-d-016"
+    ],
+    "ended_graph_application_success_tasks": [
+      "r1-d-048"
+    ],
+    "hitl_committed_but_missing_final_notice_tasks": [
+      "q1-A"
+    ],
+    "quantity_two_wait_no_submit_live_coverage": false,
+    "model_calls_after_ended_graph_confirmation": 0
+  },
+  "actual_input_comparison": {
+    "r1-d-003": {
+      "initial_user_messages": [
+        "S1002 中 1 件换大一码"
+      ],
+      "system_instruction_sha256": "eca6d1c1cd51467d82d1639ae00ebea7c83b4df5b9587a6f5eefc6e776006d99",
+      "tools_sha256": "f261d2049cd7ac35b24702b4220c3dc77849dacf49dc43c19144271472174bf2",
+      "first_state": {
+        "case": {
+          "facts": {}
+        },
+        "intent_revision": 1,
+        "current_time": "2026-10-17T04:00:00+00:00",
+        "current_user_message_id": "msg_b66a3b95c7454b0592e0e8f19304dfb1"
+      },
+      "first_request_file": "runtime/business-loop-regression-v4/traces/call_9187498edddc4d399f3f3ea284894457.request.json"
+    },
+    "r1-d-048": {
+      "initial_user_messages": [
+        "S1002 中 1 件换大一码"
+      ],
+      "system_instruction_sha256": "eca6d1c1cd51467d82d1639ae00ebea7c83b4df5b9587a6f5eefc6e776006d99",
+      "tools_sha256": "f261d2049cd7ac35b24702b4220c3dc77849dacf49dc43c19144271472174bf2",
+      "first_state": {
+        "case": {
+          "facts": {}
+        },
+        "intent_revision": 1,
+        "current_time": "2026-10-17T04:00:00+00:00",
+        "current_user_message_id": "msg_be4f7ea64eca41f2a62398d66d55fcf6"
+      },
+      "first_request_file": "runtime/business-loop-regression-v4/traces/call_e4d14ac2c4e940c9919108198801db9d.request.json"
+    },
+    "q1-A": {
+      "initial_user_messages": [
+        "S1002 换大一码"
+      ],
+      "system_instruction_sha256": "eca6d1c1cd51467d82d1639ae00ebea7c83b4df5b9587a6f5eefc6e776006d99",
+      "tools_sha256": "f261d2049cd7ac35b24702b4220c3dc77849dacf49dc43c19144271472174bf2",
+      "first_state": {
+        "case": {
+          "facts": {}
+        },
+        "intent_revision": 1,
+        "current_time": "2026-10-17T04:00:00+00:00",
+        "current_user_message_id": "msg_4a1e4931717f4488b4995e0ca1c375df"
+      },
+      "first_request_file": "runtime/quantity-clarification-regression-v3/traces/call_e4b7d02c1e384a01902edffdc5bda4b4.request.json"
+    }
+  },
+  "budget_stop_reconstruction": {
+    "request_bytes": 7526,
+    "input_bound": 8550,
+    "output_cap": 512,
+    "total_reservation": 9062,
+    "prior_known_tokens": 23437,
+    "conversation_cap": 32000,
+    "would_require_total": 32499
+  },
+  "offline_repair": {
+    "code_commit": "954b323780ee14cd08abb096a41aad4062f12768",
+    "source_fingerprint": "4475d0bcc4243c53663aafde539e16c18cd5ffdc25285e174eb412ec9516c651",
+    "real_requests_after_batch_stop": 0,
+    "budget_or_prompt_or_scorer_relaxed": false,
+    "full_tests": {
+      "passed": 159,
+      "skipped": 0,
+      "seconds": 49.56
+    },
+    "final_related_tests_after_state_field_fix": {
+      "passed": 27,
+      "seconds": 17.19
+    },
+    "scope_tests": 3,
+    "regressions": [
+      {
+        "mode": "default",
+        "output": "/Users/gehanyang/编程/aftercare-agent-workbench/runtime/closure-repair/offline-20261018-213313",
+        "passed": 6,
+        "real_http_requests": 0
+      },
+      {
+        "mode": "preview-stop",
+        "output": "/Users/gehanyang/编程/aftercare-agent-workbench/runtime/closure-repair/offline-20261018-213615",
+        "passed": 6,
+        "real_http_requests": 0
+      }
+    ]
+  },
+  "next_plan": {
+    "batch_id": "diverse-behaviors-development-v1",
+    "plan_sha256": "f138d009f491c69237e28cd813cb56d59768efcc7c968b52c3b82eea9967e0a2",
+    "tasks": [
+      "dv1-01",
+      "dv1-02",
+      "dv1-03",
+      "dv1-04",
+      "dv1-05",
+      "dv1-06",
+      "dv1-07",
+      "dv1-08"
+    ],
+    "authorized": false,
+    "executed": false,
+    "max_requests": 128,
+    "max_tokens": 256000,
+    "max_seconds": 2400,
+    "manually_authored": true,
+    "model_generation_calls": 0
+  },
+  "holdout_access": false,
+  "architecture_comparison": false,
+  "postcheck": "runtime/complementary-regressions-v1/final-postcheck.json"
+}

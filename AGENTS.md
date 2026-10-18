@@ -30,30 +30,16 @@ AFTERCARE_TEST_DATABASE_URL=postgresql+psycopg://aftercare:aftercare_local_only@
 .venv/bin/ruff format --check .
 ```
 
-当前完成阶段 0—5；6A 兼容检查 6/6、首轮 development-pilot 0/4 均已结案。
-首轮 pilot 实际 24 请求、49,871 Token；不能写成业务验收通过。
-专用入口为 `model smoke --batch compatibility-smoke` 或 `model smoke --batch development-pilot`，
-均需 `--approval`、`--account-confirmation` 与 `--execute`。
-已实现，仅接受各自绑定的获批 hash；必须临时显式启用真实开关，已执行批次禁止直接重跑。
-当前可信确认续跑修复已通过 144 项离线测试、20 项无网络容器验收，
-HITL 与预览后停止两种模式各六题通过；真实模型效果仍待验证。
-business-loop-regression-v2 已授权并结案：2/4，28 请求、54,787 Token，未知预留 0。
-取消/改口完成；直接换码及丢响应题停在已确认但无图恢复节点，丢响应恢复未覆盖。
-原始轨迹已冻结，不能重复执行或把未使用额度转入新批。
-business-loop-regression-v3 已结案：2/4，19 请求、36,533 Token、未知预留 0。
-取消及事务后丢响应恢复通过；换码/改口停在重复事实确认，改口未覆盖。
-quantity-clarification-regression-v2 曾获条件批准，但首批门禁失败，未运行。
-本轮离线提示词调整及 process-diagnostic-v4 已完成：152 passed/1 skipped，跳过项单独补验通过；
-两种离线协议模式各六题通过。模型是否改善仍待新真实验证。
-当前待批为 business-loop-regression-v4（四题，160k/64 请求）和
-quantity-clarification-regression-v3（两题，64k/32 请求），均未授权/未执行。
-旧 v3/数量 v2 scope 已关闭，不能把原授权用于新源码；详见 docs/experiments/business-loop-regression-v3-first.md。
-旧闭环批已结案，旧数量计划已过期，入口拒绝旧 hash；不能沿用授权/未用预算。
-新批次须独立新审批、固定指纹及当前免费余量/保护确认。
-修复与当前限制见 docs/experiments/confirmation-continuation.md。
-本机 8128 工作台 app/worker 已更新，真实开关关闭；原始失败与成绩不回写。
-真实模型适配已接入九工具主图，仅专用评测入口注入；普通工作台仍默认离线。
-新的真实回归和正式 `eval run --manifest` 未授权，不能自动运行。
+当前完成阶段0—5；兼容检查6/6、首轮development-pilot 0/4、闭环v2 2/4、v3 2/4均结案，历史原始记录不改写。
+最新同版本互补验证：business-loop-regression-v4为4/4；数量v3仅q1-A尝试且失败，q1-B因硬预算停止未运行。
+本轮共39请求、82,027 Token、未知预留0；改口及图结束后应用续跑/事务后丢响应实际覆盖。
+q1-A数量猜测被拦，澄清后提交正确，但提交后模型预算拒绝使最终告知缺失；不能称数量组通过。
+后续仅做离线通用异常收尾修复：同一批准预览的回执存在才补最终告知，并保留execution_stop停止批次，不重试写入或模型请求。
+离线159 passed/0 skipped，针对性7 passed；两种协议替身各六题通过，不回写真实成绩。
+最新报告 docs/experiments/complementary-regressions-v1.md，交接 docs/handoffs/phase-06A-complementary-regressions-v1.md。
+当前仅准备diverse-behaviors-development-v1八题新计划（最多128请求/256k/2400秒），手工编写且只静态校验，未授权/未执行。
+所有旧真实批次scope均关闭，不能继续q1-B、沿用旧批准或转移余额。未来运行需新hash绑定和当前账户确认。
+真实模型仍仅专用源码评测入口注入，普通工作台/worker默认离线。8128仍是19fe7离线镜像，本轮没有重建。
 每阶段完成后同步更新本文件中的状态与命令。
 
 ## 实现、验收与交接

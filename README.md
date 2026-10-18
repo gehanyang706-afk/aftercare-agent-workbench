@@ -55,10 +55,18 @@ docker compose up -d db
 [新回归草案，未批准](evaluation/manifests/development-pilot-regression-01.json)。
 
 
-最新真实开发回归 business-loop-regression-v3：**2/4**，19 请求、输入 35,392 / 输出 1,141 Token，未知预留 0。
+此前真实开发回归 business-loop-regression-v3：**2/4**，19 请求、输入 35,392 / 输出 1,141 Token，未知预留 0。
 取消及事务后丢响应恢复通过；换码/改口停在重复澄清，改口未覆盖。
 第二批数量澄清因门禁失败未运行。历史 0/4、v2 2/4 均保留，不计算跨版本提升。
 批次结束后仅完成通用提示词候选和旁路诊断调整；离线两种模式各六题通过不代表真实失败已解决。
 [本批逐题结果、预算与新待批计划](docs/experiments/business-loop-regression-v3-first.md) ·
 [交接](docs/handoffs/phase-06A-business-loop-regression-v3.md)。
 普通工作台真实入口保持关闭；本轮源码候选未更新到 8128 旧离线镜像。
+
+
+最新同版本互补验证：**业务闭环 v4 4/4；数量组 v3 的 q1-A 失败、q1-B 因预算停止未运行**。
+合计39请求、输入79,324 / 输出2,703 Token、未知预留0。改口和事务后丢响应实际触发；丢响应走图结束后的应用续跑。
+q1-A猜数量的预览被拦；用户明确1件后实际提交，但提交后模型预算拒绝造成最终告知缺失。
+原始结果保持不变；后续离线修复保留预算停止信号，并从原回执完成告知，不补发模型请求。
+[逐题结果、归因与八题多样表达待批计划](docs/experiments/complementary-regressions-v1.md)。
+新八题仅手工准备和静态校验，尚未授权或执行；普通工作台仍默认离线。
