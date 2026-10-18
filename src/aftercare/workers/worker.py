@@ -67,7 +67,9 @@ def execute_job(database_url, principal, conversation, message_id, kind, job_id,
             "graph_state": result.get("graph_state", "ENDED"),
             "notice_saved": result.get("notice_saved", False),
             "receipt": result.get("receipt"),
-            "error_code": (result.get("error") or {}).get("error_code"),
+            "error_code": result.get("execution_stop")
+            or (result.get("error") or {}).get("error_code"),
+            "execution_stop": result.get("execution_stop"),
         }
     finally:
         sessions.kw["bind"].dispose()

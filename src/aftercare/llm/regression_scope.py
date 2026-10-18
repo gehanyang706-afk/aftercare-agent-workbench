@@ -1,4 +1,4 @@
-"""Two named future scopes. A plan is not approval; no permit is generated here."""
+"""Named development scopes. A plan is not approval; no permit is generated here."""
 
 import hashlib
 import json
@@ -7,14 +7,15 @@ from aftercare.config import PROJECT_ROOT
 from aftercare.domain.rules import require
 
 SCOPES = {
-    "business-loop-regression-v4": (4, 40000, 160000, 64, 1200),
-    "quantity-clarification-regression-v3": (2, 32000, 64000, 32, 600),
+    "diverse-behaviors-development-v1": (8, 32000, 256000, 128, 2400),
 }
 CLOSED_OR_SUPERSEDED = {
     "business-loop-regression-v2",
     "quantity-clarification-regression-v1",
     "business-loop-regression-v3",
     "quantity-clarification-regression-v2",
+    "business-loop-regression-v4",
+    "quantity-clarification-regression-v3",
 }
 
 

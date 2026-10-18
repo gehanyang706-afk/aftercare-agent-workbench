@@ -13,6 +13,18 @@ from aftercare.repositories.database import session_factory
 from aftercare.services.business import BusinessService
 
 
+def output_for(result):
+    stop = result.get("execution_stop")
+    output = {
+        "ok": not bool(stop),
+        "communications": result.get("communications", []),
+        "interrupted": bool(result.get("__interrupt__")),
+    }
+    if stop:
+        output["error"] = stop
+    return output
+
+
 def main():
     install_offline_guard()
     for line in sys.stdin:
@@ -53,11 +65,7 @@ def main():
                 profile="full",
                 model=BudgetedBailianModel(gateway=gateway),
             )
-            output = {
-                "ok": True,
-                "communications": result.get("communications", []),
-                "interrupted": bool(result.get("__interrupt__")),
-            }
+            output = output_for(result)
         except Exception as e:
             output = {"ok": False, "error": getattr(e, "code", type(e).__name__)}
         finally:

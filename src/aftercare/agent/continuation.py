@@ -100,10 +100,45 @@ def continue_confirmation(
         )
         from langgraph.types import Command
 
-        result = graph.invoke(Command(resume={"decisions": [{"type": "approve"}]}), config)
+        from aftercare.domain.contracts import BusinessError
+
+        budget_stop = None
+        try:
+            result = graph.invoke(Command(resume={"decisions": [{"type": "approve"}]}), config)
+        except BusinessError as exc:
+            # These are local pre-dispatch limits, not provider/usage/security errors.
+            # A matching durable receipt can still be told to the user without a model.
+            if exc.code not in {
+                "CONVERSATION_TOKEN_LIMIT",
+                "BUDGET_EXHAUSTED",
+                "MODEL_CALL_LIMIT",
+                "BATCH_REQUEST_LIMIT",
+            }:
+                raise
+            budget_stop = exc
+            result = {
+                **graph.get_state(config).values,
+                "_graph_state": "STOPPED",
+                "execution_stop": exc.code,
+            }
         # The graph may have caught the unknown write result. Resolve only this event's receipt.
         receipt = invoke("get_operation")
         if receipt["ok"]:
+            if budget_stop is not None:
+                with service.sessions.begin() as session:
+                    service._conversation(session, principal, conversation)
+                    service.event(
+                        session,
+                        conversation,
+                        "model_execution_stopped",
+                        {
+                            "error_code": budget_stop.code,
+                            "preview_id": pid,
+                            "operation_id": receipt["data"]["operation_id"],
+                            "after_commit": True,
+                            "extra_model_calls": 0,
+                        },
+                    )
             from sqlalchemy import select
 
             from aftercare.repositories.models import Event
@@ -119,6 +154,9 @@ def continue_confirmation(
                     )
                 )
             return result, receipt["data"], None, recovered, pid
+        if budget_stop is not None:
+            # No receipt means there is no authority to fabricate a completed notice.
+            raise budget_stop
         results = [
             json.loads(m.content)
             for m in result.get("messages", [])
