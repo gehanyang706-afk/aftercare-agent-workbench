@@ -40,8 +40,14 @@ HITL 与预览后停止两种模式各六题通过；真实模型效果仍待验
 business-loop-regression-v2 已授权并结案：2/4，28 请求、54,787 Token，未知预留 0。
 取消/改口完成；直接换码及丢响应题停在已确认但无图恢复节点，丢响应恢复未覆盖。
 原始轨迹已冻结，不能重复执行或把未使用额度转入新批。
-当前待批为 business-loop-regression-v3（四题，160k/64 请求）和
-quantity-clarification-regression-v2（两题，64k/32 请求），均未授权/未执行。
+business-loop-regression-v3 已结案：2/4，19 请求、36,533 Token、未知预留 0。
+取消及事务后丢响应恢复通过；换码/改口停在重复事实确认，改口未覆盖。
+quantity-clarification-regression-v2 曾获条件批准，但首批门禁失败，未运行。
+本轮离线提示词调整及 process-diagnostic-v4 已完成：152 passed/1 skipped，跳过项单独补验通过；
+两种离线协议模式各六题通过。模型是否改善仍待新真实验证。
+当前待批为 business-loop-regression-v4（四题，160k/64 请求）和
+quantity-clarification-regression-v3（两题，64k/32 请求），均未授权/未执行。
+旧 v3/数量 v2 scope 已关闭，不能把原授权用于新源码；详见 docs/experiments/business-loop-regression-v3-first.md。
 旧闭环批已结案，旧数量计划已过期，入口拒绝旧 hash；不能沿用授权/未用预算。
 新批次须独立新审批、固定指纹及当前免费余量/保护确认。
 修复与当前限制见 docs/experiments/confirmation-continuation.md。

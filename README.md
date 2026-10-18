@@ -1,7 +1,7 @@
 # 电商售后多轮决策与执行 Agent 工作台
 
 已完成阶段 0—5：可运行三栏工作台、单主 Agent 工具循环、可信确认、真实 PostgreSQL 原子提交、幂等恢复、政策检索与任务队列。
-默认是明确标记的**脚本模拟模式**，没有真实对话模型效果或生产成功率。
+普通界面默认是明确标记的**脚本模拟模式**；专用入口的真实开发回归结果按版本单列，不代表生产成功率。
 
 ![工作台实际浏览器截图](docs/screenshots/workbench-phase05.jpg)
 
@@ -49,7 +49,16 @@ docker compose up -d db
 
 阶段 6A 首轮 development-pilot 已结案，**0/4 任务完成**；24 次真实请求，输入 48,040 / 输出 1,831，
 未知预留 0。没有实际业务操作；一次工具顺序错误，三题涉及数量歧义与脚本用户缺口。
-改口及丢响应恢复未触发，不声称真实闭环通过。首轮证据不重写；修复后没有再次调用真实模型。
+改口及丢响应恢复未触发，不声称真实闭环通过。首轮证据不重写；后续真实批次按版本单列。
 [首轮结果与归因](docs/experiments/development-pilot-first.md) ·
 [交接记录](docs/handoffs/phase-06A-development-pilot.md) ·
 [新回归草案，未批准](evaluation/manifests/development-pilot-regression-01.json)。
+
+
+最新真实开发回归 business-loop-regression-v3：**2/4**，19 请求、输入 35,392 / 输出 1,141 Token，未知预留 0。
+取消及事务后丢响应恢复通过；换码/改口停在重复澄清，改口未覆盖。
+第二批数量澄清因门禁失败未运行。历史 0/4、v2 2/4 均保留，不计算跨版本提升。
+批次结束后仅完成通用提示词候选和旁路诊断调整；离线两种模式各六题通过不代表真实失败已解决。
+[本批逐题结果、预算与新待批计划](docs/experiments/business-loop-regression-v3-first.md) ·
+[交接](docs/handoffs/phase-06A-business-loop-regression-v3.md)。
+普通工作台真实入口保持关闭；本轮源码候选未更新到 8128 旧离线镜像。
