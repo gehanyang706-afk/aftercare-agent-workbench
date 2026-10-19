@@ -89,6 +89,14 @@ def present(
         )
         stage = "execution_unknown" if task == "EXECUTION_UNKNOWN" else "failure"
         key = f"error:{pid}:{code}:{revision}"
+    elif result.get("_user_paused"):
+        task = "PAUSED_BY_USER"
+        stage = "paused"
+        text = (
+            "已按您的选择暂不提交新的申请，本轮未新增申请或库存预留。"
+            "之前已提交的申请不会因此撤销；未安排补货或自动办理。"
+        )
+        key = f"pause:{revision}"
     elif result.get("_rejected"):
         task = "REJECTED"
         stage = "rejected"

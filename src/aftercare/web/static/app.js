@@ -1,7 +1,7 @@
 const $=s=>document.querySelector(s);
 let developerMode=false;
 let csrf='',conversation='',source=null,events=new Map(),lastEvent=0,lastSnapshot=null,refreshTicket=0;
-const labels={IDLE:'待开始',RUNNING:'处理中',WAITING_USER:'等待补充',WAITING_CONFIRMATION:'等待确认',WAITING_SUBMISSION:'等待提交',SUBMITTED:'已提交 · 告知待完成',EXECUTION_UNKNOWN:'执行结果待核实',REJECTED:'方案已拒绝',TURN_ENDED:'本轮已结束',COMPLETED:'任务已完成',CANCELLED:'已停止',FAILED:'处理失败',HANDOFF_PENDING:'待人工接管',PAID_UNSHIPPED:'已支付 · 未发货',DELIVERED:'已送达',SHIPPED:'运输中',RETURN_REQUESTED:'退货申请已提交',EXCHANGE_REQUESTED:'换货申请已提交',CANCELLED:'已取消'};
+const labels={IDLE:'待开始',RUNNING:'处理中',WAITING_USER:'等待补充',PAUSED_BY_USER:'已按要求暂不提交',WAITING_CONFIRMATION:'等待确认',WAITING_SUBMISSION:'等待提交',SUBMITTED:'已提交 · 告知待完成',EXECUTION_UNKNOWN:'执行结果待核实',REJECTED:'方案已拒绝',TURN_ENDED:'本轮已结束',COMPLETED:'任务已完成',CANCELLED:'已停止',FAILED:'处理失败',HANDOFF_PENDING:'待人工接管',PAID_UNSHIPPED:'已支付 · 未发货',DELIVERED:'已送达',SHIPPED:'运输中',RETURN_REQUESTED:'退货申请已提交',EXCHANGE_REQUESTED:'换货申请已提交',CANCELLED:'已取消'};
 const tools={list_orders:'查询订单列表',get_order:'读取订单',get_inventory:'查询实时库存',search_policies:'检索适用政策',update_case:'更新当前诉求',preview_action:'生成操作预览',commit_action:'提交已确认操作',get_operation:'查询执行回执',request_handoff:'创建人工工单'};
 const kinds={user_message:'收到用户消息',conversation_created:'会话已建立',case_updated:'有效诉求已更新',preview_created:'生成待确认方案',preview_confirmed:'收到明确确认',preview_rejected:'方案已拒绝',operation_committed:'业务事务已提交',handoff_created:'已转人工',job_queued:'任务已入队',job_finished:'处理片段结束',cancel_requested:'已请求停止',demo_fault_injected:'演示故障已设置',invalid_tool_attempt:'参数校验已拦截',forbidden_tool_attempt:'越界工具已拦截'};
 function error(e){$('#error').hidden=false;$('#error').textContent=e.message||String(e)}

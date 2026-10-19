@@ -35,8 +35,14 @@ def settings():
 
 
 @pytest.mark.parametrize("batch", list(SCOPES))
-def test_frozen_scope_rejects_unapproved_old_expanded_or_unprotected_permits(batch):
+def test_frozen_scope_rejects_unapproved_old_expanded_or_unprotected_permits(batch, monkeypatch):
     p = plan_for(batch)
+    # Test permit validation independently of later offline source repairs.
+    # The actual mismatch gate has its own counterexample below.
+    monkeypatch.setattr(
+        "aftercare.llm.regression_scope.code_fingerprint",
+        lambda: (p["candidate_source_tree_sha256"], {}),
+    )
     with pytest.raises(BusinessError, match="HUMAN_APPROVAL"):
         read_scope(p)  # a plan itself is not approval
     permit = {**p, "source": "Explicit user message in this chat"}
@@ -60,9 +66,25 @@ def test_frozen_scope_rejects_unapproved_old_expanded_or_unprotected_permits(bat
         )
 
 
-def test_no_plan_creates_an_approval_file():
+def test_no_plan_creates_an_approval_file(tmp_path, monkeypatch):
+    plans = {batch: plan_for(batch) for batch in SCOPES}
+    manifests = tmp_path / "evaluation/manifests"
+    manifests.mkdir(parents=True)
+    for batch, plan in plans.items():
+        (manifests / f"{batch}.json").write_text(json.dumps(plan))
+    monkeypatch.setattr("aftercare.llm.regression_scope.PROJECT_ROOT", tmp_path)
+    before = sorted(str(p.relative_to(tmp_path)) for p in tmp_path.rglob("*"))
     for batch in SCOPES:
-        assert not (PROJECT_ROOT / f"runtime/{batch}/batch-state.json").exists()
+        with pytest.raises(BusinessError, match="HUMAN_APPROVAL"):
+            read_scope(plans[batch])
+    assert sorted(str(p.relative_to(tmp_path)) for p in tmp_path.rglob("*")) == before
+
+
+def test_changed_source_rejects_even_valid_frozen_approval(monkeypatch):
+    monkeypatch.setattr("aftercare.llm.regression_scope.code_fingerprint", lambda: ("changed", {}))
+    for batch in SCOPES:
+        with pytest.raises(BusinessError, match="CODE_VERSION_MISMATCH"):
+            read_scope({**plan_for(batch), "source": "Explicit user message in this chat"})
 
 
 def test_old_live_plan_and_old_quantity_hash_cannot_authorize_new_code():

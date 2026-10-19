@@ -102,6 +102,24 @@ def _run_turn(
     model=None,
     confirmation=None,
 ):
+    if not resume and message_id:
+        from aftercare.services.user_pause import pause_message
+
+        if pause_message(service, principal, conversation, message_id):
+            from aftercare.agent.presentation import present
+
+            # append_message already invalidated older previews. Leave their checkpoints
+            # untouched; a later new intent uses the existing invalidation/resume rules.
+            return present(
+                service,
+                principal,
+                conversation,
+                {
+                    "_user_paused": True,
+                    "_graph_state": "NOT_INVOKED",
+                    "messages": [],
+                },
+            )
     if profile == "fixed-workflow":
         from aftercare.agent.presentation import present
 
