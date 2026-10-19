@@ -1,75 +1,46 @@
 # 售后 Agent 工作台执行约束
 
-目标：实现可恢复、可审计的电商售后多轮决策与执行工作台。
-技术栈：Python 3.13、FastAPI、PostgreSQL/pgvector、Deep Agents/LangGraph、原生 HTML/CSS/JS。
-业务限于本机单商户模拟订单的查询、取消、退货、换货和转人工；不连接真实支付或物流。
+目标：本机单商户模拟订单的多轮查询、取消、退货、换货、转人工；不连接真实支付/物流。
+技术栈：Python3.13、FastAPI、PostgreSQL/pgvector、Deep Agents/LangGraph、原生HTML/CSS/JS。
+设计见docs/design四份文档、docs/business-contract.md、docs/architecture.md、docs/decisions.md。
 
-## 目录与命令
+## 当前状态与收尾范围
 
-- `src/aftercare/`：API/Web、单主 Agent、业务服务、检索、模型预算与 worker。
-- `data/`、`configs/`、`migrations/`：模拟数据、版本化政策/配置和数据库迁移。
-- `tests/`、`evaluation/`：离线测试、开发场景与独立评分；`runtime/` 保存本机运行资产，不入 Git。
-- `docs/`：详细设计、操作说明和 `handoffs/phase-XX.md` 交接记录。
+阶段0—5完成，真实已见开发结果分批保留，口径见docs/closing/results-summary.md。
+原四类业务闭环v4为4/4；最新数量批次冻结3/4、数量过程3/4，不能称全面通过。
+当前收尾候选：来源标识/中文邻接订单号/明确暂停及真实账本重置保护已离线验证，237 passed/0 skipped。
+最后六题的两种脚本协议各5/6，fa1-03“大一号”为替身解析限制，保留失败不改题。
+8128离线app/worker已更新；候选源码/镜像/证据见evaluation/manifests/closing-candidate-v1.json。
+仅final-development-acceptance-v1六题计划待批准，264k Token/96请求/1800秒；没有新真实执行授权。
+停止新增功能和提示词迭代。最后验收后除错误提交、授权绕过、重复副作用、虚假回执或预算安全异常，其他记录为已知限制，不自动追加真实回归。新真实修复批次仍须另批。
 
-项目根目录运行；先按 `docs/operations.md` 安装项目隔离依赖。
+## 目录、运行与验证
+
+src/aftercare为产品、服务、检索、预算和worker；data/configs/migrations为资产；tests/evaluation为验证。
+runtime仅保存本机运行证据，不入Git；docs/closing是当前交付入口，详细启动见docs/operations.md。
 
 ```bash
+# 项目根目录；已有本地镜像，无网络更新方法见操作说明
 docker compose up -d db
-.venv/bin/python -m aftercare db migrate
-.venv/bin/python -m aftercare demo seed --database demo
-.venv/bin/python -m aftercare serve --offline
-# 另一终端；默认页面 http://127.0.0.1:8000
-.venv/bin/python -m aftercare worker --provider scripted
-# 专用测试库须先初始化；测试与开发评测不能同时运行
-AFTERCARE_TEST_DATABASE_URL=postgresql+psycopg://aftercare:aftercare_local_only@127.0.0.1:55432/aftercare_test .venv/bin/python -m pytest -m 'not live_model'
-.venv/bin/python -m evaluation.evaluator.regression_offline --model-mode default
-.venv/bin/python -m evaluation.evaluator.regression_offline --model-mode preview-stop
-.venv/bin/python -m aftercare eval validate --split dev
-.venv/bin/python -m aftercare eval run --split dev --provider scripted
+AFTERCARE_PORT=8128 docker compose --profile app up -d --no-build --no-deps app worker
+# 以下离线PG验证须串行，不与真实评测并行
+AFTERCARE_TEST_DATABASE_URL=postgresql+psycopg://aftercare:aftercare_local_only@127.0.0.1:55432/aftercare_test ALLOW_REAL_MODEL_CALLS=false .venv/bin/python -m pytest -m 'not live_model'
+ALLOW_REAL_MODEL_CALLS=false .venv/bin/python -m evaluation.evaluator.regression_offline --scenario-file evaluation/dev/final-acceptance-v1.jsonl --user-policy-version script-user-v3 --model-mode default
 .venv/bin/ruff check .
 .venv/bin/ruff format --check .
 ```
 
-当前完成阶段0—5；兼容检查6/6、首轮development-pilot 0/4、闭环v2 2/4、v3 2/4均结案，历史原始记录不改写。
-最新同版本互补验证：business-loop-regression-v4为4/4；数量v3仅q1-A尝试且失败，q1-B因硬预算停止未运行。
-本轮共39请求、82,027 Token、未知预留0；改口及图结束后应用续跑/事务后丢响应实际覆盖。
-q1-A数量猜测被拦，澄清后提交正确，但提交后模型预算拒绝使最终告知缺失；不能称数量组通过。
-后续仅做离线通用异常收尾修复：同一批准预览的回执存在才补最终告知，并保留execution_stop停止批次，不重试写入或模型请求。
-离线159 passed/0 skipped，针对性7 passed；两种协议替身各六题通过，不回写真实成绩。
-最新报告 docs/experiments/complementary-regressions-v1.md，交接 docs/handoffs/phase-06A-complementary-regressions-v1.md。
-最新离线数量准备：quantity-evidence-v2支持常见中文件数，process-diagnostic-v5保留无证据参数/预览、拦截及澄清恢复过程缺陷；提示词/冻结评分器/历史场景未改。
-最终全量223 passed/0 skipped，新四题两种离线协议各4/4；0新增真实请求，真实数量能力仍待验证。
-quantity-priority-development-v1已完成首次真实运行：冻结评分3/4、quantity_process_clean 3/4；40请求/85,600 Token/192.414秒，未知预留0，无停止异常，四题均尝试。
-03换1件走图结束应用续跑，04退2件走HITL，回执告知均完整；07脚本措辞未触发等待选择，08先猜量被拦后澄清且暂停后重复提议/追问。
-批后仅离线修复明确暂不提交的应用事件：PAUSED_BY_USER/NOT_INVOKED，零模型/零新增副作用，不撤销已有申请；复杂表达仍澄清。script-user-v3-candidate只做离线候选，冻结v2/评分/原始记录不改。
-本批16请求/300秒每题、Token 48k/40k/40k/48k、全批64请求/176k/1200秒的授权已结束，未消费预算不转移。
-最新报告docs/experiments/quantity-priority-development-v1.md，交接docs/handoffs/phase-06A-quantity-priority-first.md。
-批后修复提交dbd44ae27403209c89fbc40442a7e44d090a519d；全量235 passed/0 skipped，新四题两模式各4/4，0新增真实请求；证据quantity-priority-postrun-repair-v1.json。旧批准hash绑定旧源码，不能续跑。
-逐题cap持久绑定独立账本会话，不能借其他题额度；普通失败继续固定题，安全/协议/usage/预算停止所有后续调用。
-旧八题计划已被新scope取代，其他四种表达保留后续开发。新版本与hash见docs/handoffs/phase-06A-quantity-priority-preparation.md。
-所有旧真实批次scope均关闭，不能继续q1-B、沿用旧批准或转移余额。未来运行需新hash绑定和当前账户确认。
-真实模型仍仅专用源码评测入口注入，普通工作台/worker默认离线。8128仍是19fe7离线镜像，本轮没有重建。
-每阶段完成后同步更新本文件中的状态与命令。
+源码serve/worker与容器二选一，普通工作台默认ScriptedModel。唯一依赖锁requirements.lock，项目.venv隔离。
+每阶段实现、验证、修复后再推进；保存交接中的功能、命令、结果、数据流、关键入口、限制及一个完整机制。
+当前交接见docs/handoffs/phase-06A-closing-candidate.md。最终真实结果尚待批准验收，不伪称已完成。
 
-## 实现、验收与交接
+## 权限与事实边界
 
-先读 `docs/design/` 四份设计，以及 `docs/business-contract.md`、`docs/architecture.md`、
-`docs/decisions.md` 和最近交接。按阶段顺序实现、验证、必要修复后再推进，不能停在 TODO 或伪实现。
-每阶段保存能力、精确运行/验证命令与结果、核心数据流、最多五个代码入口、决定/真实故障、
-已实现/已验证/待验证/未实现状态、已知限制、一个完整机制、体验任务与三个问题、下一阶段前置条件。
-跳过检查须说明前置条件，目标指标、脚本通过和真实模型效果分别报告。
-
-## 权限、安全与自主执行
-
-- 默认禁止真实模型调用，导入、健康检查和普通测试不能触发外部推理；环境开关不能代替授权。
-  获批后严格按精确模型、请求清单、次数、Token/费用/时间上限、停止条件与计划 hash 执行，
-  所有调用含重试/用户模拟均走预算网关；usage 不明暂停，不擅自换模型或扩批。
-- 只修改本项目；先检查实际目录、适用父目录规则和 Git 状态。不覆盖未知文件、不修改既有项目。
-  密钥不入 Git、日志或诊断输出；不自行推送、公开仓库或部署公网，不修改全局配置。
-- 不读取独立验收答案调参，不硬编码题目或修改评分提高成绩；已见样本不得称盲测。
-- 模型仅表达意图；服务层负责身份、资格、金额、版本、可信确认、幂等及事务提交。
-  新消息使旧预览失效；确认绑定对象、参数 hash 与意图版本。事务用 PostgreSQL 验证，不以 SQLite 替代。
-- 产品保持单主 Agent、请求与执行双白名单，禁止 shell、任意文件和通用子 Agent 工具。
-- 普通实现、项目隔离依赖、测试和修复自主完成。改变范围或增加费用时再确认；
-  全局安装、模型权重及大型镜像先列资源清单，已有明确授权范围不重复询问。
-  唯一依赖锁为 `requirements.lock`，通过 pip-tools 更新；默认使用 `.venv/bin/python`。
+- 默认禁止真实调用；.env/环境开关不代替授权。获批也须核对具体模型、地域、hash、源码、任务、请求/Token/时间/费用上限及当前免费余量/FreeTierOnly。
+- 所有真实调用共用BudgetLedger、请求计数和截止；关闭隐式重试。未知usage保留预留并暂停；不换模型、扩大批次、调用模型用户/裁判，不借用旧预算。普通工作台不开放真实入口。
+- aftercare_test可被验证清库；aftercare_demo含持久真实账本，禁止重置、删账本或删batch-state绕过。demo reset已拒绝含真实批次的库；不得down -v。
+- 只改本项目，不覆盖未知文件或用户既有报告编辑。密钥不入Git/日志，不修改全局配置，不自行推送/公开部署。
+- 不读取或运行独立验收答案/holdout，不硬编码案例、修改评分或回写历史成绩提高结果。开发场景不得称盲测。
+- case是模型提议，消息锚点不等于语义证据；申请数量来自实际user消息，购买量/库存不能替代。后台独立复核身份、资格、版本、确认及事务幂等。
+- 提交须预览→可信确认→同一业务服务。新消息失效旧预览；图结束不等于业务完成；最终告知依实际回执，停止码保留。明确暂停走共享runtime，不新增提交或模型调用。
+- 普通离线实现、测试、修复自主完成；改变范围、增加费用或新真实调用须确认。全局软件、权重、大型镜像先列资源；已获具体授权不重复询问。

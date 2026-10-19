@@ -1,5 +1,10 @@
 # 电商售后多轮决策与执行 Agent 工作台
 
+> 当前进入收尾候选，停止新增业务功能和提示词迭代。最后固定六题真实验收尚待批准；本轮0真实请求。离线工作台8128已更新，237项测试通过；六题脚本预演两模式各5/6，保留“大一号”替身解析失败。
+>
+> [最后验收与预算](docs/closing/final-acceptance.md) · [启动说明](docs/operations.md) · [演示脚本](docs/closing/demo-script.md) · [结果总表](docs/closing/results-summary.md) · [面试交接](docs/closing/interview-handoff.md) · [事实来源核对](docs/closing/fact-sources.md)
+
+
 已完成阶段 0—5：可运行三栏工作台、单主 Agent 工具循环、可信确认、真实 PostgreSQL 原子提交、幂等恢复、政策检索与任务队列。
 普通界面默认是明确标记的**脚本模拟模式**；专用入口的真实开发回归结果按版本单列，不代表生产成功率。
 
