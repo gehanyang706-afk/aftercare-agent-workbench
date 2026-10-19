@@ -72,7 +72,8 @@ q1-A猜数量的预览被拦；用户明确1件后实际提交，但提交后模
 新八题仅手工准备和静态校验，尚未授权或执行；普通工作台仍默认离线。
 
 
-当前下一批已缩为四题数量优先验证（换货澄清1件、退货澄清2件、明确2件缺货、澄清2件后缺货），旧八题计划被取代，未授权真实执行。
-常见中文件数、参数级过程诊断及提交后停止的回执告知已完成离线准备，223项测试通过；不代表新的真实效果成绩。
-[简短交接与待批预算/hash](docs/handoffs/phase-06A-quantity-priority-preparation.md) ·
-[四题冻结计划](evaluation/manifests/quantity-priority-development-v1.json)。
+数量优先 quantity-priority-development-v1 已按批准执行：冻结评分3/4，数量过程干净3/4；40请求、85,600 Token、未知预留0。03换1件、04退2件均有可信回执告知；07脚本词面失配使等待分支未覆盖；08先猜量被拦后澄清，尊重无提交但暂停后重复提议/追问。
+批后仅离线修复明确暂停的应用收尾；候选script-user-v3未接入冻结评测。真实调用已停止，不重跑、不扩批；普通工作台仍默认离线，8128仍是旧镜像。
+[本批逐题结果与归因](docs/experiments/quantity-priority-development-v1.md) ·
+[批后修复交接](docs/handoffs/phase-06A-quantity-priority-first.md) ·
+[首次轨迹封存](evaluation/manifests/quantity-priority-development-v1-first-run.json)。

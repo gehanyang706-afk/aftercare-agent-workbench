@@ -39,7 +39,12 @@ q1-A数量猜测被拦，澄清后提交正确，但提交后模型预算拒绝�
 最新报告 docs/experiments/complementary-regressions-v1.md，交接 docs/handoffs/phase-06A-complementary-regressions-v1.md。
 最新离线数量准备：quantity-evidence-v2支持常见中文件数，process-diagnostic-v5保留无证据参数/预览、拦截及澄清恢复过程缺陷；提示词/冻结评分器/历史场景未改。
 最终全量223 passed/0 skipped，新四题两种离线协议各4/4；0新增真实请求，真实数量能力仍待验证。
-当前待批quantity-priority-development-v1仅四题，16请求/300秒每题；Token分别48k/40k/40k/48k，全批64请求/176k/1200秒。
+quantity-priority-development-v1已完成首次真实运行：冻结评分3/4、quantity_process_clean 3/4；40请求/85,600 Token/192.414秒，未知预留0，无停止异常，四题均尝试。
+03换1件走图结束应用续跑，04退2件走HITL，回执告知均完整；07脚本措辞未触发等待选择，08先猜量被拦后澄清且暂停后重复提议/追问。
+批后仅离线修复明确暂不提交的应用事件：PAUSED_BY_USER/NOT_INVOKED，零模型/零新增副作用，不撤销已有申请；复杂表达仍澄清。script-user-v3-candidate只做离线候选，冻结v2/评分/原始记录不改。
+本批16请求/300秒每题、Token 48k/40k/40k/48k、全批64请求/176k/1200秒的授权已结束，未消费预算不转移。
+最新报告docs/experiments/quantity-priority-development-v1.md，交接docs/handoffs/phase-06A-quantity-priority-first.md。
+批后修复提交dbd44ae27403209c89fbc40442a7e44d090a519d；全量235 passed/0 skipped，新四题两模式各4/4，0新增真实请求；证据quantity-priority-postrun-repair-v1.json。旧批准hash绑定旧源码，不能续跑。
 逐题cap持久绑定独立账本会话，不能借其他题额度；普通失败继续固定题，安全/协议/usage/预算停止所有后续调用。
 旧八题计划已被新scope取代，其他四种表达保留后续开发。新版本与hash见docs/handoffs/phase-06A-quantity-priority-preparation.md。
 所有旧真实批次scope均关闭，不能继续q1-B、沿用旧批准或转移余额。未来运行需新hash绑定和当前账户确认。
