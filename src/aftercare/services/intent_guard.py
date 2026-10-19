@@ -19,7 +19,7 @@ def user_evidence(messages):
     for msg in messages:
         text = msg.text if hasattr(msg, "text") else msg["text"]
         source = msg.id if hasattr(msg, "text") else msg["id"]
-        orders = re.findall(r"\bS\d{4}\b", text, re.I)
+        orders = re.findall(r"(?<![A-Za-z0-9])S\d{4}(?![A-Za-z0-9])", text, re.I)
         if len(set(o.upper() for o in orders)) > 1:
             evidence = {}
             continue

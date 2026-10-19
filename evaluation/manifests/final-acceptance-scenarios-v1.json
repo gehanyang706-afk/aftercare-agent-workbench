@@ -1,0 +1,42 @@
+{
+  "version": "final-acceptance-v1",
+  "split": "dev",
+  "seen": true,
+  "not_holdout": true,
+  "source_file": "evaluation/dev/diverse-behaviors-v1.jsonl",
+  "source_sha256": "97cd9d3323d0aba9540deb6f7523bdbc0b3a40bd202b1c8b21222038b301957b",
+  "derivations": [
+    {
+      "id": "fa1-01",
+      "from": "dv1-01",
+      "task_sha256": "dd450701a3e67a25e74699feece07ab934c8d82dc33f5be796b26baabd095ad3"
+    },
+    {
+      "id": "fa1-02",
+      "from": "dv1-02",
+      "task_sha256": "213917470f33be39ffd8a2aa11ec8cc142e57bd68cab2bf374440732428fde5f"
+    },
+    {
+      "id": "fa1-03",
+      "from": "dv1-05",
+      "task_sha256": "1bc234aa37242f7e2d93e7d647ca5cc208dbd12f9a395795b04c2e4378516d0b"
+    },
+    {
+      "id": "fa1-04",
+      "from": "dv1-06",
+      "task_sha256": "b7979d742a7b91f8e4a409c4fe708c223c41d782e5727b3b7c81067f210876b6"
+    },
+    {
+      "id": "fa1-05",
+      "from": "dv1-07",
+      "task_sha256": "2cf86a457ca6788382afaea4fb9f7c6ea570e315c713e038457bc42ad38e2fac"
+    },
+    {
+      "id": "fa1-06",
+      "from": "dv1-08",
+      "task_sha256": "e6fbbf4125935646c7f26f87b33a465c689cc25c2200b22c3696379191218fc4"
+    }
+  ],
+  "changes": "Selected remaining four diverse cases plus two new stock/pause expressions; versioned Chinese quantities and shortage/pause communication requirements. Historical scenarios, grader and scores unchanged. User v3 selected explicitly; no ad hoc replies.",
+  "source_rules": "Hidden goals never sent; script responses only after matching visible questions."
+}

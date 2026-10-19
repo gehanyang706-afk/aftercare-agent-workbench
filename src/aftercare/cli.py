@@ -89,6 +89,7 @@ def parser() -> argparse.ArgumentParser:
             "business-loop-regression-v4",
             "diverse-behaviors-development-v1",
             "quantity-priority-development-v1",
+            "final-development-acceptance-v1",
             "quantity-clarification-regression-v3",
         ],
         required=True,
@@ -116,6 +117,7 @@ def main(argv: list[str] | None = None) -> int:
                 "business-loop-regression-v4",
                 "diverse-behaviors-development-v1",
                 "quantity-priority-development-v1",
+                "final-development-acceptance-v1",
                 "quantity-clarification-regression-v3",
             }:
                 sys.path.insert(0, str(PROJECT_ROOT))

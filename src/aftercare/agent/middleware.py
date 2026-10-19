@@ -3,7 +3,7 @@ import json
 from langchain.agents.middleware import AgentMiddleware
 from langchain_core.messages import AIMessage, HumanMessage, SystemMessage, ToolMessage
 
-from aftercare.agent.context import assemble_messages
+from aftercare.agent.context import assemble_messages, case_model_context
 from aftercare.agent.instructions import BUSINESS_INSTRUCTIONS
 from aftercare.agent.tools import ALLOWED
 
@@ -36,14 +36,7 @@ class BusinessBoundary(AgentMiddleware):
             + "有效状态："
             + json.dumps(
                 {
-                    "case": {
-                        "facts": {
-                            key: {"value": fact.get("value")}
-                            for key, fact in snapshot.get("case", {}).get("facts", {}).items()
-                        }
-                        if self.profile == "full"
-                        else {}
-                    },
+                    "case": case_model_context(snapshot) if self.profile == "full" else {},
                     "intent_revision": snapshot["revision"],
                     "current_time": self.service.clock().isoformat(),
                     "current_user_message_id": users[-1]["id"] if users else None,

@@ -89,6 +89,7 @@ def test_changed_source_rejects_even_valid_frozen_approval(monkeypatch):
 
 def test_old_live_plan_and_old_quantity_hash_cannot_authorize_new_code():
     for batch in [
+        "quantity-priority-development-v1",
         "business-loop-regression-v2",
         "quantity-clarification-regression-v1",
         "business-loop-regression-v3",

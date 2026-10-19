@@ -1,10 +1,10 @@
-"""Offline candidate; adds bounded stock arithmetic, never changes frozen v2."""
+"""Explicitly selected v3; adds bounded stock arithmetic, never changes frozen v2."""
 
 import re
 
 from evaluation.evaluator.user_policy_v2 import matches as previous_matches
 
-VERSION = "script-user-v3-candidate"
+VERSION = "script-user-v3"
 
 
 def matches(step, kind, text):

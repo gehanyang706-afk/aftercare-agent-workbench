@@ -157,7 +157,21 @@ class Actor:
         self.log.close()
 
 
-def run_case(scenario, settings, sessions, profile, output, actor_factory=Actor):
+def run_case(
+    scenario,
+    settings,
+    sessions,
+    profile,
+    output,
+    actor_factory=Actor,
+    user_policy_version="script-user-v2",
+):
+    if user_policy_version == "script-user-v2":
+        from evaluation.evaluator.user_policy_v2 import matches
+    elif user_policy_version == "script-user-v3":
+        from evaluation.evaluator.user_policy_v3 import matches
+    else:
+        raise ValueError("UNKNOWN_USER_POLICY_VERSION")
     reset(sessions, scenario)
     service = BusinessService(sessions, lambda: scenario.clock)
     principal = scenario.user_known_facts.get("principal", "alice")
@@ -234,8 +248,6 @@ def run_case(scenario, settings, sessions, profile, output, actor_factory=Actor)
                 preview = previews[-1]
                 visible.append(json.dumps(preview["payload"], ensure_ascii=False))
                 faults("after_preview")
-            from evaluation.evaluator.user_policy_v2 import matches
-
             current_text = "\n".join(result.get("communications", []))
             index = next(
                 (i for i, step in enumerate(steps) if matches(step, kind, current_text)), None

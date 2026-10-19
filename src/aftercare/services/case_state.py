@@ -66,7 +66,13 @@ def update_case(service, principal, conversation_id, request: CaseUpdate):
             if key in facts:
                 superseded.append({"field": key, **facts[key]})
             # constraints is a complete replacement, never an unbounded additive summary.
-            facts[key] = {"value": value, "source_message_id": source.id, "revision": conv.revision}
+            # The model supplies this value. A valid message anchor is not semantic proof.
+            facts[key] = {
+                "value": value,
+                "source_message_id": source.id,
+                "revision": conv.revision,
+                "provenance": "model_proposal",
+            }
         case["intent_revision"] = conv.revision
         conv.case = case
         invalidated = False

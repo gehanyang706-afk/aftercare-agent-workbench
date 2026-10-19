@@ -7,11 +7,12 @@ from aftercare.config import PROJECT_ROOT
 from aftercare.domain.rules import require
 
 SCOPES = {
-    "quantity-priority-development-v1": (4, 48000, 176000, 64, 1200),
+    "final-development-acceptance-v1": (6, 56000, 264000, 96, 1800),
 }
-TASK_TOKEN_CAPS = {"quantity-priority-development-v1": (48000, 40000, 40000, 48000)}
+TASK_TOKEN_CAPS = {"final-development-acceptance-v1": (40000, 40000, 40000, 48000, 40000, 56000)}
 
 CLOSED_OR_SUPERSEDED = {
+    "quantity-priority-development-v1",
     "diverse-behaviors-development-v1",
     "business-loop-regression-v2",
     "quantity-clarification-regression-v1",
@@ -71,7 +72,7 @@ def read_scope(permit):
         "additional_paid_cost_cap_cny": 0,
         "enable_thinking": False,
         "repetitions": 1,
-        "user_policy_version": "script-user-v2",
+        "user_policy_version": "script-user-v3",
         "diagnostics_version": "process-diagnostic-v5",
         "quantity_evidence_version": "quantity-evidence-v2",
         "max_requests_per_user_turn_including_auxiliary_reasoning": 8,

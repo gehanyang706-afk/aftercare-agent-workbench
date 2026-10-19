@@ -22,7 +22,16 @@ def main():
     install_offline_guard()
     parser = argparse.ArgumentParser()
     parser.add_argument("--model-mode", choices=["default", "preview-stop"], default="default")
-    parser.add_argument("--scenario-file", choices=["evaluation/dev/quantity-priority-v1.jsonl"])
+    parser.add_argument(
+        "--scenario-file",
+        choices=[
+            "evaluation/dev/quantity-priority-v1.jsonl",
+            "evaluation/dev/final-acceptance-v1.jsonl",
+        ],
+    )
+    parser.add_argument(
+        "--user-policy-version", choices=["script-user-v2", "script-user-v3"], default=USER_VERSION
+    )
     args = parser.parse_args()
     mode = args.model_mode
     files = (args.scenario_file,) if args.scenario_file else FILES
@@ -47,7 +56,15 @@ def main():
             case = Scenario.model_validate_json(line)
             assert case.split == "dev"
             start = time.monotonic()
-            result = run_case(case, settings, sessions, "full", output, actor_factory=OfflineActor)
+            result = run_case(
+                case,
+                settings,
+                sessions,
+                "full",
+                output,
+                actor_factory=OfflineActor,
+                user_policy_version=args.user_policy_version,
+            )
             result["diagnostics"] = diagnose(result["observed"])
             result["event_chain"] = event_chain(result["observed"])
             result["elapsed_seconds"] = round(time.monotonic() - start, 3)
@@ -74,7 +91,7 @@ def main():
         "real_http_requests": 0,
         "holdout_access": False,
         "diagnostics_version": VERSION,
-        "user_policy_version": USER_VERSION,
+        "user_policy_version": args.user_policy_version,
         "files": {f: hashlib.sha256((PROJECT_ROOT / f).read_bytes()).hexdigest() for f in files},
         "scorer_sha256": hashlib.sha256(
             (PROJECT_ROOT / "evaluation/evaluator/grader.py").read_bytes()

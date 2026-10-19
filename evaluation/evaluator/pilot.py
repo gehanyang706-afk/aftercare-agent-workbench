@@ -256,6 +256,7 @@ def run_batch(settings, approval, account, plan, cases, directory):
                     "full",
                     directory,
                     actor_factory=actor_factory,
+                    user_policy_version=plan.get("user_policy_version", "script-user-v2"),
                 )
                 BudgetLedger(ledger_sessions).mark_unresolved_unknown(ledger_conv)
                 with ledger_sessions() as s:

@@ -5,6 +5,22 @@ import json
 from langchain_core.messages import ToolMessage
 
 
+def case_model_context(snapshot):
+    from aftercare.services.intent_guard import user_evidence
+
+    evidence = user_evidence([m for m in snapshot.get("messages", []) if m["role"] == "user"])
+    return {
+        "facts": {
+            key: {"value": fact.get("value"), "provenance": "model_proposal"}
+            for key, fact in snapshot.get("case", {}).get("facts", {}).items()
+        },
+        "user_quantity_evidence": {
+            "quantity": evidence.get("quantity"),
+            "source_message_id": evidence.get("quantity_source"),
+        },
+    }
+
+
 def keep(value, fields):
     return {key: item for key, item in value.items() if key in fields}
 

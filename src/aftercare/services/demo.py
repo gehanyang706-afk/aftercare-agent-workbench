@@ -224,9 +224,14 @@ def reset_demo(sessions, confirmation):
     assert_dedicated(sessions)
     require(confirmation == "demo-only", "EXPLICIT_RESET_REQUIRED")
     require(sessions.kw["bind"].url.database == "aftercare_demo", "DEMO_DATABASE_REQUIRED")
-    from aftercare.repositories.models import Job
+    from aftercare.repositories.models import Job, ModelCall
 
     with sessions() as s:
+        require(
+            s.scalar(select(ModelCall.id).where(ModelCall.batch_id != "offline")) is None,
+            "REAL_LEDGER_RESET_FORBIDDEN",
+            "此演示库含已封存真实批次账本，禁止全库重置；请保留账本和业务数据。",
+        )
         require(
             s.scalar(select(Job.id).where(Job.status.in_(["RUNNING", "PENDING"]))) is None,
             "STOP_OR_FINISH_ACTIVE_JOBS_BEFORE_RESET",

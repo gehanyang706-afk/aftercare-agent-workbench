@@ -13,6 +13,12 @@ from evaluation.schema.scenario import Scenario
 
 def preflight(settings, approval, account):
     plan = read_scope(approval)
+    manifest = PROJECT_ROOT / plan["scenario_versions_manifest"]
+    require(
+        hashlib.sha256(manifest.read_bytes()).hexdigest()
+        == plan["scenario_versions_manifest_sha256"],
+        "SCENARIO_MANIFEST_VERSION_MISMATCH",
+    )
     require(
         account.get("free_quota_tokens_at_least", 0) >= plan["total_token_hard_cap"],
         "CURRENT_FREE_QUOTA_CONFIRMATION_REQUIRED",
