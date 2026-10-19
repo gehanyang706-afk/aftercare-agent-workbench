@@ -16,3 +16,6 @@ build/
 *.sqlite*
 *.db
 .DS_Store
+
+# Local IDE workspace
+.idea/
