@@ -4,7 +4,7 @@ Lock order: project -> shared model -> run -> episode -> sorted budget dimension
 No network client is created here. Reserved attempts survive a process crash and cannot replay.
 """
 
-from datetime import timedelta
+from datetime import datetime, timedelta
 
 from sqlalchemy import select
 from sqlalchemy.dialects.postgresql import insert
@@ -72,13 +72,41 @@ class ExperimentLedger:
                         for c in all_calls
                         if c.exact_model == exact and c.id not in old
                     )
-                    # Current confirmation can lower a quota, never revive a paused model
-                    # or transfer a batch cap. Historical consumption is not subtracted twice.
-                    prior.confirmed_remaining = min(
-                        confirmation["remaining"], max(0, prior.confirmed_remaining - used)
+                    # A newly authorized current snapshot replaces the old minimum.
+                    # Calls made after its timestamp still consume that snapshot.
+                    # Reused/unbound snapshots may only lower the conservative balance.
+                    stamp = account.get("confirmed_at")
+                    prior_stamp = prior.confirmation.get("confirmed_at")
+                    fresh = (
+                        account.get("FreeTierOnly") is True
+                        and account.get("plan_sha256") == plan["plan_sha256"]
+                        and account.get("confirmation_id") == plan.get("account_confirmation_id")
+                        and account.get("confirmation_id")
+                        != prior.confirmation.get("confirmation_id")
+                        and stamp is not None
                     )
+                    if fresh:
+                        at = datetime.fromisoformat(stamp)
+                        fresh = 0 <= (now - at).total_seconds() <= 3600 and (
+                            prior_stamp is None or at > datetime.fromisoformat(prior_stamp)
+                        )
+                    if fresh:
+                        since_snapshot = sum(
+                            c.usage if c.usage is not None else c.reserved
+                            for c in all_calls
+                            if c.exact_model == exact
+                            and c.provider.lower() in ALIASES
+                            and c.created_at >= at
+                        )
+                        prior.confirmed_remaining = max(
+                            0, confirmation["remaining"] - since_snapshot
+                        )
+                        prior.confirmation = account
+                    else:
+                        prior.confirmed_remaining = min(
+                            confirmation["remaining"], max(0, prior.confirmed_remaining - used)
+                        )
                     prior.watermark = {"call_ids": watermark}
-                    prior.confirmation = account
                 else:
                     s.add(
                         SharedModelQuota(

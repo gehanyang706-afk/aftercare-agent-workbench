@@ -187,7 +187,16 @@ def make_plan():
             "judge_per_required_episode": [2000, 20000],
             "batch": [124000, 840000],
         },
-        estimate_note="Cold protocol payload bounds only, not real usage prediction or guarantee.",
+        estimate_note=(
+            "Unvalidated full-episode range; v1 stopped after four HTTP requests "
+            "(12233 tokens), with no completed episode. Cold payload bounds do not "
+            "predict full trajectories; reservation protections remain unchanged."
+        ),
+        supersedes="retail-calibration-v1 (protocol-stopped; original records preserved)",
+        protocol_policy=(
+            "Preserve mixed content and tool_calls; official default environment routing; "
+            "record native response before protocol validation. No scorer changes."
+        ),
         ordinary_failure="continue_fixed_remaining",
         hard_stop=[
             "auth",
@@ -199,8 +208,9 @@ def make_plan():
         ],
         restart="read_only_reconcile",
         freeze_note=(
-            "Frozen after U4; no approval/account file generated. "
-            "Judge role also requires human approval."
+            "New post-repair batch: no v1 authorization or remaining batch budget transfers. "
+            "Fresh plan-bound account confirmation and explicit agent/user/judge approval "
+            "are required; no approval/account file generated."
         ),
     )
     plan["plan_sha256"] = plan_hash(plan)

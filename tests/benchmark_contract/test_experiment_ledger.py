@@ -157,3 +157,55 @@ def test_finished_hard_stop_closes_run_without_changing_usage(service):
         assert s.get(ModelCall, call).usage == 12
     with pytest.raises(BusinessError, match="EXPERIMENT_STOPPED"):
         ledger.reserve("bench", "bench-1", "agent", "two", 1, 10)
+
+
+def test_fresh_account_snapshot_renews_only_quota_not_batch_or_unknown(service):
+    from datetime import UTC, datetime
+
+    from aftercare.repositories.models import ExperimentRun
+
+    ledger = setup(service)
+    first = ledger.reserve("bench", "bench-1", "agent", "first", 30, 10)
+    ledger.settle(first, 25)
+    with service.sessions() as s:
+        plan = dict(s.get(ExperimentRun, "bench").config)
+    plan["account_confirmation_id"] = "fresh-account"
+    account = dict(
+        plan_sha256="frozen",
+        confirmation_id="fresh-account",
+        FreeTierOnly=True,
+        confirmed_at=datetime.now(UTC).isoformat(),
+        models={model_identity("qwen", "beijing", MODEL): {"remaining": 1000}},
+    )
+    # Consumption after the human's snapshot must still be subtracted.
+    second = ledger.reserve("bench", "bench-1", "user", "second", 30, 10)
+    ledger.settle(second, 20)
+    ledger.create_run("fresh", plan, account)
+    with service.sessions() as s:
+        quota = s.get(SharedModelQuota, model_identity("qwen", "beijing", MODEL))
+        assert quota.confirmed_remaining == 980
+        assert s.get(ActorBudget, "bench:batch").settled == 45
+        assert s.get(ActorBudget, "fresh:batch").settled == 0
+    # Reusing this snapshot cannot reset consumption a second time.
+    setup(service, "later", quota=1000)
+    with service.sessions() as s:
+        quota = s.get(SharedModelQuota, model_identity("qwen", "beijing", MODEL))
+        assert quota.confirmed_remaining == 980
+
+    third = ledger.reserve("bench", "bench-1", "user", "third", 30, 10)
+    ledger.settle(third, 10)
+    ledger.create_run("reused-snapshot", plan, account)
+    with service.sessions() as s:
+        quota = s.get(SharedModelQuota, model_identity("qwen", "beijing", MODEL))
+        assert quota.confirmed_remaining == 970
+    unknown = ledger.reserve("bench", "bench-1", "agent", "unknown", 30, 10)
+    ledger.settle(unknown, None)
+    renewed = dict(
+        account, confirmation_id="newer-account", confirmed_at=datetime.now(UTC).isoformat()
+    )
+    plan["account_confirmation_id"] = "newer-account"
+    ledger.create_run("fresh-but-paused", plan, renewed)
+    with service.sessions() as s:
+        quota = s.get(SharedModelQuota, model_identity("qwen", "beijing", MODEL))
+        assert quota.paused
+        assert s.get(ModelCall, unknown).reserved == 40
