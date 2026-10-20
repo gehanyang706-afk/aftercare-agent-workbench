@@ -26,7 +26,7 @@ class Trace:
             path.chmod(0o600)
         self.sequence += 1
         event = dict(
-            schema_version="retail-trace-v1",
+            schema_version="retail-trace-v2",
             **self.meta,
             role=role,
             sequence=self.sequence,

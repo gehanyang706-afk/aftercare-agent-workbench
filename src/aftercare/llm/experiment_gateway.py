@@ -366,3 +366,18 @@ class ExperimentLedger:
             call.usage, call.status = usage, "SETTLED"
             call.details = {**call.details, **(details or {})}
             return True
+
+    def finish_episode(self, episode_id, status, stop_batch=False, complete_batch=False):
+        require(status in {"COMPLETED", "STOPPED"}, "INVALID_EPISODE_STATUS")
+        with self.sessions.begin() as session:
+            observed = session.get(ExperimentEpisode, episode_id)
+            require(observed is not None, "EPISODE_NOT_FOUND")
+            run = session.get(ExperimentRun, observed.run_id, with_for_update=True)
+            episode = session.get(ExperimentEpisode, episode_id, with_for_update=True)
+            if not episode.status.startswith("PAUSED"):
+                episode.status = status
+            if not run.status.startswith("PAUSED"):
+                if stop_batch:
+                    run.status = "STOPPED"
+                elif complete_batch:
+                    run.status = "COMPLETED"

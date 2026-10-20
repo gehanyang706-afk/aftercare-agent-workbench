@@ -1,0 +1,54 @@
+{
+  "run_id": "retail-calibration-v1",
+  "plan_sha256": "d88ea97b575e766aed30e86a036d1499a4f8285ceac16575a2b67289e5d6c539",
+  "source_commit": "b4004bc27b32dc0918c6acdcf1742871db63fac8",
+  "source_tree_hash": "d3b6741129c150e1676a3052b44111c516d01c172fae9c90a72bc7277bdff92a",
+  "planned_episodes": 4,
+  "attempted": 1,
+  "evaluated": 0,
+  "not_run": 3,
+  "stop": "MIXED_TEXT_TOOL_PROTOCOL",
+  "roles": {
+    "agent": {
+      "requests": 2,
+      "input_tokens": 10661,
+      "output_tokens": 159,
+      "known_tokens": 10820,
+      "unknown_reserved": 0
+    },
+    "user": {
+      "requests": 2,
+      "input_tokens": 1178,
+      "output_tokens": 235,
+      "known_tokens": 1413,
+      "unknown_reserved": 0
+    },
+    "judge": {
+      "requests": 0,
+      "input_tokens": 0,
+      "output_tokens": 0,
+      "known_tokens": 0,
+      "unknown_reserved": 0
+    },
+    "auxiliary": {
+      "requests": 0,
+      "input_tokens": 0,
+      "output_tokens": 0,
+      "known_tokens": 0,
+      "unknown_reserved": 0
+    }
+  },
+  "total_requests": 4,
+  "input_tokens": 11839,
+  "output_tokens": 394,
+  "total_tokens": 12233,
+  "unknown_reserved": 0,
+  "seconds": 16.97830212500412,
+  "unused_batch_token_cap_not_transferable": 1387767,
+  "unused_batch_requests_not_transferable": 158,
+  "official_success_rate": null,
+  "paired_token_saving": null,
+  "raw_response_preserved": false,
+  "official_tools_executed": 0,
+  "next_real_run_authorized": false
+}

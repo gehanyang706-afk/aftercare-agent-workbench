@@ -126,8 +126,8 @@ def make_plan():
     }
     versions["python"] = platform.python_version()
     plan = dict(
-        run_id="retail-calibration-v1",
-        batch_id="retail-calibration-v1",
+        run_id="retail-calibration-v2",
+        batch_id="retail-calibration-v2",
         experiment_version="benchmark-v1",
         environment_versions=versions,
         stage="calibration",
@@ -178,8 +178,8 @@ def make_plan():
         policy_hash=digest(env.get_policy()),
         tools_hash=digest(tools),
         user_policy_hash=digest(user.system_prompt.split(str(tasks[-1].user_scenario))[0]),
-        diagnostic_version="retail-trace-v1",
-        account_confirmation_id="retail-calibration-v1-account",
+        diagnostic_version="retail-trace-v2",
+        account_confirmation_id="retail-calibration-v2-account",
         offline_request_samples=samples,
         estimated_tokens_range={
             "agent_per_episode": [20000, 140000],

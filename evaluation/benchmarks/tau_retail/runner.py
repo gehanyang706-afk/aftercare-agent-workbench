@@ -304,7 +304,14 @@ def execute(plan, approval, account):
         def transport(payload, timeout):
             response = bounded(send_once, (endpoint, key, payload), seconds=timeout)
             if response.get("http_status") != 200:
-                return {"usage": response.get("usage"), "choices": [], "error": "HTTP_ERROR"}
+                return {
+                    "usage": response.get("usage"),
+                    "choices": [],
+                    "error": "HTTP_ERROR",
+                    "http_status": response.get("http_status"),
+                    "request_id": response.get("request_id"),
+                    "transport_error": response.get("error"),
+                }
             return response["data"]
 
         bridge = CompletionBridge(
@@ -366,6 +373,12 @@ def execute(plan, approval, account):
                         c.details.get("usage_details", {}).get("completion_tokens", 0) for c in rc
                     ),
                 )
+        ledger.finish_episode(
+            episode_id,
+            "STOPPED" if stop else "COMPLETED",
+            stop_batch=stop,
+            complete_batch=index == len(rows) - 1,
+        )
         export(directory, rows)
         if stop:
             for remaining in rows[index + 1 :]:

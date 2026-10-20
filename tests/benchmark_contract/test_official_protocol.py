@@ -275,3 +275,69 @@ def test_agent_user_judge_share_boundary_and_oracle_only_enters_judge():
         "ORACLE_CANARY" not in json.dumps(payload) for who, payload in captured if who != "judge"
     )
     assert all(payload["seed"] == 17 for _, payload in captured)
+
+
+@pytest.mark.parametrize("variant", ["official_tc", "harness_full_history"])
+def test_native_mixed_response_uses_official_environment_once(variant):
+    from evaluation.benchmarks.tau_retail.model_bridge import CompletionBridge
+    from evaluation.benchmarks.tau_retail.registry import VARIANTS
+
+    class Ledger:
+        def reserve(self, *args):
+            return "synthetic"
+
+        def settle(self, *args):
+            return True
+
+    class Trace:
+        def emit(self, *args, **kwargs):
+            pass
+
+    cfg = dict(enabled=True, exact_model="fixture", output_cap=1024, request_seconds=1, seed=17)
+    responses = iter(
+        [
+            wire("Please calculate."),
+            wire("Checking now.", [call("one", "calculate", {"expression": "2+2"})]),
+            wire("The result is 4."),
+            wire("###STOP###"),
+        ]
+    )
+    bridge = CompletionBridge(
+        Ledger(),
+        "r",
+        "e",
+        {"agent": cfg, "user": cfg},
+        lambda *args: next(responses).to_dict(),
+        Trace(),
+        10**12,
+    )
+    env = get_environment()
+    task = Task(
+        id="SYNTHETIC_MIXED",
+        user_scenario={"instructions": "Ask for a calculation."},
+        evaluation_criteria={"actions": [], "communicate_info": ["The result is 4."]},
+    )
+    args = {"num_retries": 0, "max_tokens": 1024}
+    agent = VARIANTS[variant](
+        tools=env.get_tools(), domain_policy=env.get_policy(), llm="fixture", llm_args=args
+    )
+    user = UserSimulator(llm="fixture", instructions="Ask for a calculation.", llm_args=args)
+    with official_bridge(bridge):
+        simulation = Orchestrator(
+            domain="retail",
+            agent=agent,
+            user=user,
+            environment=env,
+            task=task,
+            max_steps=10,
+            seed=17,
+        ).run()
+        reward = evaluate_simulation(simulation, task, EvaluationType.ALL, False, "retail")
+    assert reward.reward == 1
+    assert (
+        len([m for m in simulation.messages if isinstance(m, ToolMessage) and m.id == "one"]) == 1
+    )
+    assert any(
+        getattr(m, "content", None) == "Checking now." and getattr(m, "tool_calls", None)
+        for m in simulation.messages
+    )

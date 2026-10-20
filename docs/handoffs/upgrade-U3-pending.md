@@ -1,3 +1,5 @@
+> 此计划已执行并硬停止，不能续跑。结果见 upgrade-U3-first-stop.md；以下保留原待批记录。
+
 # U3待批交接（未执行）
 
 固定2项train任务107/96，每题official_tc与harness_full_history一次，共4episode。

@@ -86,6 +86,7 @@ class CompletionBridge:
             self.ledger.settle(call_id, None)
             self.trace.emit("model.unknown", {"call_id": call_id}, role)
             raise
+        self.trace.emit("model.received", {"call_id": call_id, "response": raw}, role)
         usage = raw.get("usage") or {}
         valid = all(
             type(usage.get(k)) is int and usage[k] >= 0
@@ -115,7 +116,17 @@ class CompletionBridge:
             raise ValueError("INVALID_MODEL_PROTOCOL")
         message = response.choices[0].message
         if message.tool_calls and message.content:
-            raise ValueError("MIXED_TEXT_TOOL_PROTOCOL")
+            # Preserve upstream default routing: tool calls go to ENV; do not drop text,
+            # invent user communication or add a stricter baseline termination rule.
+            self.trace.emit(
+                "protocol.mixed_message",
+                {
+                    "call_id": call_id,
+                    "handling": "official_default_routing",
+                    "meaningful_text": bool(message.content.strip()),
+                },
+                role,
+            )
         for call in message.tool_calls or []:
             self.trace.emit("tool.proposed", call.model_dump(), role, tool_call_id=call.id)
         return response

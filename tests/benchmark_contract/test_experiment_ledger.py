@@ -142,3 +142,18 @@ def test_legacy_settlement_does_not_implicitly_unpause_shared_model(service):
     legacy.settle(call, 17)
     with pytest.raises(BusinessError, match="SHARED_MODEL_PAUSED"):
         ledger.reserve("bench", "bench-1", "user", "after-legacy-settlement", 1, 10)
+
+
+def test_finished_hard_stop_closes_run_without_changing_usage(service):
+    from aftercare.repositories.models import ExperimentEpisode, ExperimentRun
+
+    ledger = setup(service)
+    call = ledger.reserve("bench", "bench-1", "agent", "one", 10, 10)
+    ledger.settle(call, 12)
+    ledger.finish_episode("bench-1", "STOPPED", stop_batch=True)
+    with service.sessions() as s:
+        assert s.get(ExperimentRun, "bench").status == "STOPPED"
+        assert s.get(ExperimentEpisode, "bench-1").status == "STOPPED"
+        assert s.get(ModelCall, call).usage == 12
+    with pytest.raises(BusinessError, match="EXPERIMENT_STOPPED"):
+        ledger.reserve("bench", "bench-1", "agent", "two", 1, 10)
