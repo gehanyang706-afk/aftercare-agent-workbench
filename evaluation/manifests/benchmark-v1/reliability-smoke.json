@@ -1,0 +1,79 @@
+{
+  "run_id": "U4-smoke-first",
+  "seed": 20261020,
+  "source_tree_hash": "development-smoke-not-frozen",
+  "cases": [
+    {
+      "case_id": "F01",
+      "concurrency": 8,
+      "injection": "duplicate_message",
+      "repeats": 1
+    },
+    {
+      "case_id": "F02",
+      "concurrency": 2,
+      "injection": "duplicate_confirmation",
+      "repeats": 1
+    },
+    {
+      "case_id": "F03",
+      "concurrency": 8,
+      "injection": "duplicate_confirmation",
+      "repeats": 1
+    },
+    {
+      "case_id": "F04",
+      "concurrency": 2,
+      "injection": "last_inventory",
+      "repeats": 1
+    },
+    {
+      "case_id": "F05",
+      "concurrency": 8,
+      "injection": "last_inventory",
+      "repeats": 1
+    },
+    {
+      "case_id": "F06",
+      "concurrency": 2,
+      "injection": "new_intent_first",
+      "repeats": 1
+    },
+    {
+      "case_id": "F07",
+      "concurrency": 2,
+      "injection": "commit_first",
+      "repeats": 1
+    },
+    {
+      "case_id": "F08",
+      "concurrency": 1,
+      "injection": "lost_response_after_commit",
+      "repeats": 1
+    },
+    {
+      "case_id": "F09",
+      "concurrency": 2,
+      "injection": "kill_parent_before_commit",
+      "repeats": 1
+    },
+    {
+      "case_id": "F10",
+      "concurrency": 1,
+      "injection": "kill_child_after_commit",
+      "repeats": 1
+    },
+    {
+      "case_id": "F11",
+      "concurrency": 2,
+      "injection": "lease_takeover_old_child_resumes",
+      "repeats": 1
+    },
+    {
+      "case_id": "F12",
+      "concurrency": 1,
+      "injection": "SSE_reconnect",
+      "repeats": 1
+    }
+  ]
+}

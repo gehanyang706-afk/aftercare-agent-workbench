@@ -356,6 +356,11 @@ class BusinessService:
 
     def commit(self, principal, preview_id, idempotency_key=None, fault=None):
         fault = fault or getattr(self, "commit_fault", None)
+        probe = getattr(self, "commit_probe", None)
+        if probe:
+            if self.sessions.kw["bind"].url.database != "aftercare_test":
+                raise RuntimeError("RELIABILITY_TEST_DATABASE_REQUIRED")
+            probe.hit("before_transaction", preview_id=preview_id)
         key = idempotency_key or preview_id
         request_hash = digest({"preview_id": preview_id})
         with self.sessions.begin() as s:
@@ -475,6 +480,8 @@ class BusinessService:
             s.flush()
             if fault == "before_commit":
                 raise RuntimeError("INJECTED_TRANSACTION_FAILURE")
+        if probe:
+            probe.hit("after_commit", preview_id=preview_id, operation_id=op_id)
         if fault == "lost_response":
             with self.sessions.begin() as s:
                 self._conversation(s, principal, row.conversation_id)
