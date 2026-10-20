@@ -4,7 +4,13 @@ from datetime import UTC, datetime
 
 from aftercare.harness.contracts import digest
 
-ALIASES = {"dashscope": "dashscope", "qwen": "dashscope", "openai/dashscope": "dashscope"}
+ALIASES = {
+    "dashscope": "dashscope",
+    "qwen": "dashscope",
+    "openai/dashscope": "dashscope",
+    "bailian-beijing-compatible": "dashscope",
+    "dashscope-beijing": "dashscope",
+}
 
 
 def model_identity(provider, region, model):

@@ -63,6 +63,7 @@ def test_baseline_exact_payload_equivalence_and_input_canary():
 
     with official_bridge(completion):
         for agent in (baseline, candidate):
+            agent.set_seed(17)
             agent.generate_next_message(
                 UserMessage(role="user", content="hi"), agent.get_init_state()
             )
@@ -181,3 +182,96 @@ def test_out_of_order_multi_result_pairs_by_id_and_empty_text():
         )
     assert result.content == ""
     assert [m.id for m in state.messages if isinstance(m, ToolMessage)] == ["b", "a"]
+
+
+def test_agent_user_judge_share_boundary_and_oracle_only_enters_judge():
+    from evaluation.benchmarks.tau_retail.model_bridge import (
+        CompletionBridge,
+        official_judge_configuration,
+    )
+
+    class Ledger:
+        def __init__(self):
+            self.roles = []
+            self.settled = []
+
+        def reserve(self, run, episode, role, *args):
+            self.roles.append(role)
+            return role + str(len(self.roles))
+
+        def settle(self, call, usage, *args):
+            self.settled.append((call, usage))
+            return True
+
+    class Trace:
+        def emit(self, *args, **kw):
+            pass
+
+    role = dict(
+        enabled=True,
+        exact_model="fixture",
+        output_cap=1024,
+        request_seconds=1,
+        temperature=0,
+        thinking=False,
+        seed=17,
+    )
+    roles = {name: dict(role) for name in ("agent", "user", "judge")}
+    ledger = Ledger()
+    captured = []
+
+    def transport(payload, timeout):
+        who = ledger.roles[-1]
+        captured.append((who, payload))
+        if who == "user":
+            return wire("###STOP###" if "agent" in ledger.roles else "Hello").to_dict()
+        if who == "judge":
+            return wire(
+                json.dumps(
+                    {
+                        "results": [
+                            {
+                                "expectedOutcome": "ORACLE_CANARY",
+                                "metExpectation": True,
+                                "reasoning": "synthetic",
+                            }
+                        ]
+                    }
+                )
+            ).to_dict()
+        return wire("Synthetic reply").to_dict()
+
+    bridge = CompletionBridge(ledger, "r", "e", roles, transport, Trace(), 10**12)
+    env = get_environment()
+    task = Task(
+        id="SYNTHETIC_JUDGE",
+        user_scenario={"instructions": "Ask a simple question."},
+        evaluation_criteria={
+            "actions": [],
+            "reward_basis": ["DB", "NL_ASSERTION"],
+            "nl_assertions": ["ORACLE_CANARY"],
+        },
+    )
+    args = {"num_retries": 0, "max_tokens": 1024, "extra_body": {"enable_thinking": False}}
+    agent = create_agent(
+        tools=env.get_tools(), domain_policy=env.get_policy(), llm="fixture", llm_args=args
+    )
+    user = UserSimulator(llm="fixture", instructions=str(task.user_scenario), llm_args=args)
+    with official_bridge(bridge), official_judge_configuration(role):
+        simulation = Orchestrator(
+            domain="retail",
+            agent=agent,
+            user=user,
+            environment=env,
+            task=task,
+            max_steps=10,
+            seed=17,
+        ).run()
+        reward = evaluate_simulation(simulation, task, EvaluationType.ALL, False, "retail")
+    assert reward.reward == 1
+    assert ledger.roles == ["user", "agent", "user", "judge"]
+    assert len(ledger.settled) == 4 and all(usage == 12 for _, usage in ledger.settled)
+    assert all(
+        "ORACLE_CANARY" not in json.dumps(payload) for who, payload in captured if who != "judge"
+    )
+    assert all(payload["seed"] == 17 for _, payload in captured)

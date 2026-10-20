@@ -1,0 +1,121 @@
+{
+  "run_id": "U4-reliability-v1-first",
+  "planned": 240,
+  "executed": 240,
+  "passed": 240,
+  "groups": {
+    "F01": {
+      "repetitions": 20,
+      "all20_passed": true
+    },
+    "F02": {
+      "repetitions": 20,
+      "all20_passed": true
+    },
+    "F03": {
+      "repetitions": 20,
+      "all20_passed": true
+    },
+    "F04": {
+      "repetitions": 20,
+      "all20_passed": true
+    },
+    "F05": {
+      "repetitions": 20,
+      "all20_passed": true
+    },
+    "F06": {
+      "repetitions": 20,
+      "all20_passed": true
+    },
+    "F07": {
+      "repetitions": 20,
+      "all20_passed": true
+    },
+    "F08": {
+      "repetitions": 20,
+      "all20_passed": true
+    },
+    "F09": {
+      "repetitions": 20,
+      "all20_passed": true
+    },
+    "F10": {
+      "repetitions": 20,
+      "all20_passed": true
+    },
+    "F11": {
+      "repetitions": 20,
+      "all20_passed": true
+    },
+    "F12": {
+      "repetitions": 20,
+      "all20_passed": true
+    }
+  },
+  "M": 12,
+  "results_sha256": "ef36f08ba5441819bfc44f09e20068f8de051988b49a18e2876b5710fe1fb6f8",
+  "checks": {
+    "F08": {
+      "verified": 20,
+      "total": 20
+    },
+    "F09": {
+      "verified": 20,
+      "total": 20
+    },
+    "F10": {
+      "verified": 20,
+      "total": 20
+    },
+    "F11": {
+      "verified": 20,
+      "total": 20
+    },
+    "F12": {
+      "verified": 20,
+      "total": 20
+    }
+  },
+  "reliability_components_unchanged_after_U4": {
+    "src/aftercare/agent/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "src/aftercare/agent/context.py": "f7d4f29edd45081c14d4bcdaa3cc859567c3cfc6c9ddc2a9c72327f986f4fb22",
+    "src/aftercare/agent/continuation.py": "433b327b45d1c4de503da7d1162ecc680bf2d57bf85b5689430b488d70d90d9f",
+    "src/aftercare/agent/demo.py": "93c63c3fd7d81aabf994da58df8565f04c6c1f77129bb450ef385237d47ae0cd",
+    "src/aftercare/agent/instructions.py": "3f41e2789bf9e2730ba74554a6c773a20d37643a9d1b819e9663c7b2675c577c",
+    "src/aftercare/agent/middleware.py": "9fba0e9d3302d649f977d1219e33ed70d370079531b4ff656e0d253826cae001",
+    "src/aftercare/agent/presentation.py": "6ff65ec11b0e39a01b14f17aa90e83117faaded11f345e5d8794592d559db074",
+    "src/aftercare/agent/runtime.py": "2d6a6d3ef7472b3da68425990f8b4a9bc14294d485556dc85a51b0cc10c9a85b",
+    "src/aftercare/agent/tools.py": "1d6ae7993a955b02a4a10c9b6ac0b288f482ce87d83d15b52b84c185bc23768c",
+    "src/aftercare/agent/workflow.py": "4446267c5b8bce9a51d5186eec189c0c742ec565c8902790ea4f5897dc7b3423",
+    "src/aftercare/services/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "src/aftercare/services/business.py": "864f30ae08c48e06e6205ae0bfb9caea46e8a639ddd19f21f17ef756be70a7af",
+    "src/aftercare/services/case_state.py": "c84ada2b8f6251dd468dea3b7285da681e8798a7aeb92e4c43e8a6b136a26537",
+    "src/aftercare/services/confirmation.py": "5feaa150afec8e1e26c0dc4ef9c749be8a85e88ccf175e398507fc20ae794e40",
+    "src/aftercare/services/demo.py": "a0d97572e3b9dce7f319395a5a34709efa3d22f7853403286722b7d58da3d0d2",
+    "src/aftercare/services/intent_guard.py": "4205c18ffe6795348640a93f4e8939f25548799d82a0bcb59b7558c04839c39f",
+    "src/aftercare/services/process_audit.py": "0042543b2b64c6788bffea135319d1590bd338d273577723993aded09a6f4523",
+    "src/aftercare/services/quantity_audit.py": "c569e2431254ab193d1656aa2f00d03b9244524536cced9785b2607d7c57aa1f",
+    "src/aftercare/services/quantity_evidence.py": "1e2533eb3e94f43425385efab3ba2ec14481e8e8b8d71430c0bc5270b3108d0c",
+    "src/aftercare/services/user_pause.py": "5493b3c38ce7998b795390ed24b12fb6b0634baee5bf0fdf8fd4b02bbbea2b16",
+    "src/aftercare/workers/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "src/aftercare/workers/queue.py": "168b739cb8461c4c6b815432a1b58fecb3ce7e0956fd627e86a713bc864e974f",
+    "src/aftercare/workers/worker.py": "04c68828f56b9e084732ab9de84c358fcbd4b636c7df209f42e97e704d52d9b0",
+    "src/aftercare/repositories/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "src/aftercare/repositories/database.py": "1439e19eeaf4181987a25c7ba7189d417d8d4a43ae8ea4ae3722249f53e6c0d9",
+    "src/aftercare/repositories/models.py": "3cae5e86303d9055b64b791020ff3d4879bf989df8cb4884e2fad75b2859808f",
+    "src/aftercare/retrieval/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "src/aftercare/retrieval/engine.py": "bf12761ab78febca257d0b9f974a4a9b7676e32ae02a209941171c386f58e713",
+    "src/aftercare/retrieval/evaluate.py": "3354883d86ccb0fc6cf91f9a03e06ea8e69dae3b4575c436855d6d0089486492",
+    "src/aftercare/retrieval/local.py": "b45ce7ca2cb6a214f3fd8c13a30b2e45caa6666bb62a658d5434fbfafa383efd",
+    "evaluation/reliability/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "evaluation/reliability/barriers.py": "cbe778194876354901daf7c1902f3b6c4b35f67ec05d4110cb49901d643e7422",
+    "evaluation/reliability/cases.py": "f217b215c4dafec0932eb19e62f37a60392c26d972164c7d58e9d2bf5aad7df9",
+    "evaluation/reliability/invariants.py": "0b30167ed9a4b51ea9fd47995167e8d9a3d388611f2e06d7af221de04f009c30",
+    "evaluation/reliability/runner.py": "39d46c01ca761419278a3b40981d057d18810d3075658716b8c892414747ca99"
+  },
+  "source_commit": "bde3c0f21aba2e396f68f818030e4ae67a31f3ce",
+  "source_tree_hash": "b4aed94539bd76a5b2e1ad66cb36b25dee0dba328f27e24961f9a49a4ca304d5",
+  "real_model_requests": 0,
+  "recorded_case_seconds": 626.66
+}

@@ -6,14 +6,14 @@ import json
 import time
 from pathlib import Path
 
-from sqlalchemy import select
+from sqlalchemy import select, text
 
 from aftercare.config import Settings
 from aftercare.harness.contracts import digest
 from aftercare.llm.experiment_gateway import ExperimentLedger
 from aftercare.llm.experiment_scope import authorize, plan_hash
 from aftercare.repositories.database import session_factory
-from aftercare.repositories.models import ModelCall
+from aftercare.repositories.models import Budget, ModelCall
 from evaluation.benchmarks.tau_retail.metrics import summarize
 from evaluation.benchmarks.tau_retail.source_guard import (
     ROOT,
@@ -106,10 +106,15 @@ def preflight(plan, approval=None, account=None):
                 or digest([t.openai_schema for t in environment.get_tools()]) != plan["tools_hash"]
             ):
                 raise ValueError("POLICY_OR_SCHEMA_MISMATCH")
-            if any(
-                b.value == "NL_ASSERTION" for t in tasks for b in t.evaluation_criteria.reward_basis
-            ):
-                raise ValueError("JUDGE_REQUIRES_NEW_APPROVAL")
+            needs_judge = [
+                t.id
+                for t in tasks
+                if t.evaluation_criteria.nl_assertions
+                and any(b.value == "NL_ASSERTION" for b in t.evaluation_criteria.reward_basis)
+            ]
+            judge = plan["roles"].get("judge", {})
+            if needs_judge and (not judge.get("enabled") or judge.get("task_ids") != needs_judge):
+                raise ValueError("JUDGE_REQUIRES_EXPLICIT_ROLE_PLAN")
             pool = json.loads(
                 (ROOT / "evaluation/manifests/benchmark-v1/development-pool.json").read_text()
             )
@@ -122,12 +127,19 @@ def preflight(plan, approval=None, account=None):
             sessions = session_factory(Settings())
             try:
                 with sessions() as session:
+                    if not session.scalar(text("SELECT to_regclass('experiment_runs')")):
+                        raise ValueError("EXPERIMENT_LEDGER_MIGRATION_REQUIRED")
                     unresolved = list(
                         session.scalars(select(ModelCall).where(ModelCall.usage.is_(None)))
                     )
                     models = {c["exact_model"] for c in plan["roles"].values() if c.get("enabled")}
                     if any(c.exact_model in models for c in unresolved):
                         raise ValueError("UNRESOLVED_MODEL_USAGE")
+                    prior = list(
+                        session.scalars(select(ModelCall).where(ModelCall.exact_model.in_(models)))
+                    )
+                    if any(session.get(Budget, c.budget_id).paused for c in prior):
+                        raise ValueError("LEGACY_MODEL_BUDGET_PAUSED")
             finally:
                 sessions.kw["bind"].dispose()
 
@@ -202,7 +214,11 @@ def execute(plan, approval, account):
     from aftercare.llm.smoke import send_once
     from aftercare.llm.supervisor import bounded
     from aftercare.offline import install_offline_guard
-    from evaluation.benchmarks.tau_retail.model_bridge import CompletionBridge, official_bridge
+    from evaluation.benchmarks.tau_retail.model_bridge import (
+        CompletionBridge,
+        official_bridge,
+        official_judge_configuration,
+    )
     from evaluation.benchmarks.tau_retail.registry import VARIANTS
 
     settings = Settings()
@@ -250,8 +266,6 @@ def execute(plan, approval, account):
             directory / str(index), plan["run_id"], episode_id, row["variant"], plan["trial"]
         )
         task = tasks[row["task_id"]]
-        if any(b.value == "NL_ASSERTION" for b in task.evaluation_criteria.reward_basis):
-            raise ValueError("JUDGE_REQUIRES_NEW_APPROVAL")
 
         def args(role):
             c = plan["roles"][role]
@@ -305,7 +319,10 @@ def execute(plan, approval, account):
         stop = False
         try:
             row["status"] = "attempted"
-            with official_bridge(bridge):
+            with (
+                official_bridge(bridge),
+                official_judge_configuration(plan["roles"].get("judge", {})),
+            ):
                 simulation = Orchestrator(
                     domain="retail",
                     agent=agent,

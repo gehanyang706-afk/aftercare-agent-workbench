@@ -57,3 +57,13 @@ ALLOW_REAL_MODEL_CALLS=false .venv/bin/python -m evaluation.evaluator.regression
 U4 仅 aftercare_test，真实进程故障须保存触发证据；不得以对象重建替代杀进程。
 每阶段记录 docs/handoffs/upgrade-U*.md；缺依赖先集中资源清单，继续独立工作。
 新命令在 benchmarks/tau_retail/README.md 中随验收更新；未验收明确标注。
+
+
+### 升级离线交付状态
+
+U0/U1/U2完成；U4冻结版本bde3c0f完成12组×20次，240/240通过（M=12），首次失败与修复证据保留。
+公开摘要见docs/benchmarks/reports，命令见benchmarks/tau_retail/README.md。
+U4后仅调整公开评测seed/必要裁判/旧provider暂停保护，产品可靠性源码未变；U3必须使用重新冻结的新计划hash。
+校准train107/96实际包含NL_ASSERTION；107需裁判，96断言为空。裁判也须单独列精确模型和角色预算批准，不能删奖励或换题回避。
+本轮真实请求0，真实账本156次/309920Token/unknown0未变。未执行六题旧计划、test或独立holdout。
+当前demo/8128仍为0005旧离线候选；新增0006迁移仅在aftercare_test验收。真实校准前须完成保留账本的增量迁移和离线应用版本协调，未就绪预检拒绝；不得清库解决。

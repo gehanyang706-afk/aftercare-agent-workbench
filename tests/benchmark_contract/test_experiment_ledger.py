@@ -108,3 +108,37 @@ def test_current_lower_quota_and_watermark_do_not_double_subtract(service):
     with service.sessions() as s:
         quota = s.get(SharedModelQuota, model_identity("qwen", "beijing", MODEL))
         assert quota.confirmed_remaining == 100
+
+
+def test_legacy_unknown_provider_alias_blocks_new_roles_without_rewriting_old_call(service):
+    from aftercare.llm.budget import BudgetLedger
+
+    old = BudgetLedger(service.sessions)
+    conversation = service.create_conversation("alice")
+    call = old.reserve(
+        "bailian-beijing-compatible", MODEL, "legacy", conversation, "legacy-run", 20, 10, 1000
+    )
+    old.settle(call, None)
+    assert model_identity("bailian-beijing-compatible", "beijing", MODEL) == model_identity(
+        "qwen", "beijing", MODEL
+    )
+    ledger = setup(service)
+    with pytest.raises(BusinessError, match="SHARED_MODEL_PAUSED|UNRESOLVED_MODEL_USAGE"):
+        ledger.reserve("bench", "bench-1", "user", "new", 1, 10)
+    with service.sessions() as s:
+        row = s.get(ModelCall, call)
+        assert row.provider == "bailian-beijing-compatible" and row.status == "USAGE_UNKNOWN"
+        assert row.reserved == 30 and row.usage is None
+
+
+def test_legacy_settlement_does_not_implicitly_unpause_shared_model(service):
+    from aftercare.llm.budget import BudgetLedger
+
+    legacy = BudgetLedger(service.sessions)
+    conv = service.create_conversation("alice")
+    call = legacy.reserve("bailian-beijing-compatible", MODEL, "old", conv, "old-run", 20, 10, 1000)
+    legacy.settle(call, None)
+    ledger = setup(service)
+    legacy.settle(call, 17)
+    with pytest.raises(BusinessError, match="SHARED_MODEL_PAUSED"):
+        ledger.reserve("bench", "bench-1", "user", "after-legacy-settlement", 1, 10)

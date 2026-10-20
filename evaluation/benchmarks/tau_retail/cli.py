@@ -84,12 +84,29 @@ def make_plan():
             episode_token_cap=200000 if agent else 100000,
             batch_token_cap=800000 if agent else 400000,
             request_seconds=60,
+            seed=20261020,
         )
 
+    needs_judge = [
+        t.id
+        for t in tasks
+        if t.evaluation_criteria.nl_assertions
+        and any(b.value == "NL_ASSERTION" for b in t.evaluation_criteria.reward_basis)
+    ]
+    judge = dict(
+        role("user"),
+        output_cap=1024,
+        request_cap=1,
+        batch_request_cap=len(needs_judge) * 2,
+        episode_token_cap=100000,
+        batch_token_cap=100000 * len(needs_judge) * 2,
+        task_ids=needs_judge,
+        enabled=bool(needs_judge),
+    )
     roles = {
         "agent": role("agent"),
         "user": role("user"),
-        "judge": {"enabled": False},
+        "judge": judge,
         "auxiliary": {"enabled": False},
     }
     from random import Random
@@ -131,10 +148,10 @@ def make_plan():
         order_seed=20261020,
         episodes=episodes,
         roles=roles,
-        total_token_cap=1200000,
-        request_cap=160,
-        episode_token_cap=300000,
-        episode_request_cap=40,
+        total_token_cap=1200000 + judge["batch_token_cap"],
+        request_cap=160 + judge["batch_request_cap"],
+        episode_token_cap=400000 if needs_judge else 300000,
+        episode_request_cap=41 if needs_judge else 40,
         episode_seconds=600,
         wall_clock_seconds=2400,
         max_steps=80,
@@ -148,6 +165,15 @@ def make_plan():
         auto_review=False,
         evaluation_type="ALL",
         reward_basis=basis,
+        judge_required_tasks=needs_judge,
+        judge_configuration_note=(
+            "Official default GPT-4.1 judge replaced by explicitly approved "
+            "exact Qwen for both variants; prompts, criteria and reward unchanged."
+        ),
+        seed_support=(
+            "Forward identical seed for agent/user/judge; API behavior uncalibrated, "
+            "no determinism guarantee."
+        ),
         scorer_hash=lock["source_hashes"]["src/tau2/evaluator/evaluator.py"],
         policy_hash=digest(env.get_policy()),
         tools_hash=digest(tools),
@@ -158,7 +184,8 @@ def make_plan():
         estimated_tokens_range={
             "agent_per_episode": [20000, 140000],
             "user_per_episode": [10000, 60000],
-            "batch": [120000, 800000],
+            "judge_per_required_episode": [2000, 20000],
+            "batch": [124000, 840000],
         },
         estimate_note="Cold protocol payload bounds only, not real usage prediction or guarantee.",
         ordinary_failure="continue_fixed_remaining",
@@ -171,7 +198,10 @@ def make_plan():
             "any_persistent_budget_or_deadline",
         ],
         restart="read_only_reconcile",
-        freeze_note="Re-freeze after U4 code repairs; no approval file generated.",
+        freeze_note=(
+            "Frozen after U4; no approval/account file generated. "
+            "Judge role also requires human approval."
+        ),
     )
     plan["plan_sha256"] = plan_hash(plan)
     return plan

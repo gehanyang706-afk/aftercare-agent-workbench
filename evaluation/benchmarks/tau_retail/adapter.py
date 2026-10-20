@@ -27,6 +27,9 @@ class RetailAgent(HalfDuplexAgent):
         self.llm, self.llm_args = llm, dict(llm_args or {})
         self.policy, self.trace, self.context_limit = ContextPolicy(policy_id), trace, context_limit
 
+    def set_seed(self, seed):
+        self.llm_args["seed"] = seed
+
     def get_init_state(self, message_history=None):
         from tau2.agent.base_agent import is_valid_agent_history_message
 

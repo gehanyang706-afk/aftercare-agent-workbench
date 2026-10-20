@@ -11,7 +11,7 @@ from sqlalchemy.dialects.postgresql import insert
 
 from aftercare.domain.contracts import utc_now
 from aftercare.domain.rules import require
-from aftercare.llm.experiment_scope import model_identity
+from aftercare.llm.experiment_scope import ALIASES, model_identity
 from aftercare.repositories.models import (
     ActorBudget,
     Budget,
@@ -57,8 +57,15 @@ class ExperimentLedger:
                 all_calls = list(s.scalars(select(ModelCall)))
                 watermark = [c.id for c in all_calls]
                 prior = s.get(SharedModelQuota, key, with_for_update=True)
+                exact = key.split(":", 2)[2]
+                legacy_paused = any(
+                    c.exact_model == exact
+                    and c.provider.lower() in ALIASES
+                    and (c.usage is None or s.get(Budget, c.budget_id).paused)
+                    for c in all_calls
+                )
                 if prior:
-                    exact = key.split(":", 2)[2]
+                    prior.paused = prior.paused or legacy_paused
                     old = set(prior.watermark["call_ids"])
                     used = sum(
                         c.usage if c.usage is not None else c.reserved
@@ -79,7 +86,7 @@ class ExperimentLedger:
                             confirmed_remaining=confirmation["remaining"],
                             watermark={"call_ids": watermark},
                             confirmation=account,
-                            paused=False,
+                            paused=legacy_paused,
                         )
                     )
             self._dimension(
@@ -188,6 +195,12 @@ class ExperimentLedger:
             require(run_data is not None, "RUN_NOT_FOUND")
             cfg = run_data.config["roles"].get(role, {})
             require(cfg.get("enabled") is True, "ROLE_NOT_APPROVED")
+            episode_data = s.get(ExperimentEpisode, episode_id)
+            require(episode_data is not None, "EPISODE_NOT_FOUND")
+            require(
+                not cfg.get("task_ids") or episode_data.config.get("task_id") in cfg["task_ids"],
+                "ROLE_NOT_APPROVED_FOR_TASK",
+            )
             key = model_identity(cfg["provider"], cfg["region"], cfg["exact_model"])
             quota = s.get(SharedModelQuota, key, with_for_update=True)
             require(quota is not None and not quota.paused, "SHARED_MODEL_PAUSED")
@@ -198,7 +211,7 @@ class ExperimentLedger:
             require(
                 not any(
                     c.usage is None
-                    and c.provider in {"dashscope", "qwen", "openai/dashscope"}
+                    and c.provider.lower() in ALIASES
                     and (
                         c.status == "USAGE_UNKNOWN"
                         or c.details.get("request_deadline", 0) <= utc_now().timestamp()

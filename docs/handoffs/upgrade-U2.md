@@ -13,3 +13,9 @@ metrics输出planned/attempted/completed/not_run、角色分账、配对四格�
 CLI：inspect --offline、contract-test --offline、plan --stage calibration --dry-run、run（缺execute/批准只preflight）、report。
 具体命令见benchmarks/tau_retail/README.md。U3计划必须在U4修复后重新冻结source/lock/scorer/任务内容hash。
 没有创建approval/account确认文件，没有真实请求。未知价格留null，未取得A/B/C。
+
+
+补充核对：校准固定任务107/96的实际reward_basis为DB+NL_ASSERTION。107需1次裁判、96无需实际裁判请求。
+已离线接入共同裁判配置（提议Qwen同精确版本替代官方默认GPT-4.1，prompt/评分不变），纳入待批角色；没有真实调用。
+官方Orchestrator会给LLMAgent/User设置seed，适配器已复用同一行为；原始payload等价与三角色seed/账本边界spy均通过。
+后续隔离契约共23 passed，包含历史bailian-beijing-compatible provider别名与旧暂停不隐式解除的反例。

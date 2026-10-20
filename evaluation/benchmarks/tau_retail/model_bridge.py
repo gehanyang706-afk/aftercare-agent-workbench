@@ -50,7 +50,10 @@ class CompletionBridge:
             "num_retries",
             "extra_body",
             "timeout",
+            "seed",
         }
+        if "seed" in request and request["seed"] != cfg.get("seed"):
+            raise ValueError("SEED_SCOPE_MISMATCH")
         if set(request) - allowed:
             raise ValueError("UNSUPPORTED_PARAMETERS:" + str(sorted(set(request) - allowed)))
         if request.get("max_tokens") != cfg["output_cap"]:
@@ -147,3 +150,24 @@ def official_bridge(completion):
             litellm.failure_callback,
             litellm.drop_params,
         ) = prior
+
+
+@contextmanager
+def official_judge_configuration(config):
+    """Common approved evaluator-model configuration; prompt/criteria/reward code unchanged."""
+    from tau2.evaluator import evaluator_nl_assertions as module
+
+    saved = (module.DEFAULT_LLM_NL_ASSERTIONS, module.DEFAULT_LLM_NL_ASSERTIONS_ARGS)
+    if config.get("enabled"):
+        module.DEFAULT_LLM_NL_ASSERTIONS = config["exact_model"]
+        module.DEFAULT_LLM_NL_ASSERTIONS_ARGS = dict(
+            num_retries=0,
+            max_tokens=config["output_cap"],
+            temperature=config["temperature"],
+            seed=config["seed"],
+            extra_body={"enable_thinking": config["thinking"]},
+        )
+    try:
+        yield
+    finally:
+        module.DEFAULT_LLM_NL_ASSERTIONS, module.DEFAULT_LLM_NL_ASSERTIONS_ARGS = saved
