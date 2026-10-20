@@ -1,0 +1,268 @@
+{
+  "batch_id": "retail-tool-visibility-v1",
+  "plan_sha256": "cf13c693664f104ef6b4f82385f0a67d3b2424f447c6f704755faaaa68bdf04a",
+  "source_commit": "e621e8f1ecb09f458bd21a1fbb35815a80349ad8",
+  "source_tree_hash": "d11aa716ad3183e15870aa666f2209b46b9af56ac951b66987b076bd2383efa2",
+  "rule_hash": "0027ef78d8b3e22b09fb2076c2759811f551745f9aa9869b0bfb75e1f2fcd647",
+  "catalog_hash": "c1b3ff400ce83557f898d8603de1ebb9aee48ebd7ab0524698a8d5068b76ac73",
+  "planned": 2,
+  "attempted": 2,
+  "evaluated": 2,
+  "not_run": 0,
+  "run_status": "COMPLETED",
+  "roles": {
+    "agent": {
+      "http_requests": 22,
+      "input_tokens": 143597,
+      "output_tokens": 4140,
+      "known_tokens": 147737,
+      "unknown_reserved": 0,
+      "model_wait_seconds": 122.17895691901504
+    },
+    "user": {
+      "http_requests": 12,
+      "input_tokens": 16045,
+      "output_tokens": 808,
+      "known_tokens": 16853,
+      "unknown_reserved": 0,
+      "model_wait_seconds": 41.42613333402551
+    },
+    "judge": {
+      "http_requests": 0,
+      "input_tokens": 0,
+      "output_tokens": 0,
+      "known_tokens": 0,
+      "unknown_reserved": 0,
+      "model_wait_seconds": 0
+    },
+    "auxiliary": {
+      "http_requests": 0,
+      "input_tokens": 0,
+      "output_tokens": 0,
+      "known_tokens": 0,
+      "unknown_reserved": 0,
+      "model_wait_seconds": 0
+    }
+  },
+  "totals": {
+    "http_requests": 34,
+    "input_tokens": 159642,
+    "output_tokens": 4948,
+    "known_tokens": 164590,
+    "unknown_reserved": 0,
+    "model_wait_seconds": 163.60509025304054
+  },
+  "episode_seconds_sum": 166.1238940829935,
+  "path_cost_analysis": {
+    "agent_tokens_baseline": 64655,
+    "agent_tokens_candidate": 83082,
+    "agent_token_increase_percent": 28.500502668007123,
+    "same_successful_path_comparison": false,
+    "reason": "Baseline did not perform the item modification; no both-success pair",
+    "within_candidate_path_byte_comparison": [
+      {
+        "variant": "official_tc",
+        "actual_request_bytes": 238467,
+        "same_history_full_catalog_bytes": 238467,
+        "same_history_byte_reduction_percent": 0.0,
+        "actual_schema_bytes": 117610,
+        "full_schema_bytes": 117610,
+        "requests_matched_selection": 0
+      },
+      {
+        "variant": "tool_visibility_v1",
+        "actual_request_bytes": 292825,
+        "same_history_full_catalog_bytes": 341678,
+        "same_history_byte_reduction_percent": 14.297964750437542,
+        "actual_schema_bytes": 92279,
+        "full_schema_bytes": 141132,
+        "requests_matched_selection": 12
+      }
+    ]
+  },
+  "ledger": {
+    "historical_real_requests": 272,
+    "historical_known_tokens": 996369,
+    "unknown_calls": 0,
+    "project_cap": 2000000,
+    "project_settled": 1164930,
+    "project_reserved": 0,
+    "project_available": 835070,
+    "project_paused": false,
+    "shared_model_paused": false,
+    "run_status": "COMPLETED",
+    "episode_statuses": [
+      "COMPLETED",
+      "COMPLETED"
+    ],
+    "ordinary_real_flag": false
+  },
+  "episodes": [
+    {
+      "task_id": "96",
+      "variant": "official_tc",
+      "status": "completed",
+      "official_reward": 0.0,
+      "db_match": false,
+      "execution_stop": "TerminationReason.USER_STOP",
+      "seconds": 65.26275549999264,
+      "roles": {
+        "agent": {
+          "known_tokens": 64655,
+          "unknown_reserved": 0,
+          "http_requests": 10,
+          "model_wait_seconds": 43.66433271097776,
+          "input_tokens": 63339,
+          "output_tokens": 1316
+        },
+        "user": {
+          "known_tokens": 6445,
+          "unknown_reserved": 0,
+          "http_requests": 6,
+          "model_wait_seconds": 20.412582834018394,
+          "input_tokens": 6026,
+          "output_tokens": 419
+        },
+        "judge": {
+          "known_tokens": 0,
+          "unknown_reserved": 0,
+          "http_requests": 0,
+          "model_wait_seconds": 0,
+          "input_tokens": 0,
+          "output_tokens": 0
+        },
+        "auxiliary": {
+          "known_tokens": 0,
+          "unknown_reserved": 0,
+          "http_requests": 0,
+          "model_wait_seconds": 0,
+          "input_tokens": 0,
+          "output_tokens": 0
+        }
+      },
+      "tools": {
+        "mutation_sequence": 1,
+        "executed": 5,
+        "repeated_reads": 0,
+        "seconds": 0.0021482919983100146
+      },
+      "tool_names": [
+        "find_user_id_by_name_zip",
+        "get_user_details",
+        "get_order_details",
+        "get_order_details",
+        "modify_pending_order_address"
+      ],
+      "write_operations": 1,
+      "tool_errors": 0,
+      "fallback": {},
+      "unexposed_proposals": 0,
+      "tool_schema_counts": [
+        16,
+        16,
+        16,
+        16,
+        16,
+        16,
+        16,
+        16,
+        16,
+        16
+      ],
+      "length_truncated": 0,
+      "long_explanations": 0,
+      "claim_signals": {
+        "refund_received_language": 0,
+        "completed_fulfillment_language": 0
+      }
+    },
+    {
+      "task_id": "96",
+      "variant": "tool_visibility_v1",
+      "status": "completed",
+      "official_reward": 1.0,
+      "db_match": true,
+      "execution_stop": "TerminationReason.USER_STOP",
+      "seconds": 100.86113858300087,
+      "roles": {
+        "agent": {
+          "known_tokens": 83082,
+          "unknown_reserved": 0,
+          "http_requests": 12,
+          "model_wait_seconds": 78.51462420803728,
+          "input_tokens": 80258,
+          "output_tokens": 2824
+        },
+        "user": {
+          "known_tokens": 10408,
+          "unknown_reserved": 0,
+          "http_requests": 6,
+          "model_wait_seconds": 21.013550500007113,
+          "input_tokens": 10019,
+          "output_tokens": 389
+        },
+        "judge": {
+          "known_tokens": 0,
+          "unknown_reserved": 0,
+          "http_requests": 0,
+          "model_wait_seconds": 0,
+          "input_tokens": 0,
+          "output_tokens": 0
+        },
+        "auxiliary": {
+          "known_tokens": 0,
+          "unknown_reserved": 0,
+          "http_requests": 0,
+          "model_wait_seconds": 0,
+          "input_tokens": 0,
+          "output_tokens": 0
+        }
+      },
+      "tools": {
+        "mutation_sequence": 2,
+        "executed": 7,
+        "repeated_reads": 0,
+        "seconds": 0.0034701250115176663
+      },
+      "tool_names": [
+        "find_user_id_by_name_zip",
+        "get_user_details",
+        "get_order_details",
+        "get_product_details",
+        "get_order_details",
+        "modify_pending_order_address",
+        "modify_pending_order_items"
+      ],
+      "write_operations": 2,
+      "tool_errors": 0,
+      "fallback": {},
+      "unexposed_proposals": 0,
+      "tool_schema_counts": [
+        10,
+        10,
+        10,
+        10,
+        14,
+        14,
+        14,
+        14,
+        14,
+        14,
+        14,
+        13
+      ],
+      "length_truncated": 0,
+      "long_explanations": 1,
+      "claim_signals": {
+        "refund_received_language": 1,
+        "completed_fulfillment_language": 0
+      }
+    }
+  ],
+  "limitations": [
+    "One seen task pair, not overall Retail performance.",
+    "Baseline omitted item modification; lower consumption is not optimization.",
+    "Same-history byte comparison is offline, not counterfactual model usage.",
+    "No new fix or rerun; output quality diagnostic only."
+  ]
+}

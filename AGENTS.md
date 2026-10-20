@@ -111,3 +111,13 @@ tune-v1为待批8episode计划，322请求/260万Token/80分钟；项目现可�
 73项离线契约通过；51请求体字节减15.48%，已见调用30/30，均非真实效果证据；告知质量只诊断，不混改提示词。
 新tool-visibility-v1计划仅train96×两配置，80请求/600kToken/1200秒，无judge/aux；未批准未执行，普通工作台仍离线，不读validation/Test/holdout。
 项目cap保持2000000，当前可用999660；不复用旧批批准或旧余额，真实运行仍需新hash授权及当前精确模型免费余量/FreeTierOnly确认。
+
+
+### U3c tool-visibility-v1 首次真实批次已结束
+
+用户批准新hash并确认当前≥600k免费余量/FreeTierOnly后，只执行train96官方→候选各一次；见docs/benchmarks/reports/U3c-tool-visibility-v1-first.md。
+基线reward0、候选1；均USER_STOP，基线漏商品修改。34HTTP/164590Token/unknown0，累计166.12秒。
+候选Agent多耗28.50%，无相同成功路径节省结论；同历史schema切换仅证明请求体字节下降14.30%。fallback/未暴露提议/工具错误均0。
+截断0；候选冗长及到账措辞风险只诊断、未改prompt/输出/评分。原历史结果保留，不为旧开发失败大修或重跑全量/U4。
+真实历史272请求/996369Token，项目cap仍2000000，可用835070，普通工作台flag仍false。
+本批授权结束，真实调用停止；不自动delivered/validation/Test，不借旧批余额、不追加新模型或实验。

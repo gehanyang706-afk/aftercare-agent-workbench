@@ -83,3 +83,10 @@ PYTHONPATH=src runtime/benchmark-deps/venv/bin/python -m evaluation.benchmarks.t
 ```
 
 动态子集仅对新Agent变体，用户/judge不筛选；工具可见性不代替确认授权，环境保持完整工具目录。真实角色、额度和源码/hash须按新计划另批，普通工作台不扩大真实入口。
+
+
+## U3c 已运行结果
+
+tool-visibility-v1固定小批已结束：基线0/候选1，34HTTP/164590Token，无unknown。
+候选完成两项任务，基线只完成地址；Agent成本候选高28.50%，不称Token优化成功。
+细节见 docs/benchmarks/reports/U3c-tool-visibility-v1-first.md；历史待批说明仅作历史，本批不可再执行，未来真实任务须新计划及新批准。
