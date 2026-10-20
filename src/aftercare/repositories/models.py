@@ -278,3 +278,56 @@ class Job(Base):
     cancel_requested: Mapped[bool] = mapped_column(Boolean, default=False)
     result: Mapped[dict] = mapped_column(JSON, default=dict)
     created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True))
+
+
+class ExperimentRun(Base):
+    __tablename__ = "experiment_runs"
+    id: Mapped[str] = mapped_column(String, primary_key=True)
+    plan_hash: Mapped[str] = mapped_column(String)
+    config: Mapped[dict] = mapped_column(JSON)
+    deadline: Mapped[datetime] = mapped_column(DateTime(timezone=True))
+    status: Mapped[str] = mapped_column(String, default="READY")
+
+
+class ExperimentEpisode(Base):
+    __tablename__ = "experiment_episodes"
+    id: Mapped[str] = mapped_column(String, primary_key=True)
+    run_id: Mapped[str] = mapped_column(ForeignKey("experiment_runs.id"))
+    conversation_id: Mapped[str] = mapped_column(ForeignKey("conversations.id"))
+    config: Mapped[dict] = mapped_column(JSON)
+    deadline: Mapped[datetime] = mapped_column(DateTime(timezone=True))
+    status: Mapped[str] = mapped_column(String, default="READY")
+
+
+class SharedModelQuota(Base):
+    __tablename__ = "shared_model_quotas"
+    id: Mapped[str] = mapped_column(String, primary_key=True)
+    confirmed_remaining: Mapped[int] = mapped_column(BigInteger)
+    watermark: Mapped[dict] = mapped_column(JSON)
+    confirmation: Mapped[dict] = mapped_column(JSON)
+    paused: Mapped[bool] = mapped_column(Boolean, default=False)
+
+
+class ActorBudget(Base):
+    __tablename__ = "experiment_actor_budgets"
+    id: Mapped[str] = mapped_column(String, primary_key=True)
+    run_id: Mapped[str] = mapped_column(ForeignKey("experiment_runs.id"))
+    episode_id: Mapped[str | None] = mapped_column(ForeignKey("experiment_episodes.id"))
+    role: Mapped[str] = mapped_column(String)
+    cap: Mapped[int] = mapped_column(BigInteger)
+    request_cap: Mapped[int] = mapped_column(Integer)
+    settled: Mapped[int] = mapped_column(BigInteger, default=0)
+    reserved: Mapped[int] = mapped_column(BigInteger, default=0)
+    requests: Mapped[int] = mapped_column(Integer, default=0)
+
+
+class ExperimentCall(Base):
+    __tablename__ = "experiment_calls"
+    call_id: Mapped[str] = mapped_column(ForeignKey("model_calls.id"), primary_key=True)
+    quota_id: Mapped[str] = mapped_column(ForeignKey("shared_model_quotas.id"))
+    run_id: Mapped[str] = mapped_column(ForeignKey("experiment_runs.id"))
+    episode_id: Mapped[str] = mapped_column(ForeignKey("experiment_episodes.id"))
+    role: Mapped[str] = mapped_column(String)
+    attempt_id: Mapped[str] = mapped_column(String, unique=True)
+    dimensions: Mapped[list] = mapped_column(JSON)
+    metadata_: Mapped[dict] = mapped_column("metadata", JSON)

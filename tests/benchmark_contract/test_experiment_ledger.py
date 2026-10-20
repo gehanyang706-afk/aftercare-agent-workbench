@@ -1,0 +1,95 @@
+from concurrent.futures import ThreadPoolExecutor
+
+import pytest
+
+from aftercare.domain.contracts import BusinessError
+from aftercare.llm.experiment_gateway import ExperimentLedger
+from aftercare.llm.experiment_scope import model_identity
+from aftercare.repositories.models import ActorBudget, Budget, ModelCall, SharedModelQuota
+
+MODEL = "qwen3.5-plus-2026-02-15"
+
+
+def setup(service, run="bench", cap=1000, quota=1000):
+    ledger = ExperimentLedger(service.sessions)
+    role = dict(
+        enabled=True,
+        provider="qwen",
+        region="beijing",
+        exact_model=MODEL,
+        batch_token_cap=cap,
+        batch_request_cap=20,
+        episode_token_cap=cap,
+        request_cap=10,
+        output_cap=10,
+    )
+    plan = dict(
+        plan_sha256="frozen",
+        total_token_cap=cap,
+        request_cap=20,
+        wall_clock_seconds=100,
+        episode_seconds=50,
+        episode_token_cap=cap,
+        episode_request_cap=20,
+        roles={"agent": role, "user": role, "judge": {"enabled": False}},
+    )
+    ledger.create_run(
+        run, plan, {"models": {model_identity("qwen", "beijing", MODEL): {"remaining": quota}}}
+    )
+    ledger.create_episode(
+        run, run + "-1", dict(task_id="synthetic", variant="official_tc", trial=0)
+    )
+    return ledger
+
+
+def test_settle_includes_roles_without_double_counting(service):
+    ledger = setup(service)
+    for i, role in enumerate(("agent", "user")):
+        call = ledger.reserve("bench", "bench-1", role, str(i), 30, 10)
+        ledger.settle(call, 25, {"input_tokens": 20, "output_tokens": 5})
+    with service.sessions() as s:
+        assert s.get(Budget, "project").settled == 50
+        assert s.get(ActorBudget, "bench:batch").requests == 2
+        assert s.get(ActorBudget, "bench:batch").reserved == 0
+    with pytest.raises(BusinessError, match="ROLE_NOT_APPROVED"):
+        ledger.reserve("bench", "bench-1", "judge", "bad", 1, 10)
+
+
+def test_unknown_pauses_same_model_other_batch_role_restart(service):
+    ledger = setup(service)
+    setup(service, "other")
+    call = ledger.reserve("bench", "bench-1", "agent", "one", 30, 10)
+    ledger.settle(call, None)
+    with service.sessions() as s:
+        assert s.get(ModelCall, call).reserved == 40
+        assert s.get(SharedModelQuota, model_identity("dashscope", "beijing", MODEL)).paused
+    restarted = ExperimentLedger(service.sessions)
+    with pytest.raises(BusinessError, match="SHARED_MODEL_PAUSED"):
+        restarted.reserve("other", "other-1", "user", "two", 10, 10)
+
+
+def test_atomic_shared_quota_and_project_limit(service):
+    ledger = setup(service, quota=70)
+
+    def attempt(i):
+        try:
+            return ledger.reserve("bench", "bench-1", "agent", str(i), 40, 10)
+        except BusinessError as exc:
+            return exc.code
+
+    with ThreadPoolExecutor(max_workers=2) as pool:
+        results = list(pool.map(attempt, range(2)))
+    assert len([r for r in results if r.startswith("call_")]) == 1
+    assert any(r in {"SHARED_QUOTA_EXHAUSTED", "UNRESOLVED_MODEL_USAGE"} for r in results)
+    with service.sessions() as s:
+        assert s.get(Budget, "project").reserved == 50
+
+
+def test_restart_cannot_reset_or_replay_attempt(service):
+    ledger = setup(service)
+    call = ledger.reserve("bench", "bench-1", "agent", "same", 1, 10)
+    ledger.settle(call, 2)
+    with pytest.raises(BusinessError, match="ATTEMPT_REPLAY"):
+        ledger.reserve("bench", "bench-1", "agent", "same", 1, 10)
+    with pytest.raises(ValueError, match="RUN_RESTART_READ_ONLY"):
+        setup(service)
