@@ -28,9 +28,12 @@ def validate_stage(plan, pool):
     allowed = {
         "calibration": ("calibration", ["official_tc", "harness_full_history"]),
         "tune": ("tune_run", ["official_tc", "harness_evidence"]),
+        "tool_visibility": ("tool_visibility_pilot", ["official_tc", "tool_visibility_v1"]),
     }
     if plan.get("stage") not in allowed:
         raise ValueError("ONLY_FROZEN_TRAIN_STAGES_SUPPORTED")
+    if plan.get("stage") == "tune":
+        raise ValueError("TUNE_V1_SUSPENDED")
     key, variants = allowed[plan["stage"]]
     if (
         plan.get("split") != "train"
@@ -101,6 +104,27 @@ def preflight(plan, approval=None, account=None):
             errors.append("MISSING:" + key)
     if plan.get("source_tree_hash") != source_fingerprint():
         errors.append("SOURCE_HASH_MISMATCH")
+    if plan.get("stage") == "tune":
+        errors.append("TUNE_V1_SUSPENDED")
+    if plan.get("stage") == "tool_visibility":
+        from evaluation.benchmarks.tau_retail.tool_visibility import RULE_VERSION, rule_hash
+
+        if (
+            plan.get("tool_visibility_rule_hash") != rule_hash()
+            or plan.get("tool_visibility_version") != RULE_VERSION
+        ):
+            errors.append("TOOL_VISIBILITY_RULE_HASH_MISMATCH")
+        if plan.get("tool_visibility_catalog_hash") != plan.get("tools_hash"):
+            errors.append("TOOL_VISIBILITY_CATALOG_HASH_MISMATCH")
+        evidence_path = (
+            ROOT / "evaluation/manifests/benchmark-v1/tool-visibility-offline-evidence-v1.json"
+        )
+        if not evidence_path.exists() or digest(json.loads(evidence_path.read_text())) != plan.get(
+            "offline_evidence_hash"
+        ):
+            errors.append("OFFLINE_VISIBILITY_EVIDENCE_CHANGED")
+        if plan.get("offline_screen_passed") is not True:
+            errors.append("OFFLINE_VISIBILITY_SCREEN_NOT_PASSED")
     if approval is None or account is None:
         errors.append("HUMAN_APPROVAL_AND_CURRENT_ACCOUNT_REQUIRED")
     elif not errors:
@@ -138,6 +162,12 @@ def preflight(plan, approval=None, account=None):
             judge = plan["roles"].get("judge", {})
             if needs_judge and (not judge.get("enabled") or judge.get("task_ids") != needs_judge):
                 raise ValueError("JUDGE_REQUIRES_EXPLICIT_ROLE_PLAN")
+            if plan["stage"] == "tool_visibility" and (
+                needs_judge
+                or judge.get("enabled")
+                or plan["roles"].get("auxiliary", {}).get("enabled")
+            ):
+                raise ValueError("VISIBILITY_PILOT_UNEXPECTED_ROLE")
             pool = json.loads(
                 (ROOT / "evaluation/manifests/benchmark-v1/development-pool.json").read_text()
             )
@@ -309,7 +339,7 @@ def execute(plan, approval, account):
             llm=plan["roles"]["agent"]["exact_model"],
             llm_args=args("agent"),
         )
-        if row["variant"].startswith("harness_"):
+        if row["variant"] != "official_tc":
             agent.trace = trace  # Audit only; baseline keeps its original class and prompt.
         user = UserSimulator(
             llm=plan["roles"]["user"]["exact_model"],
@@ -347,6 +377,14 @@ def execute(plan, approval, account):
             transport,
             trace,
             min(deadline, time.time() + plan["episode_seconds"]),
+            tool_scope=dict(
+                variant=row["variant"],
+                catalog=[t.openai_schema for t in env.get_tools()],
+                catalog_hash=plan["tool_visibility_catalog_hash"],
+                rule_hash=plan["tool_visibility_rule_hash"],
+            )
+            if plan["stage"] == "tool_visibility"
+            else None,
         )
         stop = False
         try:

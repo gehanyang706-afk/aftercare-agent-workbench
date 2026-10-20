@@ -70,6 +70,15 @@ def test_tune_scope_cannot_switch_split_variants_or_fixed_tasks():
         task_ids=pool["tune_run"],
         variants=["official_tc", "harness_evidence"],
     )
+    with pytest.raises(ValueError, match="SUSPENDED"):
+        validate_stage(plan, pool)
+    plan = dict(
+        plan,
+        stage="tool_visibility",
+        task_ids=["a"],
+        variants=["official_tc", "tool_visibility_v1"],
+    )
+    pool["tool_visibility_pilot"] = ["a"]
     validate_stage(plan, pool)
     for field, value in [
         ("split", "test"),

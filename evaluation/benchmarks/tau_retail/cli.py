@@ -35,14 +35,26 @@ def make_plan(stage="calibration"):
     pool = json.loads(
         (ROOT / "evaluation/manifests/benchmark-v1/development-pool.json").read_text()
     )
-    if stage not in {"calibration", "tune"}:
+    if stage not in {"calibration", "tune", "tool_visibility"}:
         raise ValueError("UNSUPPORTED_STAGE")
-    ids = pool["calibration" if stage == "calibration" else "tune_run"]
+    ids = pool[
+        {
+            "calibration": "calibration",
+            "tune": "tune_run",
+            "tool_visibility": "tool_visibility_pilot",
+        }[stage]
+    ]
     candidates = [
         "official_tc",
         "harness_full_history" if stage == "calibration" else "harness_evidence",
     ]
-    run_id = "retail-calibration-v2" if stage == "calibration" else "retail-tune-v1"
+    if stage == "tool_visibility":
+        candidates = ["official_tc", "tool_visibility_v1"]
+    run_id = {
+        "calibration": "retail-calibration-v2",
+        "tune": "retail-tune-v1",
+        "tool_visibility": "retail-tool-visibility-v1",
+    }[stage]
     episode_count = len(ids) * len(candidates)
     tasks = load_train_tasks(ids)
     basis = sorted({b.value for t in tasks for b in t.evaluation_criteria.reward_basis})
@@ -224,6 +236,47 @@ def make_plan(stage="calibration"):
             "are required; no approval/account file generated."
         ),
     )
+    if stage == "tool_visibility":
+        from evaluation.benchmarks.tau_retail.tool_visibility import RULE_VERSION, rule_hash
+
+        if needs_judge:
+            raise ValueError("VISIBILITY_PILOT_REQUIRES_NEW_JUDGE_PLAN")
+        evidence = json.loads(
+            (
+                ROOT / "evaluation/manifests/benchmark-v1/tool-visibility-offline-evidence-v1.json"
+            ).read_text()
+        )
+        plan.update(
+            offline_evidence_hash=digest(evidence),
+            offline_screen_passed=evidence["investment_screen_passed"],
+            context_projection_version="full_history_unchanged",
+            hypothesis=(
+                "Select only original official tools from observed order state; "
+                "no other input/output changes"
+            ),
+            tool_visibility_version=RULE_VERSION,
+            tool_visibility_rule_hash=rule_hash(),
+            tool_visibility_catalog_hash=plan["tools_hash"],
+            selection_note=(
+                "Different per-step schema exposure, same full official "
+                "environment/parameters/policy/scorer"
+            ),
+            output_quality_policy="diagnostic_only_no_rewrite",
+            judge_configuration_note=(
+                "Disabled: train96 has no effective NL assertions; "
+                "no judge or auxiliary calls permitted"
+            ),
+            freeze_note=(
+                "Requires separate Agent/user approval and current exact-model "
+                "free quota/FreeTierOnly; no prior authorization transfers"
+            ),
+            estimated_tokens_range={"batch": [180000, 360000]},
+            estimated_requests_range=[30, 55],
+            estimated_seconds_range=[180, 420],
+            task_selection_note=(
+                "Seen train96 mechanism diagnostic; n=1 pair is not general Retail performance"
+            ),
+        )
     plan["plan_sha256"] = plan_hash(plan)
     return plan
 
@@ -234,7 +287,7 @@ def main():
     for name in ("inspect", "contract-test"):
         sub.add_parser(name).add_argument("--offline", action="store_true", required=True)
     plan = sub.add_parser("plan")
-    plan.add_argument("--stage", choices=["calibration", "tune"], required=True)
+    plan.add_argument("--stage", choices=["calibration", "tune", "tool_visibility"], required=True)
     plan.add_argument("--dry-run", action="store_true", required=True)
     plan.add_argument("--output")
     run = sub.add_parser("run")

@@ -47,5 +47,8 @@
     "112",
     "30"
   ],
-  "body_access_note": "Trusted preparation accessed only these train bodies; never export goals/answers to Agent. No validation/test body inspected by implementer."
+  "body_access_note": "Trusted preparation accessed only these train bodies; never export goals/answers to Agent. No validation/test body inspected by implementer.",
+  "tool_visibility_pilot": [
+    "96"
+  ]
 }

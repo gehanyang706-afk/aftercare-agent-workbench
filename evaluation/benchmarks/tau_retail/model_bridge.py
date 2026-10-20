@@ -24,10 +24,15 @@ def role_at_boundary():
 
 
 class CompletionBridge:
-    def __init__(self, ledger, run_id, episode_id, roles, transport, trace, deadline):
+    def __init__(
+        self, ledger, run_id, episode_id, roles, transport, trace, deadline, tool_scope=None
+    ):
         self.ledger, self.run, self.episode = ledger, run_id, episode_id
         self.roles, self.transport, self.trace, self.deadline = roles, transport, trace, deadline
         self.sequence = 0
+        self.tool_scope = tool_scope
+        if tool_scope and tool_scope.get("variant") not in {"official_tc", "tool_visibility_v1"}:
+            raise ValueError("TOOL_VISIBILITY_VARIANT_NOT_APPROVED")
 
     def __call__(self, **request):
         from litellm import ModelResponse
@@ -58,6 +63,19 @@ class CompletionBridge:
             raise ValueError("UNSUPPORTED_PARAMETERS:" + str(sorted(set(request) - allowed)))
         if request.get("max_tokens") != cfg["output_cap"]:
             raise ValueError("OUTPUT_CAP_CHANGED")
+        if self.tool_scope:
+            from evaluation.benchmarks.tau_retail.tool_visibility import validate_catalog_subset
+
+            scope = self.tool_scope
+            if role == "agent":
+                tools = request.get("tools") or []
+                validate_catalog_subset(
+                    tools, scope["catalog"], scope["catalog_hash"], scope["rule_hash"]
+                )
+                if scope["variant"] == "official_tc" and tools != scope["catalog"]:
+                    raise ValueError("BASELINE_TOOLS_CHANGED")
+            elif request.get("tools"):
+                raise ValueError("TOOL_VISIBILITY_AGENT_ONLY")
         payload = {
             k: v for k, v in request.items() if k not in {"num_retries", "timeout", "extra_body"}
         }
@@ -128,6 +146,22 @@ class CompletionBridge:
                 role,
             )
         for call in message.tool_calls or []:
+            if self.tool_scope and role == "agent":
+                exposed = {t["function"]["name"] for t in payload.get("tools", [])}
+                catalog = {t["function"]["name"] for t in self.tool_scope["catalog"]}
+                if call.function.name not in exposed:
+                    self.trace.emit(
+                        "tools.unexposed_proposal",
+                        {
+                            "name": call.function.name,
+                            "kind": "official_but_hidden"
+                            if call.function.name in catalog
+                            else "outside_catalog",
+                            "handling": "unchanged_official_execution_no_retry",
+                        },
+                        role,
+                        tool_call_id=call.id,
+                    )
             self.trace.emit("tool.proposed", call.model_dump(), role, tool_call_id=call.id)
         return response
 

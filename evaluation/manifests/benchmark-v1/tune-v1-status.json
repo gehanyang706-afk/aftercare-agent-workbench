@@ -1,0 +1,6 @@
+{
+  "plan_sha256": "b8f77a03771ff63781c0ed1cde8ef5ee87a6a69000f8cac8d60f260d7bd2014b",
+  "status": "suspended_by_user",
+  "reason": "Superseded by offline U3c state-aware visibility preparation; original plan unchanged, no execution authorization",
+  "replacement": "retail-tool-visibility-v1 (pending separate approval)"
+}

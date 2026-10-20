@@ -22,10 +22,12 @@ class RetailAgent(HalfDuplexAgent):
         policy_id="full_history",
         trace=None,
         context_limit=200000,
+        tool_visibility=False,
     ):
         super().__init__(tools=tools, domain_policy=domain_policy)
         self.llm, self.llm_args = llm, dict(llm_args or {})
         self.policy, self.trace, self.context_limit = ContextPolicy(policy_id), trace, context_limit
+        self.tool_visibility = tool_visibility
 
     def set_seed(self, seed):
         self.llm_args["seed"] = seed
@@ -54,9 +56,23 @@ class RetailAgent(HalfDuplexAgent):
         else:
             state.messages.append(message)
         raw = llm_utils.to_litellm_messages(state.messages)
+        selected_tools = self.tools
+        if self.tool_visibility:
+            from evaluation.benchmarks.tau_retail.tool_visibility import ToolVisibilityPolicy
+
+            observed = deepcopy(raw)
+            for converted, original in zip(observed, state.messages, strict=True):
+                if converted.get("role") == "tool":
+                    converted["error"] = getattr(original, "error", False)
+            decision = ToolVisibilityPolicy().select(
+                observed, [t.openai_schema for t in self.tools]
+            )
+            selected_tools = [t for t in self.tools if t.name in decision.visible_names]
+            if self.trace:
+                self.trace.emit("tools.visibility", decision.to_dict())
         prepared = self.policy.build(
             ContextInput(
-                raw, state.system_messages[0].content, [t.openai_schema for t in self.tools]
+                raw, state.system_messages[0].content, [t.openai_schema for t in selected_tools]
             ),
             self.context_limit,
         )
@@ -82,7 +98,7 @@ class RetailAgent(HalfDuplexAgent):
             )
         result = llm_utils.generate(
             model=self.llm,
-            tools=self.tools,
+            tools=selected_tools,
             messages=state.system_messages + visible,
             call_name="agent_response",
             **self.llm_args,
@@ -99,6 +115,7 @@ def create_agent(
     llm_args=None,
     policy_id="full_history",
     trace=None,
+    tool_visibility=False,
     **untrusted_factory_fields,
 ):
     # Official build_agent passes task/audio fields. They are deliberately never retained.
@@ -109,4 +126,5 @@ def create_agent(
         llm_args=llm_args,
         policy_id=policy_id,
         trace=trace,
+        tool_visibility=tool_visibility,
     )
