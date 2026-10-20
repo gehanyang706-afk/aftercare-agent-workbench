@@ -6,6 +6,36 @@ from aftercare.harness.contracts import PreparedContext, canonical, digest
 from aftercare.harness.message_blocks import message_blocks
 
 
+def compact_json_whitespace(text):
+    """Validate JSON, then preserve every lexeme, duplicate key and string byte.
+
+    Parsing is only a validity check, never a serialization source. Malformed and
+    non-JSON tool text is left untouched by the caller.
+    """
+    import json
+
+    def invalid_constant(value):
+        raise ValueError("NON_JSON_CONSTANT:" + value)
+
+    json.loads(text, parse_float=str, parse_int=str, parse_constant=invalid_constant)
+    result, quoted, escaped = [], False, False
+    for char in text:
+        if quoted:
+            result.append(char)
+            if escaped:
+                escaped = False
+            elif char == "\\":
+                escaped = True
+            elif char == '"':
+                quoted = False
+        elif char == '"':
+            quoted = True
+            result.append(char)
+        elif char not in " \t\r\n":
+            result.append(char)
+    return "".join(result)
+
+
 class ContextPolicy:
     def __init__(self, policy_id="full_history", window=8):
         if policy_id not in {"full_history", "fixed_window", "evidence_projection"}:
@@ -25,12 +55,10 @@ class ContextPolicy:
                 # Lossless JSON whitespace normalization only. Unknown tool schemas, errors,
                 # money, IDs, options, snapshots and every user revision stay fully visible.
                 reason = "lossless_json_normalization"
-                import json
-
                 for message in projected:
                     if message.get("role") == "tool" and isinstance(message.get("content"), str):
                         try:
-                            message["content"] = canonical(json.loads(message["content"]))
+                            message["content"] = compact_json_whitespace(message["content"])
                         except (ValueError, TypeError):
                             pass
             selections.append(

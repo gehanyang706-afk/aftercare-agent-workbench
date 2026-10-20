@@ -24,6 +24,29 @@ from evaluation.benchmarks.tau_retail.source_guard import (
 from evaluation.benchmarks.tau_retail.trace import Trace
 
 
+def validate_stage(plan, pool):
+    allowed = {
+        "calibration": ("calibration", ["official_tc", "harness_full_history"]),
+        "tune": ("tune_run", ["official_tc", "harness_evidence"]),
+    }
+    if plan.get("stage") not in allowed:
+        raise ValueError("ONLY_FROZEN_TRAIN_STAGES_SUPPORTED")
+    key, variants = allowed[plan["stage"]]
+    if (
+        plan.get("split") != "train"
+        or plan["task_ids"] != pool[key]
+        or plan["variants"] != variants
+    ):
+        raise ValueError("FIXED_STAGE_SCOPE_MISMATCH")
+
+
+def validate_project_capacity(budget, plan):
+    if budget is None or budget.paused:
+        raise ValueError("PROJECT_BUDGET_UNAVAILABLE")
+    if budget.cap - budget.settled - budget.reserved < plan["total_token_cap"]:
+        raise ValueError("PROJECT_CAP_INCREASE_REQUIRES_SEPARATE_APPROVAL")
+
+
 def preflight(plan, approval=None, account=None):
     upstream()
     errors = []
@@ -118,8 +141,7 @@ def preflight(plan, approval=None, account=None):
             pool = json.loads(
                 (ROOT / "evaluation/manifests/benchmark-v1/development-pool.json").read_text()
             )
-            if plan["stage"] != "calibration" or plan["task_ids"] != pool["calibration"]:
-                raise ValueError("ONLY_FROZEN_CALIBRATION_SUPPORTED")
+            validate_stage(plan, pool)
             pairs = [(e["task_id"], e["variant"]) for e in plan["episodes"]]
             expected = {(t, v) for t in plan["task_ids"] for v in plan["variants"]}
             if len(pairs) != len(expected) or set(pairs) != expected:
@@ -129,6 +151,7 @@ def preflight(plan, approval=None, account=None):
                 with sessions() as session:
                     if not session.scalar(text("SELECT to_regclass('experiment_runs')")):
                         raise ValueError("EXPERIMENT_LEDGER_MIGRATION_REQUIRED")
+                    validate_project_capacity(session.get(Budget, "project"), plan)
                     unresolved = list(
                         session.scalars(select(ModelCall).where(ModelCall.usage.is_(None)))
                     )
@@ -286,6 +309,8 @@ def execute(plan, approval, account):
             llm=plan["roles"]["agent"]["exact_model"],
             llm_args=args("agent"),
         )
+        if row["variant"].startswith("harness_"):
+            agent.trace = trace  # Audit only; baseline keeps its original class and prompt.
         user = UserSimulator(
             llm=plan["roles"]["user"]["exact_model"],
             instructions=str(task.user_scenario),

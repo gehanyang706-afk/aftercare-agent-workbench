@@ -58,3 +58,41 @@ def test_plan_mutation_or_old_account_cannot_authorize():
     account["FreeTierOnly"] = False
     with pytest.raises(ValueError, match="ACCOUNT"):
         authorize(plan, approval, account, "hash")
+
+
+def test_tune_scope_cannot_switch_split_variants_or_fixed_tasks():
+    from evaluation.benchmarks.tau_retail.runner import validate_stage
+
+    pool = {"calibration": ["a", "b"], "tune_run": ["a", "b", "c", "d"]}
+    plan = dict(
+        stage="tune",
+        split="train",
+        task_ids=pool["tune_run"],
+        variants=["official_tc", "harness_evidence"],
+    )
+    validate_stage(plan, pool)
+    for field, value in [
+        ("split", "test"),
+        ("variants", ["official_tc", "harness_fixed_window"]),
+        ("task_ids", ["c", "d"]),
+        ("stage", "validation"),
+    ]:
+        with pytest.raises(ValueError):
+            validate_stage(dict(plan, **{field: value}), pool)
+
+
+def test_new_plan_cannot_silently_raise_project_budget():
+    from types import SimpleNamespace
+
+    from evaluation.benchmarks.tau_retail.runner import validate_project_capacity
+
+    budget = SimpleNamespace(cap=100, settled=20, reserved=10, paused=False)
+    validate_project_capacity(budget, {"total_token_cap": 70})
+    with pytest.raises(ValueError, match="SEPARATE_APPROVAL"):
+        validate_project_capacity(
+            budget, {"total_token_cap": 71, "project_cap_change_authorized": True}
+        )
+    assert budget.cap == 100
+    budget.paused = True
+    with pytest.raises(ValueError, match="UNAVAILABLE"):
+        validate_project_capacity(budget, {"total_token_cap": 1})

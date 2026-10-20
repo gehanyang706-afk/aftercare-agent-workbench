@@ -136,3 +136,47 @@ def test_observations_have_sources_and_writes_invalidate_without_deleting_histor
     )
     assert prepared.selection_manifest[1]["observations"]
     assert len(prepared.messages) == len(raw) + 1
+
+
+def test_evidence_projection_preserves_json_lexemes_and_user_revision():
+    raw_json = ' { "z": 0.123456789012345678901, "a": "two  spaces", "z": 2, "n": 1e+20 } '
+    raw = [
+        {"role": "user", "content": "Cancel the old choice; keep 2, not 1."},
+        {
+            "role": "assistant",
+            "content": None,
+            "tool_calls": [{"id": "a", "function": {"name": "get", "arguments": "{}"}}],
+        },
+        {"role": "tool", "tool_call_id": "a", "content": raw_json},
+    ]
+    prepared = ContextPolicy("evidence_projection").build(ContextInput(raw, "policy", []), 999999)
+    assert (
+        prepared.messages[-1]["content"]
+        == '{"z":0.123456789012345678901,"a":"two  spaces","z":2,"n":1e+20}'
+    )
+    assert prepared.messages[1] == raw[0]
+    assert raw[-1]["content"] == raw_json
+
+
+@pytest.mark.parametrize(
+    "text", ['{"msg": "a \\" b \\\\ c", "id": "001"}', '[ 1, -0.00, 1E-9999, "中 文" ]']
+)
+def test_json_compaction_preserves_exact_tokens_and_is_idempotent(text):
+    import json
+
+    from aftercare.harness.context_policy import compact_json_whitespace
+
+    out = compact_json_whitespace(text)
+    assert json.loads(out) == json.loads(text)
+    assert compact_json_whitespace(out) == out
+    assert len(out.encode()) <= len(text.encode())
+
+
+@pytest.mark.parametrize("text", ["ERROR: insufficient stock", '{"x": NaN}', '{"broken": '])
+def test_non_json_tool_output_remains_unchanged(text):
+    raw = [
+        {"role": "assistant", "tool_calls": [{"id": "a"}]},
+        {"role": "tool", "tool_call_id": "a", "content": text},
+    ]
+    projected = ContextPolicy("evidence_projection").build(ContextInput(raw, "policy", []), 999999)
+    assert projected.messages[-1]["content"] == text

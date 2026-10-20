@@ -21,7 +21,7 @@ def configure():
     sys.path.insert(0, str(upstream() / "src"))
 
 
-def make_plan():
+def make_plan(stage="calibration"):
     from aftercare.offline import install_offline_guard
 
     install_offline_guard()
@@ -35,7 +35,15 @@ def make_plan():
     pool = json.loads(
         (ROOT / "evaluation/manifests/benchmark-v1/development-pool.json").read_text()
     )
-    ids = pool["calibration"]
+    if stage not in {"calibration", "tune"}:
+        raise ValueError("UNSUPPORTED_STAGE")
+    ids = pool["calibration" if stage == "calibration" else "tune_run"]
+    candidates = [
+        "official_tc",
+        "harness_full_history" if stage == "calibration" else "harness_evidence",
+    ]
+    run_id = "retail-calibration-v2" if stage == "calibration" else "retail-tune-v1"
+    episode_count = len(ids) * len(candidates)
     tasks = load_train_tasks(ids)
     basis = sorted({b.value for t in tasks for b in t.evaluation_criteria.reward_basis})
     env = get_environment()
@@ -80,9 +88,9 @@ def make_plan():
             temperature=0,
             output_cap=1024 if agent else 512,
             request_cap=24 if agent else 16,
-            batch_request_cap=96 if agent else 64,
+            batch_request_cap=(24 if agent else 16) * episode_count,
             episode_token_cap=200000 if agent else 100000,
-            batch_token_cap=800000 if agent else 400000,
+            batch_token_cap=(200000 if agent else 100000) * episode_count,
             request_seconds=60,
             seed=20261020,
         )
@@ -114,7 +122,7 @@ def make_plan():
     random = Random(20261020)
     episodes = []
     for task_id in ids:
-        variants = ["official_tc", "harness_full_history"]
+        variants = list(candidates)
         random.shuffle(variants)
         episodes.extend(dict(task_id=task_id, variant=v) for v in variants)
     lock = json.loads((ROOT / "benchmarks/tau_retail/upstream.lock.json").read_text())
@@ -126,11 +134,11 @@ def make_plan():
     }
     versions["python"] = platform.python_version()
     plan = dict(
-        run_id="retail-calibration-v2",
-        batch_id="retail-calibration-v2",
+        run_id=run_id,
+        batch_id=run_id,
         experiment_version="benchmark-v1",
         environment_versions=versions,
-        stage="calibration",
+        stage=stage,
         status="pending_human_approval",
         source_commit=subprocess.check_output(
             ["git", "rev-parse", "HEAD"], cwd=ROOT, text=True
@@ -143,17 +151,17 @@ def make_plan():
         split="train",
         task_ids=ids,
         task_content_hash=digest([t.model_dump(mode="json") for t in tasks]),
-        variants=["official_tc", "harness_full_history"],
+        variants=candidates,
         trial=0,
         order_seed=20261020,
         episodes=episodes,
         roles=roles,
-        total_token_cap=1200000 + judge["batch_token_cap"],
-        request_cap=160 + judge["batch_request_cap"],
+        total_token_cap=300000 * episode_count + judge["batch_token_cap"],
+        request_cap=40 * episode_count + judge["batch_request_cap"],
         episode_token_cap=400000 if needs_judge else 300000,
         episode_request_cap=41 if needs_judge else 40,
         episode_seconds=600,
-        wall_clock_seconds=2400,
+        wall_clock_seconds=600 * episode_count,
         max_steps=80,
         max_errors=10,
         request_seconds=60,
@@ -179,20 +187,23 @@ def make_plan():
         tools_hash=digest(tools),
         user_policy_hash=digest(user.system_prompt.split(str(tasks[-1].user_scenario))[0]),
         diagnostic_version="retail-trace-v2",
-        account_confirmation_id="retail-calibration-v2-account",
+        account_confirmation_id=run_id + "-account",
         offline_request_samples=samples,
         estimated_tokens_range={
             "agent_per_episode": [20000, 140000],
             "user_per_episode": [10000, 60000],
             "judge_per_required_episode": [2000, 20000],
-            "batch": [124000, 840000],
+            "batch": [100000 * episode_count, 190000 * episode_count],
         },
         estimate_note=(
-            "Unvalidated full-episode range; v1 stopped after four HTTP requests "
-            "(12233 tokens), with no completed episode. Cold payload bounds do not "
-            "predict full trajectories; reservation protections remain unchanged."
+            "Calibration-v2 completed four episodes at 115k-147k tokens each; "
+            "future-task estimate is 100k-190k per episode, not a guarantee. "
+            "Conservative reservations and all hard caps remain unchanged."
         ),
-        supersedes="retail-calibration-v1 (protocol-stopped; original records preserved)",
+        supersedes="No prior authorization transfers; all historical results preserved",
+        context_projection_version="json-whitespace-lexeme-v1",
+        hypothesis="Remove only outside-string JSON whitespace; no fact/history/policy reduction",
+        project_cap_change_authorized=False,
         protocol_policy=(
             "Preserve mixed content and tool_calls; official default environment routing; "
             "record native response before protocol validation. No scorer changes."
@@ -223,7 +234,7 @@ def main():
     for name in ("inspect", "contract-test"):
         sub.add_parser(name).add_argument("--offline", action="store_true", required=True)
     plan = sub.add_parser("plan")
-    plan.add_argument("--stage", choices=["calibration"], required=True)
+    plan.add_argument("--stage", choices=["calibration", "tune"], required=True)
     plan.add_argument("--dry-run", action="store_true", required=True)
     plan.add_argument("--output")
     run = sub.add_parser("run")
@@ -266,7 +277,7 @@ def main():
         )
         raise SystemExit(result.returncode)
     elif args.command == "plan":
-        value = make_plan()
+        value = make_plan(args.stage)
         if args.output:
             Path(args.output).write_text(json.dumps(value, ensure_ascii=False, indent=2) + "\n")
         print(json.dumps(value, ensure_ascii=False, indent=2))

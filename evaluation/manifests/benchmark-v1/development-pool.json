@@ -43,7 +43,9 @@
   ],
   "read_task_bodies": [
     "107",
-    "96"
+    "96",
+    "112",
+    "30"
   ],
-  "body_access_note": "Trusted offline preparation only; no oracle exported to Agent or human output."
+  "body_access_note": "Trusted preparation accessed only these train bodies; never export goals/answers to Agent. No validation/test body inspected by implementer."
 }

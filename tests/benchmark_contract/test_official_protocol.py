@@ -341,3 +341,49 @@ def test_native_mixed_response_uses_official_environment_once(variant):
         getattr(m, "content", None) == "Checking now." and getattr(m, "tool_calls", None)
         for m in simulation.messages
     )
+
+
+def test_projection_changes_only_tool_whitespace_at_actual_official_boundary(tmp_path):
+    from copy import deepcopy
+
+    from evaluation.benchmarks.tau_retail.trace import Trace
+
+    env = get_environment()
+    args = dict(
+        tools=env.get_tools(),
+        domain_policy=env.get_policy(),
+        llm="fixture",
+        llm_args={"num_retries": 0, "max_tokens": 1024},
+    )
+    trace = Trace(tmp_path, "synthetic", "synthetic:0", "harness_evidence")
+    agents = [LLMAgent(**args), create_agent(**args, policy_id="evidence_projection", trace=trace)]
+    captured = []
+
+    def capture(**kw):
+        captured.append(deepcopy(kw))
+        return (
+            wire(calls=[call("x", "calculate", {"expression": "1"})])
+            if len(captured) % 2
+            else wire("Not submitting; please clarify.")
+        )
+
+    raw = '{ "price": 0.123456789012345678901, "note": "keep  two spaces" }'
+    with official_bridge(capture):
+        for agent in agents:
+            agent.set_seed(17)
+            _, state = agent.generate_next_message(
+                UserMessage(role="user", content="Keep two; cancel previous approval."),
+                agent.get_init_state(),
+            )
+            agent.generate_next_message(
+                ToolMessage(role="tool", id="x", requestor="assistant", content=raw), state
+            )
+            assert state.messages[-2].content == raw
+    assert captured[0] == captured[2]
+    expected = deepcopy(captured[1])
+    expected["messages"][-1]["content"] = (
+        '{"price":0.123456789012345678901,"note":"keep  two spaces"}'
+    )
+    assert expected == captured[3]
+    events = [json.loads(x) for x in trace.path.read_text().splitlines()]
+    assert len(events) == 2 and all(x["event_type"] == "context.prepared" for x in events)
