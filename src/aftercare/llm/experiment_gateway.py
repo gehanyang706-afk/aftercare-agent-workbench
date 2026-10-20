@@ -33,6 +33,12 @@ class ExperimentLedger:
     def create_run(self, run_id, plan, account):
         """Called only after authorization by the runner; never refresh a quota on restart."""
         with self.sessions.begin() as s:
+            s.execute(
+                insert(Budget)
+                .values(id="project", cap=2000000, settled=0, reserved=0, paused=False)
+                .on_conflict_do_nothing(index_elements=["id"])
+            )
+            s.get(Budget, "project", with_for_update=True)
             existing = s.get(ExperimentRun, run_id)
             if existing:
                 require(existing.plan_hash == plan["plan_sha256"], "RUN_PLAN_CHANGED")
@@ -47,19 +53,35 @@ class ExperimentLedger:
                 )
             )
             s.flush()
-            for key, confirmation in account["models"].items():
-                watermark = list(s.scalars(select(ModelCall.id)))
-                s.execute(
-                    insert(SharedModelQuota)
-                    .values(
-                        id=key,
-                        confirmed_remaining=confirmation["remaining"],
-                        watermark={"call_ids": watermark},
-                        confirmation=account,
-                        paused=False,
+            for key, confirmation in sorted(account["models"].items()):
+                all_calls = list(s.scalars(select(ModelCall)))
+                watermark = [c.id for c in all_calls]
+                prior = s.get(SharedModelQuota, key, with_for_update=True)
+                if prior:
+                    exact = key.split(":", 2)[2]
+                    old = set(prior.watermark["call_ids"])
+                    used = sum(
+                        c.usage if c.usage is not None else c.reserved
+                        for c in all_calls
+                        if c.exact_model == exact and c.id not in old
                     )
-                    .on_conflict_do_nothing(index_elements=["id"])
-                )
+                    # Current confirmation can lower a quota, never revive a paused model
+                    # or transfer a batch cap. Historical consumption is not subtracted twice.
+                    prior.confirmed_remaining = min(
+                        confirmation["remaining"], max(0, prior.confirmed_remaining - used)
+                    )
+                    prior.watermark = {"call_ids": watermark}
+                    prior.confirmation = account
+                else:
+                    s.add(
+                        SharedModelQuota(
+                            id=key,
+                            confirmed_remaining=confirmation["remaining"],
+                            watermark={"call_ids": watermark},
+                            confirmation=account,
+                            paused=False,
+                        )
+                    )
             self._dimension(
                 s,
                 run_id + ":batch",
@@ -314,15 +336,20 @@ class ExperimentLedger:
             dimensions = [s.get(ActorBudget, k, with_for_update=True) for k in mapping.dimensions]
             call = s.get(ModelCall, call_id, with_for_update=True)
             if call.status == "SETTLED":
-                return
+                return True
+            require(
+                call.status != "USAGE_UNKNOWN" or usage is None,
+                "MANUAL_USAGE_RECONCILIATION_REQUIRED",
+            )
             if usage is None or usage < 0 or usage > call.reserved:
                 quota.paused = True
                 run.status = episode.status = "PAUSED_UNKNOWN_USAGE"
                 call.status = "USAGE_UNKNOWN"
-                return
+                return False
             budget = s.get(Budget, call.budget_id, with_for_update=True)
             for row in [project, budget, *dimensions]:
                 row.reserved -= call.reserved
                 row.settled += usage
             call.usage, call.status = usage, "SETTLED"
             call.details = {**call.details, **(details or {})}
+            return True

@@ -36,7 +36,9 @@ class BusinessBoundary(AgentMiddleware):
             + "有效状态："
             + json.dumps(
                 {
-                    "case": case_model_context(snapshot) if self.profile == "full" else {},
+                    "case": case_model_context(snapshot)
+                    if self.profile in {"full", "harness-evidence-v1"}
+                    else {},
                     "intent_revision": snapshot["revision"],
                     "current_time": self.service.clock().isoformat(),
                     "current_user_message_id": users[-1]["id"] if users else None,
@@ -44,6 +46,26 @@ class BusinessBoundary(AgentMiddleware):
                 ensure_ascii=False,
             )
         )
+        if self.profile == "harness-evidence-v1":
+            from aftercare.agent.context import shared_evidence_context
+
+            messages, context = shared_evidence_context(
+                messages,
+                text,
+                [{"name": t.name, "parameters": t.args_schema.model_json_schema()} for t in tools],
+            )
+            with self.service.sessions.begin() as session:
+                self.service._conversation(session, self.principal, self.conversation)
+                self.service.event(
+                    session,
+                    self.conversation,
+                    "context_prepared",
+                    {
+                        "policy_id": context.policy_id,
+                        "estimated_size": context.estimated_size,
+                        "selection_manifest": context.selection_manifest,
+                    },
+                )
         prepared = request.override(
             tools=tools, messages=messages, system_message=SystemMessage(content=text)
         )

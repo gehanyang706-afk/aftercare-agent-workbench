@@ -25,7 +25,14 @@ EXCLUDED = frozenset(
 
 
 def factory(
-    service, principal, conversation, checkpointer, run_id=None, model=None, profile="full"
+    service,
+    principal,
+    conversation,
+    checkpointer,
+    run_id=None,
+    model=None,
+    profile="full",
+    retrieval_profile=None,
 ):
     model = model or ScriptedModel(
         ledger=BudgetLedger(service.sessions),
@@ -41,12 +48,29 @@ def factory(
         ),
     )
     search = PolicySearch()
+    retrieval_profile = retrieval_profile or (
+        "full-policy" if profile == "react-full-policy" else "bm25"
+    )
+    if retrieval_profile not in {"full-policy", "bm25", "hybrid-rerank"}:
+        raise ValueError("UNSUPPORTED_PRODUCT_RETRIEVAL_PROFILE")
+    with service.sessions.begin() as session:
+        service._conversation(session, principal, conversation)
+        service.event(
+            session,
+            conversation,
+            "runtime_profile",
+            {
+                "context_profile": profile,
+                "retrieval_profile": retrieval_profile,
+                "retrieval_corpus_hash": search.corpus_hash,
+            },
+        )
     tools = toolset(
         service,
         principal,
         conversation,
         search,
-        retrieval_profile="full-policy" if profile == "react-full-policy" else "bm25",
+        retrieval_profile=retrieval_profile,
     )
     graph = create_deep_agent(
         model=model,
@@ -141,7 +165,7 @@ def _run_turn(
             conversation,
             run_workflow(service, principal, conversation, message_id, False, decision),
         )
-    if profile not in {"full", "retrieval", "react-full-policy"}:
+    if profile not in {"full", "retrieval", "react-full-policy", "harness-evidence-v1"}:
         raise ValueError("UNKNOWN_AGENT_PROFILE")
     config = {"configurable": {"thread_id": conversation}, "recursion_limit": 96}
     with agent_runtime(

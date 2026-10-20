@@ -76,6 +76,7 @@ class CompletionBridge:
             role,
         )
         self.trace.emit("model.sent", {"call_id": call_id, "payload": payload}, role)
+        started = time.monotonic()
         try:
             raw = self.transport(payload, min(cfg["request_seconds"], self.deadline - time.time()))
         except BaseException:
@@ -90,19 +91,30 @@ class CompletionBridge:
         valid = valid and usage.get("total_tokens") == usage.get("prompt_tokens", 0) + usage.get(
             "completion_tokens", 0
         )
-        self.ledger.settle(
+        settled = self.ledger.settle(
             call_id,
             usage["total_tokens"] if valid else None,
-            {"usage_details": usage, "cost_cny": None},
+            {
+                "usage_details": usage,
+                "cost_cny": None,
+                "model_wait_seconds": time.monotonic() - started,
+            },
         )
-        if not valid:
+        if not valid or settled is False:
             self.trace.emit("model.unknown", {"call_id": call_id, "usage": usage}, role)
             raise ValueError("USAGE_UNKNOWN")
         self.trace.emit("model.settled", {"call_id": call_id, "usage": usage}, role)
         # Usage is settled BEFORE validating choices, JSON arguments or protocol.
+        if raw.get("model") != cfg["exact_model"]:
+            raise ValueError("RESPONSE_MODEL_MISMATCH")
         response = ModelResponse(**raw)
         if not response.choices:
             raise ValueError("INVALID_MODEL_PROTOCOL")
+        message = response.choices[0].message
+        if message.tool_calls and message.content:
+            raise ValueError("MIXED_TEXT_TOOL_PROTOCOL")
+        for call in message.tool_calls or []:
+            self.trace.emit("tool.proposed", call.model_dump(), role, tool_call_id=call.id)
         return response
 
 
@@ -112,13 +124,26 @@ def official_bridge(completion):
     from tau2.utils import llm_utils
 
     saved, saved_cost = llm_utils.completion, llm_utils.get_response_cost
-    prior = (litellm.telemetry, litellm.cache, litellm.success_callback, litellm.failure_callback)
+    prior = (
+        litellm.telemetry,
+        litellm.cache,
+        litellm.success_callback,
+        litellm.failure_callback,
+        litellm.drop_params,
+    )
     litellm.telemetry, litellm.cache = False, None
     litellm.success_callback, litellm.failure_callback = [], []
+    litellm.drop_params = False
     llm_utils.completion = completion
     llm_utils.get_response_cost = lambda response: None  # Unknown price != zero cost.
     try:
         yield
     finally:
         llm_utils.completion, llm_utils.get_response_cost = saved, saved_cost
-        litellm.telemetry, litellm.cache, litellm.success_callback, litellm.failure_callback = prior
+        (
+            litellm.telemetry,
+            litellm.cache,
+            litellm.success_callback,
+            litellm.failure_callback,
+            litellm.drop_params,
+        ) = prior

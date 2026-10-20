@@ -41,5 +41,9 @@
     "43",
     "34"
   ],
-  "read_task_bodies": []
+  "read_task_bodies": [
+    "107",
+    "96"
+  ],
+  "body_access_note": "Trusted offline preparation only; no oracle exported to Agent or human output."
 }

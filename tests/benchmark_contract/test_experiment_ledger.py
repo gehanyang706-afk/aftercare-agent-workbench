@@ -93,3 +93,18 @@ def test_restart_cannot_reset_or_replay_attempt(service):
         ledger.reserve("bench", "bench-1", "agent", "same", 1, 10)
     with pytest.raises(ValueError, match="RUN_RESTART_READ_ONLY"):
         setup(service)
+
+
+def test_current_lower_quota_and_watermark_do_not_double_subtract(service):
+    ledger = setup(service, quota=1000)
+    call = ledger.reserve("bench", "bench-1", "agent", "first", 30, 10)
+    ledger.settle(call, 25)
+    setup(service, "next", quota=975)
+    with service.sessions() as s:
+        quota = s.get(SharedModelQuota, model_identity("qwen", "beijing", MODEL))
+        assert quota.confirmed_remaining == 975
+        assert call in quota.watermark["call_ids"]
+    setup(service, "lower", quota=100)
+    with service.sessions() as s:
+        quota = s.get(SharedModelQuota, model_identity("qwen", "beijing", MODEL))
+        assert quota.confirmed_remaining == 100

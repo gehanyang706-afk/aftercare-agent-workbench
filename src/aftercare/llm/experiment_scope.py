@@ -31,6 +31,8 @@ def authorize(plan, approval, account, source_hash):
         raise ValueError("HIDDEN_CALLS_FORBIDDEN")
     if account.get("plan_sha256") != plan_hash(plan) or not account.get("FreeTierOnly"):
         raise ValueError("CURRENT_ACCOUNT_CONFIRMATION_REQUIRED")
+    if account.get("confirmation_id") != plan.get("account_confirmation_id"):
+        raise ValueError("ACCOUNT_CONFIRMATION_ID_MISMATCH")
     stamp = datetime.fromisoformat(account["confirmed_at"])
     age = (datetime.now(UTC) - stamp).total_seconds()
     if not 0 <= age <= 3600:

@@ -42,6 +42,12 @@ class ContextPolicy:
                     "prepared_hash": digest(projected),
                     "source_bytes": len(canonical(block).encode()),
                     "prepared_bytes": len(canonical(projected).encode()) if keep else 0,
+                    "observations": [
+                        deepcopy(o)
+                        for o in context.source_observations
+                        if o.get("tool_call_id")
+                        in {m.get("tool_call_id") for m in block if m.get("role") == "tool"}
+                    ],
                     "provenance": [
                         "tool_observation"
                         if m.get("role") == "tool"

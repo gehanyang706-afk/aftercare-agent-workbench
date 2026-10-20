@@ -20,6 +20,11 @@ def upstream():
     for path, expected in lock["source_hashes"].items():
         if hashlib.sha256((root / path).read_bytes()).hexdigest() != expected:
             raise ValueError("UPSTREAM_CONTENT_CHANGED:" + path)
+    dirty = subprocess.check_output(
+        ["git", "-C", str(root), "status", "--porcelain", "--untracked-files=no"], text=True
+    )
+    if dirty.strip():
+        raise ValueError("UPSTREAM_TRACKED_FILES_DIRTY")
     return root
 
 
@@ -27,7 +32,19 @@ def source_fingerprint():
     paths = []
     for folder in ("src", "evaluation/benchmarks", "evaluation/reliability", "migrations"):
         paths += [p for p in (ROOT / folder).rglob("*.py") if "__pycache__" not in p.parts]
-    paths += [ROOT / "benchmarks/tau_retail/requirements.lock", LOCK]
+    for folder in ("tests", "configs", "data/policies", "migrations/sql"):
+        paths += [
+            p
+            for p in (ROOT / folder).rglob("*")
+            if p.is_file() and p.suffix in {".py", ".yaml", ".json", ".sql"}
+        ]
+    paths += [
+        ROOT / "benchmarks/tau_retail/requirements.lock",
+        LOCK,
+        ROOT / "requirements.lock",
+        ROOT / "pyproject.toml",
+        ROOT / "evaluation/manifests/benchmark-v1/development-pool.json",
+    ]
     return digest(
         {
             str(p.relative_to(ROOT)): hashlib.sha256(p.read_bytes()).hexdigest()
