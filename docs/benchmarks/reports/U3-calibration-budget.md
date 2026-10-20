@@ -1,6 +1,6 @@
 # U3 校准待批范围
 
-不授权或执行任何推理。最终计划和hash在U4结束、裁判/seed协议离线验收后重新冻结。
+不授权或执行任何推理。最终计划已在U4结束、裁判/seed协议离线验收后重新冻结。
 
 固定train ID：107、96；各一次 official_tc / harness_full_history，共4个episode；种子20261020，并发1。
 官方两配置使用相同完整policy/schema、输出/步骤/时间限制和固定官方用户策略。无题目替换、重跑或追加候选。
@@ -32,3 +32,9 @@
 普通reward失败保留首次结果并继续固定剩余episode；认证/配额/协议/安全/unknown usage/任一持久预算或硬截止停止整批。
 unknown保留预留并暂停精确模型全部角色/批次，不将超时当0；重启只导出对账，不重新执行已有或自动续跑未启动episode。
 完成后只报告校准协议与成本，不报告公开test成功率/性能提升。后续默认4 tune+4 validation需分别新计划批准；test/holdout/模型裁判扩批均不自动运行。
+
+冻结源码提交：`b4004bc27b32dc0918c6acdcf1742871db63fac8`。
+源码指纹：`d3b6741129c150e1676a3052b44111c516d01c172fae9c90a72bc7277bdff92a`。
+计划hash：`d88ea97b575e766aed30e86a036d1499a4f8285ceac16575a2b67289e5d6c539`。
+计划文件：evaluation/manifests/benchmark-v1/calibration-v1.json。
+无批准/当前账户记录的实际预检结果为executable=false，真实请求0。
