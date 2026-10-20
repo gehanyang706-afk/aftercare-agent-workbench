@@ -101,3 +101,13 @@ calibration-v2 已冻结，见 docs/handoffs/upgrade-U3-calibration-v2-pending.m
 整请求体字节仅减少1.13%，没有新真实Token收益，建议暂缓付费/免费额度实验，不为简历指标无限加功能。
 tune-v1为待批8episode计划，322请求/260万Token/80分钟；项目现可用999660，缺1600340，未改总cap。
 新真实批次、260万当前免费余量/FreeTierOnly和项目cap调整必须分别明确批准；不复用校准批准，不运行validation/Test/holdout。
+
+
+### U3c 工具可见性离线范围（替代原tune-v1方向）
+
+按 docs/handoffs/upgrade-U3c-tool-visibility-offline.md 实施；本阶段不是未见validation。
+原tune-v1保留hash并暂缓，入口拒绝其执行。新候选tool_visibility_v1仅改Agent每步可见工具子集；完整官方实现/参数/政策/历史/输出保留，基线不动。
+只能用实际已见订单结果及实体来源选择；多订单并集、查询/转人工常驻、历史工具保留、未知/同批状态顺序不确定全目录回退。可见性不是授权，官方Orchestrator唯一执行。
+73项离线契约通过；51请求体字节减15.48%，已见调用30/30，均非真实效果证据；告知质量只诊断，不混改提示词。
+新tool-visibility-v1计划仅train96×两配置，80请求/600kToken/1200秒，无judge/aux；未批准未执行，普通工作台仍离线，不读validation/Test/holdout。
+项目cap保持2000000，当前可用999660；不复用旧批批准或旧余额，真实运行仍需新hash授权及当前精确模型免费余量/FreeTierOnly确认。

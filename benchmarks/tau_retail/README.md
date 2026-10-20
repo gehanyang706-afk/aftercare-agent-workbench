@@ -69,3 +69,17 @@ PYTHONPATH=src .venv/bin/python -m evaluation.benchmarks.tau_retail.replay_conte
 ```
 
 当前冻结 tune-v1 尚未真实验收；项目预算不足，不能仅凭打开环境变量执行。没有新角色/预算/当前账户批准，不得添加 execute 或直接运行官方默认真实评测。
+
+
+## U3c 工具可见性候选（离线已验收，真实待批）
+
+原 tune-v1 暂缓，不再执行；新候选与限制见 docs/handoffs/upgrade-U3c-tool-visibility-offline.md。
+73项离线契约、51请求体-15.48%字节及30/30历史调用覆盖不等于真实性能。
+新计划 evaluation/manifests/benchmark-v1/tool-visibility-v1.json 仅train96×两配置；默认只预检，不允许自行添加execute。
+
+```bash
+PYTHONPATH=src .venv/bin/python -m evaluation.benchmarks.tau_retail.visibility_replay --run-dir runtime/retail-runs/retail-calibration-v2 --output runtime/U3c-preparation/replay-review.json
+PYTHONPATH=src runtime/benchmark-deps/venv/bin/python -m evaluation.benchmarks.tau_retail.cli run --manifest evaluation/manifests/benchmark-v1/tool-visibility-v1.json
+```
+
+动态子集仅对新Agent变体，用户/judge不筛选；工具可见性不代替确认授权，环境保持完整工具目录。真实角色、额度和源码/hash须按新计划另批，普通工作台不扩大真实入口。
