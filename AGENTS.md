@@ -84,3 +84,12 @@ calibration-v2 已冻结，见 docs/handoffs/upgrade-U3-calibration-v2-pending.m
 29 项隔离契约通过；新账户快照只能经新计划批准更新，未知用量暂停不解除，旧批预算不转移。
 旧 v1 24 个原始文件保持不变，真实账本仍 160 请求 / 322153 Token / unknown 0。
 新批需要新 hash 批准及当前精确模型 ≥140万免费 Token、北京 FreeTierOnly 确认；尚未运行。
+
+
+### U3a calibration-v2 已执行（历史待批段落保留）
+
+用户新批准及当前账户确认后，本批仅运行一次，4 episode 完成、官方均通过；78 HTTP / 509626 Token / unknown 0，累计481.03秒。
+报告 docs/benchmarks/reports/U3-calibration-v2-first.md；官方2/2、全历史2/2，全历史Agent多耗6.12%，不称优化收益。
+两次自然语言输出截断保留，不改评分或自动重跑；v1原始结果和24文件hash未变。
+普通工作台真实flag仍false；真实历史238请求/831779Token；项目预算可用999660Token，不擅自扩cap。
+本次真实授权已结束；U3b、validation、Test、holdout等均未获新批执行授权。
