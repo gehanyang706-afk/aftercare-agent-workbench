@@ -52,3 +52,20 @@ full_history保留全部可见消息；fixed_window只删完整交互块，保�
 本机原始轨迹/账本/测试证据：runtime/upgrade-U0、runtime/reliability；公开摘要：docs/benchmarks/reports。
 M只统计实际完整20次故障触发且全部不变量通过的组；对象重建与普通函数测试不冒充实际杀进程。
 所有历史产品真实结果保持原样；新公开指标不跨版本包装为旧实验改善。
+
+
+## U3a 已完成与 U3b 离线候选
+
+calibration-v2 4 episode 官方通过，78请求/509626Token；全历史 Agent 多耗6.12%，见 docs/benchmarks/reports/U3-calibration-v2-first.md。
+U3b仅离线准备，见 docs/handoffs/upgrade-U3b-offline.md。无损JSON空白候选整请求体仅减1.13%字节，不是Token收益。
+
+```bash
+# 离线生成待审 train tune 计划；不生成批准、不发送请求
+PYTHONPATH=src runtime/benchmark-deps/venv/bin/python -m evaluation.benchmarks.tau_retail.cli plan --stage tune --dry-run --output runtime/U3b-preparation/review-plan.json
+# 冻结计划只读预检，无批准不会执行
+PYTHONPATH=src runtime/benchmark-deps/venv/bin/python -m evaluation.benchmarks.tau_retail.cli run --manifest evaluation/manifests/benchmark-v1/tune-v1.json
+# 只读已结束批次的 Agent 可见上下文，不读取用户/裁判隐藏输入
+PYTHONPATH=src .venv/bin/python -m evaluation.benchmarks.tau_retail.replay_context --run-dir runtime/retail-runs/retail-calibration-v2 --output runtime/U3b-preparation/context-replay.json
+```
+
+当前冻结 tune-v1 尚未真实验收；项目预算不足，不能仅凭打开环境变量执行。没有新角色/预算/当前账户批准，不得添加 execute 或直接运行官方默认真实评测。

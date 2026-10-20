@@ -1,0 +1,36 @@
+{
+  "scope": "U3b offline preparation; no real execution",
+  "source_commit": "76f72e3d0fce61e547e968058c3379eb643aae95",
+  "source_tree_hash": "c59d33cd264808cc0000eeecbb60a44595d459aac04b08e5daf33f8615f85d78",
+  "plan_sha256": "b8f77a03771ff63781c0ed1cde8ef5ee87a6a69000f8cac8d60f260d7bd2014b",
+  "candidate": "json-whitespace-lexeme-v1",
+  "replay_summary": {
+    "requests": 51,
+    "original_bytes": 1554397,
+    "projected_bytes": 1536865,
+    "unchanged_inputs": 12,
+    "note": "Byte replay only; no model response, task-success or Token saving prediction.",
+    "byte_saving_pct": 1.1278971845673946
+  },
+  "benchmark_contract_tests_passed": 39,
+  "product_shared_context_tests_passed": 1,
+  "real_requests_this_stage": 0,
+  "readiness": {
+    "real_requests_all_history": 238,
+    "known_real_tokens": 831779,
+    "unknown_reserved": 0,
+    "project_cap": 2000000,
+    "project_settled": 1000340,
+    "project_reserved": 0,
+    "project_available": 999660,
+    "new_batch_exists": false,
+    "ordinary_real_flag": false,
+    "required_available": 2600000,
+    "available_gap": 1600340,
+    "minimum_project_cap_if_separately_approved": 3600340,
+    "remaining_account_is_unknown": true,
+    "retail-calibration-v1_artifacts_unchanged": true,
+    "retail-calibration-v2_artifacts_unchanged": true
+  },
+  "recommendation": "Do not automatically execute: weak byte-level signal, no measured Token benefit, insufficient project allowance."
+}

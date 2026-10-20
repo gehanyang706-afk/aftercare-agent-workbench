@@ -93,3 +93,11 @@ calibration-v2 已冻结，见 docs/handoffs/upgrade-U3-calibration-v2-pending.m
 两次自然语言输出截断保留，不改评分或自动重跑；v1原始结果和24文件hash未变。
 普通工作台真实flag仍false；真实历史238请求/831779Token；项目预算可用999660Token，不擅自扩cap。
 本次真实授权已结束；U3b、validation、Test、holdout等均未获新批执行授权。
+
+
+### U3b 离线候选准备
+
+见 docs/handoffs/upgrade-U3b-offline.md：词元原样 JSON 空白投影、51请求离线重放、39 benchmark契约+1产品共享投影测试通过。
+整请求体字节仅减少1.13%，没有新真实Token收益，建议暂缓付费/免费额度实验，不为简历指标无限加功能。
+tune-v1为待批8episode计划，322请求/260万Token/80分钟；项目现可用999660，缺1600340，未改总cap。
+新真实批次、260万当前免费余量/FreeTierOnly和项目cap调整必须分别明确批准；不复用校准批准，不运行validation/Test/holdout。

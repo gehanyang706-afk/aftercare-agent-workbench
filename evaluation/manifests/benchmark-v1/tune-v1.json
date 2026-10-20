@@ -1,0 +1,245 @@
+{
+  "run_id": "retail-tune-v1",
+  "batch_id": "retail-tune-v1",
+  "experiment_version": "benchmark-v1",
+  "environment_versions": {
+    "litellm": "1.82.6",
+    "pydantic": "2.14.1",
+    "httpx": "0.28.1",
+    "psycopg": "3.3.6",
+    "sqlalchemy": "2.0.55",
+    "python": "3.13.14"
+  },
+  "stage": "tune",
+  "status": "pending_human_approval",
+  "source_commit": "76f72e3d0fce61e547e968058c3379eb643aae95",
+  "source_tree_hash": "c59d33cd264808cc0000eeecbb60a44595d459aac04b08e5daf33f8615f85d78",
+  "upstream_commit": "fc0055dc4e0a316c3f83133267fbd6faaa770992",
+  "dependency_lock_hash": "26b9cd61714128e16275a365ce6ea261ca8db04cbb8a937d1d60fd2feabb0836",
+  "split": "train",
+  "task_ids": [
+    "107",
+    "96",
+    "112",
+    "30"
+  ],
+  "task_content_hash": "b80aa40fbc0f665bcbe85d831f1759972cce7b3f71efd48688bc4aa8e172e687",
+  "variants": [
+    "official_tc",
+    "harness_evidence"
+  ],
+  "trial": 0,
+  "order_seed": 20261020,
+  "episodes": [
+    {
+      "task_id": "107",
+      "variant": "official_tc"
+    },
+    {
+      "task_id": "107",
+      "variant": "harness_evidence"
+    },
+    {
+      "task_id": "96",
+      "variant": "official_tc"
+    },
+    {
+      "task_id": "96",
+      "variant": "harness_evidence"
+    },
+    {
+      "task_id": "112",
+      "variant": "harness_evidence"
+    },
+    {
+      "task_id": "112",
+      "variant": "official_tc"
+    },
+    {
+      "task_id": "30",
+      "variant": "official_tc"
+    },
+    {
+      "task_id": "30",
+      "variant": "harness_evidence"
+    }
+  ],
+  "roles": {
+    "agent": {
+      "enabled": true,
+      "provider": "dashscope",
+      "region": "beijing",
+      "exact_model": "qwen3.5-plus-2026-02-15",
+      "thinking": false,
+      "temperature": 0,
+      "output_cap": 1024,
+      "request_cap": 24,
+      "batch_request_cap": 192,
+      "episode_token_cap": 200000,
+      "batch_token_cap": 1600000,
+      "request_seconds": 60,
+      "seed": 20261020
+    },
+    "user": {
+      "enabled": true,
+      "provider": "dashscope",
+      "region": "beijing",
+      "exact_model": "qwen3.5-plus-2026-02-15",
+      "thinking": false,
+      "temperature": 0,
+      "output_cap": 512,
+      "request_cap": 16,
+      "batch_request_cap": 128,
+      "episode_token_cap": 100000,
+      "batch_token_cap": 800000,
+      "request_seconds": 60,
+      "seed": 20261020
+    },
+    "judge": {
+      "enabled": true,
+      "provider": "dashscope",
+      "region": "beijing",
+      "exact_model": "qwen3.5-plus-2026-02-15",
+      "thinking": false,
+      "temperature": 0,
+      "output_cap": 1024,
+      "request_cap": 1,
+      "batch_request_cap": 2,
+      "episode_token_cap": 100000,
+      "batch_token_cap": 200000,
+      "request_seconds": 60,
+      "seed": 20261020,
+      "task_ids": [
+        "107"
+      ]
+    },
+    "auxiliary": {
+      "enabled": false
+    }
+  },
+  "total_token_cap": 2600000,
+  "request_cap": 322,
+  "episode_token_cap": 400000,
+  "episode_request_cap": 41,
+  "episode_seconds": 600,
+  "wall_clock_seconds": 4800,
+  "max_steps": 80,
+  "max_errors": 10,
+  "request_seconds": 60,
+  "consecutive_request_cap": 24,
+  "concurrency": 1,
+  "retries": 0,
+  "model_switch": false,
+  "additional_paid_cost_cap_cny": 0,
+  "auto_review": false,
+  "evaluation_type": "ALL",
+  "reward_basis": [
+    "DB",
+    "NL_ASSERTION"
+  ],
+  "judge_required_tasks": [
+    "107"
+  ],
+  "judge_configuration_note": "Official default GPT-4.1 judge replaced by explicitly approved exact Qwen for both variants; prompts, criteria and reward unchanged.",
+  "seed_support": "Forward identical seed for agent/user/judge; API behavior uncalibrated, no determinism guarantee.",
+  "scorer_hash": "204d95a82812402f2fee989250392d3c66de702a8bcc20258c7e2a8153a1ea8d",
+  "policy_hash": "8a80a07edc5d308465f1435af8a01a56f1e4a37409e2b2fe6e679046e19d3f23",
+  "tools_hash": "c1b3ff400ce83557f898d8603de1ebb9aee48ebd7ab0524698a8d5068b76ac73",
+  "user_policy_hash": "d3c3d9149526d7e5cccc081d030d87d2aefc972e3c602dfd29c83da72638cd4c",
+  "diagnostic_version": "retail-trace-v2",
+  "account_confirmation_id": "retail-tune-v1-account",
+  "offline_request_samples": [
+    {
+      "task_id": "107",
+      "role": "agent",
+      "payload_bytes": 19148,
+      "initial_reservation_bound": 22220,
+      "simulated_20_messages_2k_each_bound": 62220
+    },
+    {
+      "task_id": "107",
+      "role": "user",
+      "payload_bytes": 2319,
+      "initial_reservation_bound": 4879,
+      "simulated_20_messages_2k_each_bound": 44879
+    },
+    {
+      "task_id": "96",
+      "role": "agent",
+      "payload_bytes": 19148,
+      "initial_reservation_bound": 22220,
+      "simulated_20_messages_2k_each_bound": 62220
+    },
+    {
+      "task_id": "96",
+      "role": "user",
+      "payload_bytes": 2120,
+      "initial_reservation_bound": 4680,
+      "simulated_20_messages_2k_each_bound": 44680
+    },
+    {
+      "task_id": "112",
+      "role": "agent",
+      "payload_bytes": 19148,
+      "initial_reservation_bound": 22220,
+      "simulated_20_messages_2k_each_bound": 62220
+    },
+    {
+      "task_id": "112",
+      "role": "user",
+      "payload_bytes": 2257,
+      "initial_reservation_bound": 4817,
+      "simulated_20_messages_2k_each_bound": 44817
+    },
+    {
+      "task_id": "30",
+      "role": "agent",
+      "payload_bytes": 19148,
+      "initial_reservation_bound": 22220,
+      "simulated_20_messages_2k_each_bound": 62220
+    },
+    {
+      "task_id": "30",
+      "role": "user",
+      "payload_bytes": 2399,
+      "initial_reservation_bound": 4959,
+      "simulated_20_messages_2k_each_bound": 44959
+    }
+  ],
+  "estimated_tokens_range": {
+    "agent_per_episode": [
+      20000,
+      140000
+    ],
+    "user_per_episode": [
+      10000,
+      60000
+    ],
+    "judge_per_required_episode": [
+      2000,
+      20000
+    ],
+    "batch": [
+      800000,
+      1520000
+    ]
+  },
+  "estimate_note": "Calibration-v2 completed four episodes at 115k-147k tokens each; future-task estimate is 100k-190k per episode, not a guarantee. Conservative reservations and all hard caps remain unchanged.",
+  "supersedes": "No prior authorization transfers; all historical results preserved",
+  "context_projection_version": "json-whitespace-lexeme-v1",
+  "hypothesis": "Remove only outside-string JSON whitespace; no fact/history/policy reduction",
+  "project_cap_change_authorized": false,
+  "protocol_policy": "Preserve mixed content and tool_calls; official default environment routing; record native response before protocol validation. No scorer changes.",
+  "ordinary_failure": "continue_fixed_remaining",
+  "hard_stop": [
+    "auth",
+    "quota",
+    "protocol",
+    "safety",
+    "unknown_usage",
+    "any_persistent_budget_or_deadline"
+  ],
+  "restart": "read_only_reconcile",
+  "freeze_note": "New post-repair batch: no v1 authorization or remaining batch budget transfers. Fresh plan-bound account confirmation and explicit agent/user/judge approval are required; no approval/account file generated.",
+  "plan_sha256": "b8f77a03771ff63781c0ed1cde8ef5ee87a6a69000f8cac8d60f260d7bd2014b"
+}
