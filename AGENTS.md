@@ -44,3 +44,16 @@ ALLOW_REAL_MODEL_CALLS=false .venv/bin/python -m evaluation.evaluator.regression
 - case是模型提议，消息锚点不等于语义证据；申请数量来自实际user消息，购买量/库存不能替代。后台独立复核身份、资格、版本、确认及事务幂等。
 - 提交须预览→可信确认→同一业务服务。新消息失效旧预览；图结束不等于业务完成；最终告知依实际回执，停止码保留。明确暂停走共享runtime，不新增提交或模型调用。
 - 普通离线实现、测试、修复自主完成；改变范围、增加费用或新真实调用须确认。全局软件、权重、大型镜像先列资源；已获具体授权不重复询问。
+
+## 公开评测升级（2026-10-20）
+
+本轮按 docs/benchmarks/implementation-v1 四份规格推进 U0→U1→U2 及环境就绪后的 U4。
+授权离线实现、测试、修复与交接；不授权真实 Agent/用户/裁判调用、付费、推送或公开部署。
+旧 final-development-acceptance-v1 本轮不执行，不与公开评测叠加。历史冻结结果及上述保护仍有效。
+官方 tau2 v1.0.1 固定 commit；隔离源码、环境和依赖锁，不修改产品 requirements.lock。
+仅官方 Orchestrator 执行官方工具；Agent 不接收 task、隐藏目标、参考动作、评分答案或完整环境。
+开发只读 train；test 由可信准备/评测入口处理，不打印答案；项目独立 holdout 不读不运行。
+所有未来真实角色共用持久总账及精确模型跨角色额度保护，未知 usage 保留预留并暂停，不沿用旧批准。
+U4 仅 aftercare_test，真实进程故障须保存触发证据；不得以对象重建替代杀进程。
+每阶段记录 docs/handoffs/upgrade-U*.md；缺依赖先集中资源清单，继续独立工作。
+新命令在 benchmarks/tau_retail/README.md 中随验收更新；未验收明确标注。
