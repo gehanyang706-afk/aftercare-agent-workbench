@@ -6,7 +6,7 @@ from sqlalchemy.engine import make_url
 from aftercare.config import HealthResult, Settings
 from aftercare.offline import is_loopback
 
-BASELINE_REVISION = "0005_web_jobs"
+BASELINE_REVISION = "0006_experiments"
 
 
 def is_local_database(url) -> bool:

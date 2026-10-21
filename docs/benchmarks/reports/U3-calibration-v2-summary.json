@@ -1,0 +1,335 @@
+{
+  "batch_id": "retail-calibration-v2",
+  "plan_sha256": "a130bd74a04c4a2730a85f6f51618bafa8739cc216c130a370c67c38b1b1d2d7",
+  "source_commit": "934069e22dd9ddc7dad5178592f70be094ea1d4e",
+  "source_tree_hash": "15f3a12adf5d6e99571160040136aca0f595725b60a18b3d9d5f67785b22cc3d",
+  "upstream_commit": "fc0055dc4e0a316c3f83133267fbd6faaa770992",
+  "status": "COMPLETED",
+  "planned": 4,
+  "attempted": 4,
+  "evaluated": 4,
+  "not_run": 0,
+  "totals": {
+    "http_requests": 78,
+    "input_tokens": 494339,
+    "output_tokens": 15287,
+    "known_tokens": 509626,
+    "unknown_reserved": 0,
+    "model_wait_seconds": 473.3783082099835
+  },
+  "role_totals": {
+    "agent": {
+      "http_requests": 51,
+      "input_tokens": 431665,
+      "output_tokens": 12523,
+      "known_tokens": 444188,
+      "unknown_reserved": 0,
+      "model_wait_seconds": 346.8423304200114
+    },
+    "user": {
+      "http_requests": 25,
+      "input_tokens": 44846,
+      "output_tokens": 2440,
+      "known_tokens": 47286,
+      "unknown_reserved": 0,
+      "model_wait_seconds": 115.36837958097749
+    },
+    "judge": {
+      "http_requests": 2,
+      "input_tokens": 17828,
+      "output_tokens": 324,
+      "known_tokens": 18152,
+      "unknown_reserved": 0,
+      "model_wait_seconds": 11.167598208994605
+    },
+    "auxiliary": {
+      "http_requests": 0,
+      "input_tokens": 0,
+      "output_tokens": 0,
+      "known_tokens": 0,
+      "unknown_reserved": 0,
+      "model_wait_seconds": 0
+    }
+  },
+  "episode_seconds_sum": 481.03257116697205,
+  "remaining_batch_tokens_not_transferable": 890374,
+  "remaining_batch_requests_not_transferable": 84,
+  "episodes": [
+    {
+      "task_id": "107",
+      "variant": "official_tc",
+      "status": "completed",
+      "official_reward": 1.0,
+      "execution_stop": "TerminationReason.USER_STOP",
+      "seconds": 122.63275449999492,
+      "roles": {
+        "agent": {
+          "known_tokens": 113919,
+          "unknown_reserved": 0,
+          "http_requests": 12,
+          "model_wait_seconds": 90.11376412797836,
+          "input_tokens": 110421,
+          "output_tokens": 3498
+        },
+        "user": {
+          "known_tokens": 11149,
+          "unknown_reserved": 0,
+          "http_requests": 5,
+          "model_wait_seconds": 25.03314487398893,
+          "input_tokens": 10562,
+          "output_tokens": 587
+        },
+        "judge": {
+          "known_tokens": 8831,
+          "unknown_reserved": 0,
+          "http_requests": 1,
+          "model_wait_seconds": 5.751775541997631,
+          "input_tokens": 8664,
+          "output_tokens": 167
+        },
+        "auxiliary": {
+          "known_tokens": 0,
+          "unknown_reserved": 0,
+          "http_requests": 0,
+          "model_wait_seconds": 0,
+          "input_tokens": 0,
+          "output_tokens": 0
+        }
+      },
+      "tools": {
+        "mutation_sequence": 2,
+        "executed": 8,
+        "repeated_reads": 0,
+        "seconds": 0.0059554999897954985
+      },
+      "db_match": true,
+      "tool_names": [
+        "find_user_id_by_name_zip",
+        "get_user_details",
+        "get_order_details",
+        "get_order_details",
+        "get_product_details",
+        "get_product_details",
+        "exchange_delivered_order_items",
+        "exchange_delivered_order_items"
+      ],
+      "write_operations": 2,
+      "tool_errors": 0,
+      "mixed_messages": 8,
+      "truncated_responses": [
+        {
+          "role": "agent",
+          "has_tool_calls": false,
+          "content_chars": 3419
+        }
+      ]
+    },
+    {
+      "task_id": "107",
+      "variant": "harness_full_history",
+      "status": "completed",
+      "official_reward": 1.0,
+      "execution_stop": "TerminationReason.USER_STOP",
+      "seconds": 142.25375124999846,
+      "roles": {
+        "agent": {
+          "known_tokens": 123182,
+          "unknown_reserved": 0,
+          "http_requests": 13,
+          "model_wait_seconds": 98.96904979101964,
+          "input_tokens": 119452,
+          "output_tokens": 3730
+        },
+        "user": {
+          "known_tokens": 14105,
+          "unknown_reserved": 0,
+          "http_requests": 6,
+          "model_wait_seconds": 36.197516332991654,
+          "input_tokens": 13257,
+          "output_tokens": 848
+        },
+        "judge": {
+          "known_tokens": 9321,
+          "unknown_reserved": 0,
+          "http_requests": 1,
+          "model_wait_seconds": 5.415822666996974,
+          "input_tokens": 9164,
+          "output_tokens": 157
+        },
+        "auxiliary": {
+          "known_tokens": 0,
+          "unknown_reserved": 0,
+          "http_requests": 0,
+          "model_wait_seconds": 0,
+          "input_tokens": 0,
+          "output_tokens": 0
+        }
+      },
+      "tools": {
+        "mutation_sequence": 2,
+        "executed": 8,
+        "repeated_reads": 0,
+        "seconds": 0.0053327069617807865
+      },
+      "db_match": true,
+      "tool_names": [
+        "find_user_id_by_name_zip",
+        "get_user_details",
+        "get_order_details",
+        "get_product_details",
+        "get_order_details",
+        "get_product_details",
+        "exchange_delivered_order_items",
+        "exchange_delivered_order_items"
+      ],
+      "write_operations": 2,
+      "tool_errors": 0,
+      "mixed_messages": 8,
+      "truncated_responses": [
+        {
+          "role": "agent",
+          "has_tool_calls": false,
+          "content_chars": 3125
+        }
+      ]
+    },
+    {
+      "task_id": "96",
+      "variant": "official_tc",
+      "status": "completed",
+      "official_reward": 1.0,
+      "execution_stop": "TerminationReason.USER_STOP",
+      "seconds": 101.27763679198688,
+      "roles": {
+        "agent": {
+          "known_tokens": 101577,
+          "unknown_reserved": 0,
+          "http_requests": 13,
+          "model_wait_seconds": 75.12431945801654,
+          "input_tokens": 99130,
+          "output_tokens": 2447
+        },
+        "user": {
+          "known_tokens": 10545,
+          "unknown_reserved": 0,
+          "http_requests": 7,
+          "model_wait_seconds": 24.232361709000543,
+          "input_tokens": 10123,
+          "output_tokens": 422
+        },
+        "judge": {
+          "known_tokens": 0,
+          "unknown_reserved": 0,
+          "http_requests": 0,
+          "model_wait_seconds": 0,
+          "input_tokens": 0,
+          "output_tokens": 0
+        },
+        "auxiliary": {
+          "known_tokens": 0,
+          "unknown_reserved": 0,
+          "http_requests": 0,
+          "model_wait_seconds": 0,
+          "input_tokens": 0,
+          "output_tokens": 0
+        }
+      },
+      "tools": {
+        "mutation_sequence": 2,
+        "executed": 7,
+        "repeated_reads": 0,
+        "seconds": 0.004464749988983385
+      },
+      "db_match": true,
+      "tool_names": [
+        "find_user_id_by_name_zip",
+        "get_user_details",
+        "get_order_details",
+        "get_product_details",
+        "get_order_details",
+        "modify_pending_order_address",
+        "modify_pending_order_items"
+      ],
+      "write_operations": 2,
+      "tool_errors": 0,
+      "mixed_messages": 4,
+      "truncated_responses": []
+    },
+    {
+      "task_id": "96",
+      "variant": "harness_full_history",
+      "status": "completed",
+      "official_reward": 1.0,
+      "execution_stop": "TerminationReason.USER_STOP",
+      "seconds": 114.8684286249918,
+      "roles": {
+        "agent": {
+          "known_tokens": 105510,
+          "unknown_reserved": 0,
+          "http_requests": 13,
+          "model_wait_seconds": 82.63519704299688,
+          "input_tokens": 102662,
+          "output_tokens": 2848
+        },
+        "user": {
+          "known_tokens": 11487,
+          "unknown_reserved": 0,
+          "http_requests": 7,
+          "model_wait_seconds": 29.90535666499636,
+          "input_tokens": 10904,
+          "output_tokens": 583
+        },
+        "judge": {
+          "known_tokens": 0,
+          "unknown_reserved": 0,
+          "http_requests": 0,
+          "model_wait_seconds": 0,
+          "input_tokens": 0,
+          "output_tokens": 0
+        },
+        "auxiliary": {
+          "known_tokens": 0,
+          "unknown_reserved": 0,
+          "http_requests": 0,
+          "model_wait_seconds": 0,
+          "input_tokens": 0,
+          "output_tokens": 0
+        }
+      },
+      "tools": {
+        "mutation_sequence": 2,
+        "executed": 7,
+        "repeated_reads": 0,
+        "seconds": 0.0037036259891465306
+      },
+      "db_match": true,
+      "tool_names": [
+        "find_user_id_by_name_zip",
+        "get_user_details",
+        "get_order_details",
+        "get_product_details",
+        "get_order_details",
+        "modify_pending_order_address",
+        "modify_pending_order_items"
+      ],
+      "write_operations": 2,
+      "tool_errors": 0,
+      "mixed_messages": 5,
+      "truncated_responses": []
+    }
+  ],
+  "paired_calibration_only": {
+    "variant_order": [
+      "official_tc",
+      "harness_full_history"
+    ],
+    "counts": {
+      "11": 2
+    },
+    "valid_pairs": 2,
+    "both_success_n": 2,
+    "agent_token_saving_pct": -6.123547536845231,
+    "both_success_agent_token_saving_pct": -6.123547536845231,
+    "success_delta_pp": 0.0
+  }
+}

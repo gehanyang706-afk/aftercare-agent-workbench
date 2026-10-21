@@ -170,3 +170,39 @@ def assemble_messages(messages):
                 pass
         output.append(projected)
     return output
+
+
+def shared_evidence_context(messages, policy, tools, context_limit=200000):
+    """Opt-in profile; legacy full projection remains available without behavior changes."""
+    from langchain_core.messages import convert_to_openai_messages
+
+    from aftercare.harness.context_policy import ContextPolicy
+    from aftercare.harness.contracts import ContextInput, observations
+
+    raw = convert_to_openai_messages(messages)
+    prepared = ContextPolicy("evidence_projection").build(
+        ContextInput(
+            raw,
+            policy,
+            tools,
+            observations(
+                raw,
+                {
+                    name: False
+                    for name in (
+                        "list_orders",
+                        "get_order",
+                        "get_inventory",
+                        "get_operation",
+                        "search_policies",
+                    )
+                },
+            ),
+        ),
+        context_limit,
+    )
+    result = [
+        message.model_copy(update={"content": projected.get("content") or ""})
+        for message, projected in zip(messages, prepared.messages[1:], strict=True)
+    ]
+    return result, prepared

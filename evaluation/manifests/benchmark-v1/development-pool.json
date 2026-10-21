@@ -1,0 +1,54 @@
+{
+  "algorithm": "sha256(aftercare-retail-20261020: + task_id), ascending",
+  "upstream_commit": "fc0055dc4e0a316c3f83133267fbd6faaa770992",
+  "tune_pool": [
+    "107",
+    "96",
+    "112",
+    "30",
+    "93",
+    "16",
+    "59",
+    "0",
+    "25",
+    "15",
+    "21",
+    "63"
+  ],
+  "validation_pool": [
+    "20",
+    "57",
+    "43",
+    "34",
+    "7",
+    "47",
+    "6",
+    "48"
+  ],
+  "calibration": [
+    "107",
+    "96"
+  ],
+  "tune_run": [
+    "107",
+    "96",
+    "112",
+    "30"
+  ],
+  "validation_run": [
+    "20",
+    "57",
+    "43",
+    "34"
+  ],
+  "read_task_bodies": [
+    "107",
+    "96",
+    "112",
+    "30"
+  ],
+  "body_access_note": "Trusted preparation accessed only these train bodies; never export goals/answers to Agent. No validation/test body inspected by implementer.",
+  "tool_visibility_pilot": [
+    "96"
+  ]
+}

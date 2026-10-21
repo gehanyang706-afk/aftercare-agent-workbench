@@ -1,0 +1,196 @@
+{
+  "run_id": "retail-calibration-v2",
+  "batch_id": "retail-calibration-v2",
+  "experiment_version": "benchmark-v1",
+  "environment_versions": {
+    "litellm": "1.82.6",
+    "pydantic": "2.14.1",
+    "httpx": "0.28.1",
+    "psycopg": "3.3.6",
+    "sqlalchemy": "2.0.55",
+    "python": "3.13.14"
+  },
+  "stage": "calibration",
+  "status": "pending_human_approval",
+  "source_commit": "934069e22dd9ddc7dad5178592f70be094ea1d4e",
+  "source_tree_hash": "15f3a12adf5d6e99571160040136aca0f595725b60a18b3d9d5f67785b22cc3d",
+  "upstream_commit": "fc0055dc4e0a316c3f83133267fbd6faaa770992",
+  "dependency_lock_hash": "26b9cd61714128e16275a365ce6ea261ca8db04cbb8a937d1d60fd2feabb0836",
+  "split": "train",
+  "task_ids": [
+    "107",
+    "96"
+  ],
+  "task_content_hash": "f441e60dc572dd8edd22d1233bed5bc7b31376261b610f561f2f98af33d18457",
+  "variants": [
+    "official_tc",
+    "harness_full_history"
+  ],
+  "trial": 0,
+  "order_seed": 20261020,
+  "episodes": [
+    {
+      "task_id": "107",
+      "variant": "official_tc"
+    },
+    {
+      "task_id": "107",
+      "variant": "harness_full_history"
+    },
+    {
+      "task_id": "96",
+      "variant": "official_tc"
+    },
+    {
+      "task_id": "96",
+      "variant": "harness_full_history"
+    }
+  ],
+  "roles": {
+    "agent": {
+      "enabled": true,
+      "provider": "dashscope",
+      "region": "beijing",
+      "exact_model": "qwen3.5-plus-2026-02-15",
+      "thinking": false,
+      "temperature": 0,
+      "output_cap": 1024,
+      "request_cap": 24,
+      "batch_request_cap": 96,
+      "episode_token_cap": 200000,
+      "batch_token_cap": 800000,
+      "request_seconds": 60,
+      "seed": 20261020
+    },
+    "user": {
+      "enabled": true,
+      "provider": "dashscope",
+      "region": "beijing",
+      "exact_model": "qwen3.5-plus-2026-02-15",
+      "thinking": false,
+      "temperature": 0,
+      "output_cap": 512,
+      "request_cap": 16,
+      "batch_request_cap": 64,
+      "episode_token_cap": 100000,
+      "batch_token_cap": 400000,
+      "request_seconds": 60,
+      "seed": 20261020
+    },
+    "judge": {
+      "enabled": true,
+      "provider": "dashscope",
+      "region": "beijing",
+      "exact_model": "qwen3.5-plus-2026-02-15",
+      "thinking": false,
+      "temperature": 0,
+      "output_cap": 1024,
+      "request_cap": 1,
+      "batch_request_cap": 2,
+      "episode_token_cap": 100000,
+      "batch_token_cap": 200000,
+      "request_seconds": 60,
+      "seed": 20261020,
+      "task_ids": [
+        "107"
+      ]
+    },
+    "auxiliary": {
+      "enabled": false
+    }
+  },
+  "total_token_cap": 1400000,
+  "request_cap": 162,
+  "episode_token_cap": 400000,
+  "episode_request_cap": 41,
+  "episode_seconds": 600,
+  "wall_clock_seconds": 2400,
+  "max_steps": 80,
+  "max_errors": 10,
+  "request_seconds": 60,
+  "consecutive_request_cap": 24,
+  "concurrency": 1,
+  "retries": 0,
+  "model_switch": false,
+  "additional_paid_cost_cap_cny": 0,
+  "auto_review": false,
+  "evaluation_type": "ALL",
+  "reward_basis": [
+    "DB",
+    "NL_ASSERTION"
+  ],
+  "judge_required_tasks": [
+    "107"
+  ],
+  "judge_configuration_note": "Official default GPT-4.1 judge replaced by explicitly approved exact Qwen for both variants; prompts, criteria and reward unchanged.",
+  "seed_support": "Forward identical seed for agent/user/judge; API behavior uncalibrated, no determinism guarantee.",
+  "scorer_hash": "204d95a82812402f2fee989250392d3c66de702a8bcc20258c7e2a8153a1ea8d",
+  "policy_hash": "8a80a07edc5d308465f1435af8a01a56f1e4a37409e2b2fe6e679046e19d3f23",
+  "tools_hash": "c1b3ff400ce83557f898d8603de1ebb9aee48ebd7ab0524698a8d5068b76ac73",
+  "user_policy_hash": "d3c3d9149526d7e5cccc081d030d87d2aefc972e3c602dfd29c83da72638cd4c",
+  "diagnostic_version": "retail-trace-v2",
+  "account_confirmation_id": "retail-calibration-v2-account",
+  "offline_request_samples": [
+    {
+      "task_id": "107",
+      "role": "agent",
+      "payload_bytes": 19148,
+      "initial_reservation_bound": 22220,
+      "simulated_20_messages_2k_each_bound": 62220
+    },
+    {
+      "task_id": "107",
+      "role": "user",
+      "payload_bytes": 2319,
+      "initial_reservation_bound": 4879,
+      "simulated_20_messages_2k_each_bound": 44879
+    },
+    {
+      "task_id": "96",
+      "role": "agent",
+      "payload_bytes": 19148,
+      "initial_reservation_bound": 22220,
+      "simulated_20_messages_2k_each_bound": 62220
+    },
+    {
+      "task_id": "96",
+      "role": "user",
+      "payload_bytes": 2120,
+      "initial_reservation_bound": 4680,
+      "simulated_20_messages_2k_each_bound": 44680
+    }
+  ],
+  "estimated_tokens_range": {
+    "agent_per_episode": [
+      20000,
+      140000
+    ],
+    "user_per_episode": [
+      10000,
+      60000
+    ],
+    "judge_per_required_episode": [
+      2000,
+      20000
+    ],
+    "batch": [
+      124000,
+      840000
+    ]
+  },
+  "estimate_note": "Unvalidated full-episode range; v1 stopped after four HTTP requests (12233 tokens), with no completed episode. Cold payload bounds do not predict full trajectories; reservation protections remain unchanged.",
+  "supersedes": "retail-calibration-v1 (protocol-stopped; original records preserved)",
+  "protocol_policy": "Preserve mixed content and tool_calls; official default environment routing; record native response before protocol validation. No scorer changes.",
+  "ordinary_failure": "continue_fixed_remaining",
+  "hard_stop": [
+    "auth",
+    "quota",
+    "protocol",
+    "safety",
+    "unknown_usage",
+    "any_persistent_budget_or_deadline"
+  ],
+  "restart": "read_only_reconcile",
+  "freeze_note": "New post-repair batch: no v1 authorization or remaining batch budget transfers. Fresh plan-bound account confirmation and explicit agent/user/judge approval are required; no approval/account file generated.",
+  "plan_sha256": "a130bd74a04c4a2730a85f6f51618bafa8739cc216c130a370c67c38b1b1d2d7"
+}

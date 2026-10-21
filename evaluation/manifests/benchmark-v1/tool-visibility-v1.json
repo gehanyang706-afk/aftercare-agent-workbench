@@ -1,0 +1,176 @@
+{
+  "run_id": "retail-tool-visibility-v1",
+  "batch_id": "retail-tool-visibility-v1",
+  "experiment_version": "benchmark-v1",
+  "environment_versions": {
+    "litellm": "1.82.6",
+    "pydantic": "2.14.1",
+    "httpx": "0.28.1",
+    "psycopg": "3.3.6",
+    "sqlalchemy": "2.0.55",
+    "python": "3.13.14"
+  },
+  "stage": "tool_visibility",
+  "status": "pending_human_approval",
+  "source_commit": "e621e8f1ecb09f458bd21a1fbb35815a80349ad8",
+  "source_tree_hash": "d11aa716ad3183e15870aa666f2209b46b9af56ac951b66987b076bd2383efa2",
+  "upstream_commit": "fc0055dc4e0a316c3f83133267fbd6faaa770992",
+  "dependency_lock_hash": "26b9cd61714128e16275a365ce6ea261ca8db04cbb8a937d1d60fd2feabb0836",
+  "split": "train",
+  "task_ids": [
+    "96"
+  ],
+  "task_content_hash": "2154f3d7f08d876e962317453720d4ebcc65f7726119ecc5c32e3954bd66a35e",
+  "variants": [
+    "official_tc",
+    "tool_visibility_v1"
+  ],
+  "trial": 0,
+  "order_seed": 20261020,
+  "episodes": [
+    {
+      "task_id": "96",
+      "variant": "official_tc"
+    },
+    {
+      "task_id": "96",
+      "variant": "tool_visibility_v1"
+    }
+  ],
+  "roles": {
+    "agent": {
+      "enabled": true,
+      "provider": "dashscope",
+      "region": "beijing",
+      "exact_model": "qwen3.5-plus-2026-02-15",
+      "thinking": false,
+      "temperature": 0,
+      "output_cap": 1024,
+      "request_cap": 24,
+      "batch_request_cap": 48,
+      "episode_token_cap": 200000,
+      "batch_token_cap": 400000,
+      "request_seconds": 60,
+      "seed": 20261020
+    },
+    "user": {
+      "enabled": true,
+      "provider": "dashscope",
+      "region": "beijing",
+      "exact_model": "qwen3.5-plus-2026-02-15",
+      "thinking": false,
+      "temperature": 0,
+      "output_cap": 512,
+      "request_cap": 16,
+      "batch_request_cap": 32,
+      "episode_token_cap": 100000,
+      "batch_token_cap": 200000,
+      "request_seconds": 60,
+      "seed": 20261020
+    },
+    "judge": {
+      "enabled": false,
+      "provider": "dashscope",
+      "region": "beijing",
+      "exact_model": "qwen3.5-plus-2026-02-15",
+      "thinking": false,
+      "temperature": 0,
+      "output_cap": 1024,
+      "request_cap": 1,
+      "batch_request_cap": 0,
+      "episode_token_cap": 100000,
+      "batch_token_cap": 0,
+      "request_seconds": 60,
+      "seed": 20261020,
+      "task_ids": []
+    },
+    "auxiliary": {
+      "enabled": false
+    }
+  },
+  "total_token_cap": 600000,
+  "request_cap": 80,
+  "episode_token_cap": 300000,
+  "episode_request_cap": 40,
+  "episode_seconds": 600,
+  "wall_clock_seconds": 1200,
+  "max_steps": 80,
+  "max_errors": 10,
+  "request_seconds": 60,
+  "consecutive_request_cap": 24,
+  "concurrency": 1,
+  "retries": 0,
+  "model_switch": false,
+  "additional_paid_cost_cap_cny": 0,
+  "auto_review": false,
+  "evaluation_type": "ALL",
+  "reward_basis": [
+    "DB",
+    "NL_ASSERTION"
+  ],
+  "judge_required_tasks": [],
+  "judge_configuration_note": "Disabled: train96 has no effective NL assertions; no judge or auxiliary calls permitted",
+  "seed_support": "Forward identical seed for agent/user/judge; API behavior uncalibrated, no determinism guarantee.",
+  "scorer_hash": "204d95a82812402f2fee989250392d3c66de702a8bcc20258c7e2a8153a1ea8d",
+  "policy_hash": "8a80a07edc5d308465f1435af8a01a56f1e4a37409e2b2fe6e679046e19d3f23",
+  "tools_hash": "c1b3ff400ce83557f898d8603de1ebb9aee48ebd7ab0524698a8d5068b76ac73",
+  "user_policy_hash": "d3c3d9149526d7e5cccc081d030d87d2aefc972e3c602dfd29c83da72638cd4c",
+  "diagnostic_version": "retail-trace-v2",
+  "account_confirmation_id": "retail-tool-visibility-v1-account",
+  "offline_request_samples": [
+    {
+      "task_id": "96",
+      "role": "agent",
+      "payload_bytes": 19148,
+      "initial_reservation_bound": 22220,
+      "simulated_20_messages_2k_each_bound": 62220
+    },
+    {
+      "task_id": "96",
+      "role": "user",
+      "payload_bytes": 2120,
+      "initial_reservation_bound": 4680,
+      "simulated_20_messages_2k_each_bound": 44680
+    }
+  ],
+  "estimated_tokens_range": {
+    "batch": [
+      180000,
+      360000
+    ]
+  },
+  "estimate_note": "Calibration-v2 completed four episodes at 115k-147k tokens each; future-task estimate is 100k-190k per episode, not a guarantee. Conservative reservations and all hard caps remain unchanged.",
+  "supersedes": "No prior authorization transfers; all historical results preserved",
+  "context_projection_version": "full_history_unchanged",
+  "hypothesis": "Select only original official tools from observed order state; no other input/output changes",
+  "project_cap_change_authorized": false,
+  "protocol_policy": "Preserve mixed content and tool_calls; official default environment routing; record native response before protocol validation. No scorer changes.",
+  "ordinary_failure": "continue_fixed_remaining",
+  "hard_stop": [
+    "auth",
+    "quota",
+    "protocol",
+    "safety",
+    "unknown_usage",
+    "any_persistent_budget_or_deadline"
+  ],
+  "restart": "read_only_reconcile",
+  "freeze_note": "Requires separate Agent/user approval and current exact-model free quota/FreeTierOnly; no prior authorization transfers",
+  "offline_evidence_hash": "82531e40c340d6c2b12ee2dfca2559c25ba9f6722190c2ae48a4473760e74353",
+  "offline_screen_passed": true,
+  "tool_visibility_version": "state-aware-tools-v1",
+  "tool_visibility_rule_hash": "0027ef78d8b3e22b09fb2076c2759811f551745f9aa9869b0bfb75e1f2fcd647",
+  "tool_visibility_catalog_hash": "c1b3ff400ce83557f898d8603de1ebb9aee48ebd7ab0524698a8d5068b76ac73",
+  "selection_note": "Different per-step schema exposure, same full official environment/parameters/policy/scorer",
+  "output_quality_policy": "diagnostic_only_no_rewrite",
+  "estimated_requests_range": [
+    30,
+    55
+  ],
+  "estimated_seconds_range": [
+    180,
+    420
+  ],
+  "task_selection_note": "Seen train96 mechanism diagnostic; n=1 pair is not general Retail performance",
+  "plan_sha256": "cf13c693664f104ef6b4f82385f0a67d3b2424f447c6f704755faaaa68bdf04a"
+}

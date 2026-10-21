@@ -1,0 +1,78 @@
+{
+  "version": "tool-visibility-offline-evidence-v1",
+  "rule_version": "state-aware-tools-v1",
+  "rule_hash": "0027ef78d8b3e22b09fb2076c2759811f551745f9aa9869b0bfb75e1f2fcd647",
+  "reference_profile_verification": {
+    "profile_sha256": "b83d50caa97a46080d9cfec2b335e140ae139c4dc630f23ce64e863461302150",
+    "verified_files": 106,
+    "all_matched": true,
+    "catalog_hash": "c1b3ff400ce83557f898d8603de1ebb9aee48ebd7ab0524698a8d5068b76ac73"
+  },
+  "totals": {
+    "requests": 51,
+    "original_bytes": 1554397,
+    "routed_bytes": 1313852,
+    "observed_next_calls": 30,
+    "covered_next_calls": 30,
+    "actual_agent_input_tokens": 431665,
+    "actual_agent_output_tokens": 12523,
+    "byte_reduction_percent": 15.47513280069377
+  },
+  "fallback_counts": {},
+  "observed_tool_counts": {
+    "find_user_id_by_name_zip": 4,
+    "get_user_details": 4,
+    "get_order_details": 8,
+    "get_product_details": 6,
+    "exchange_delivered_order_items": 4,
+    "modify_pending_order_address": 2,
+    "modify_pending_order_items": 2
+  },
+  "offline_tests": {
+    "passed": 73,
+    "seconds": 3.5,
+    "skipped": 0,
+    "log_sha256": "65c78db7dca8bf00273b8edcbfadf74b32155973e1560332f655dac5c26957db"
+  },
+  "raw_replay_sha256": "8d8995955c1382e2c37ef118082a3c8ba7a8a87ae53ca5fce3ae1bfdc3ae1106",
+  "investment_screen_passed": true,
+  "claim_signals": {
+    "length_truncated": 2,
+    "long_explanation_signal": 5,
+    "refund_received_language": 2,
+    "completed_fulfillment_language": 1
+  },
+  "cache_usage_observed": {
+    "missing_cached_field": 51
+  },
+  "real_requests": 0,
+  "limitations": [
+    "Observed paths are not complete action-space or semantic quality proof.",
+    "Bytes are not Tokens or cost.",
+    "No output rewriting; claims/confirmation/redundancy require human review."
+  ],
+  "fixes_preserved": [
+    "Conservative fallback on ambiguous same-entity batch read/write results; no fabricated latest state",
+    "Official Tool objects are freshly constructed by get_tools; identity checked against original adapter input, not later catalog reconstruction"
+  ],
+  "plan_sha256": "cf13c693664f104ef6b4f82385f0a67d3b2424f447c6f704755faaaa68bdf04a",
+  "source_commit": "e621e8f1ecb09f458bd21a1fbb35815a80349ad8",
+  "source_tree_hash": "d11aa716ad3183e15870aa666f2209b46b9af56ac951b66987b076bd2383efa2",
+  "readiness": {
+    "real_requests_all_history": 238,
+    "known_real_tokens_all_history": 831779,
+    "unknown_reserved": 0,
+    "project_cap": 2000000,
+    "project_settled": 1000340,
+    "project_reserved": 0,
+    "project_available": 999660,
+    "new_batch_exists": false,
+    "ordinary_real_flag": false,
+    "fits_existing_project_cap": true,
+    "current_account_confirmation": "not_provided_for_new_plan",
+    "retail-calibration-v1_unchanged": true,
+    "retail-calibration-v2_unchanged": true,
+    "existing_user_files_unchanged": true
+  },
+  "real_requests_this_stage": 0
+}

@@ -15,7 +15,7 @@ from aftercare.repositories.models import Conversation, Job, Message
 from aftercare.services.business import BusinessService, new_id
 
 
-def execute_job(database_url, principal, conversation, message_id, kind, job_id, owner):
+def execute_job(database_url, principal, conversation, message_id, kind, job_id, owner, probe=None):
     from aftercare.offline import install_offline_guard
 
     install_offline_guard()
@@ -35,6 +35,10 @@ def execute_job(database_url, principal, conversation, message_id, kind, job_id,
 
     service = BusinessService(sessions)
     service.run_guard = guard
+    if probe:
+        if sessions.kw["bind"].url.database != "aftercare_test":
+            raise RuntimeError("RELIABILITY_TEST_DATABASE_REQUIRED")
+        service.commit_probe = probe
     with sessions() as s:
         job_data = s.get(Job, job_id).result
         fault = job_data.get("fault")
@@ -76,8 +80,9 @@ def execute_job(database_url, principal, conversation, message_id, kind, job_id,
 
 
 class LeaseObserver:
-    def __init__(self, sessions, job_id, owner):
+    def __init__(self, sessions, job_id, owner, lease_seconds=10):
         self.sessions, self.job_id, self.owner = sessions, job_id, owner
+        self.lease_seconds = lease_seconds
         self.next_check = 0
         self.cancelled = False
 
@@ -89,13 +94,15 @@ class LeaseObserver:
             job = s.get(Job, self.job_id, with_for_update=True)
             self.cancelled = job.cancel_requested or job.lease_owner != self.owner
             if not self.cancelled:
-                job.lease_expires_at = utc_now() + timedelta(seconds=10)
+                job.lease_expires_at = utc_now() + timedelta(seconds=self.lease_seconds)
         return self.cancelled
 
 
-def run_once(settings, seconds=180):
+def run_once(settings, seconds=180, probe=None, lease_seconds=10):
     sessions = session_factory(settings)
     engine = sessions.kw["bind"]
+    if (probe or lease_seconds != 10) and engine.url.database != "aftercare_test":
+        raise RuntimeError("RELIABILITY_TEST_DATABASE_REQUIRED")
     owner = new_id("worker")
     lease_connection = engine.connect()
     claimed = None
@@ -126,7 +133,7 @@ def run_once(settings, seconds=180):
                 conv = s.get(Conversation, job.conversation_id)
                 job.status = "RUNNING"
                 job.lease_owner = owner
-                job.lease_expires_at = utc_now() + timedelta(seconds=10)
+                job.lease_expires_at = utc_now() + timedelta(seconds=lease_seconds)
                 job.attempt += 1
                 claimed = {
                     "id": job.id,
@@ -139,6 +146,13 @@ def run_once(settings, seconds=180):
                 break
         if not claimed:
             return False
+        if probe:
+            probe.hit(
+                "after_claim",
+                job_id=claimed["id"],
+                owner=owner,
+                backend_pid=lease_connection.scalar(text("SELECT pg_backend_pid()")),
+            )
         service = BusinessService(sessions)
         status = "COMPLETED"
         result = {}
@@ -153,9 +167,10 @@ def run_once(settings, seconds=180):
                     claimed["kind"],
                     claimed["id"],
                     owner,
+                    probe,
                 ),
                 seconds=seconds,
-                cancel=LeaseObserver(sessions, claimed["id"], owner),
+                cancel=LeaseObserver(sessions, claimed["id"], owner, lease_seconds),
             )
         except TimeoutError as e:
             status = "CANCELLED" if str(e) == "TASK_CANCELLED" else "FAILED"
@@ -178,6 +193,8 @@ def run_once(settings, seconds=180):
                 if task_state in {"COMPLETED", "REJECTED", "HANDOFF_PENDING"}
                 else task_state
             )
+        if probe:
+            probe.hit("before_job_finish", job_id=claimed["id"], owner=owner)
         with sessions.begin() as s:
             conv = s.scalar(
                 select(Conversation)
@@ -188,7 +205,10 @@ def run_once(settings, seconds=180):
             if job.lease_owner != owner:
                 return True
             job.status = status
-            job.result = result
+            # Keep the original trusted event across a failed execution/reclaim.
+            # Output errors must not erase the immutable approval binding.
+            binding = job.result.get("confirmation")
+            job.result = {**({"confirmation": binding} if binding else {}), **result}
             job.lease_expires_at = None
             if conv.revision == claimed["revision"]:
                 if result.get("text") and not result.get("notice_saved"):
